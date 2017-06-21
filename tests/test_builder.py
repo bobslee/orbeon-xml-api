@@ -95,3 +95,27 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(textarea_counter.label, 'Text Area with Character counter')
         self.assertEqual(textarea_counter.hint, None)
         self.assertEqual(textarea_counter.alert, '140 characters at most')
+
+    def test_date_control(self):
+        date_control = self.builder_1.controls['date']
+        self.assertEqual(date_control.label, 'Date')
+        self.assertEqual(date_control.hint, 'Standard date field')
+        self.assertEqual(date_control.alert, None)
+
+    def test_time_control(self):
+        time_control = self.builder_1.controls['time']
+        self.assertEqual(time_control.label, 'Time')
+        self.assertEqual(time_control.hint, 'Standard time field')
+        self.assertEqual(time_control.alert, None)
+
+    def test_datetime_control(self):
+        datetime_control = self.builder_1.controls['datetime']
+        self.assertEqual(datetime_control.label, 'Date and Time')
+        self.assertEqual(datetime_control.hint, 'Standard date and time field')
+        self.assertEqual(datetime_control.alert, None)
+
+    def test_dropdown_date_control(self):
+        dropdown_date_control = self.builder_1.controls['dropdown-date']
+        self.assertEqual(dropdown_date_control.label, 'Dropdown Date')
+        self.assertEqual(dropdown_date_control.hint, 'Date selector with dropdown menus')
+        self.assertEqual(dropdown_date_control.alert, None)

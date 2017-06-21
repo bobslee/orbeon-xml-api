@@ -55,6 +55,32 @@ class Control(object):
         self.refs = {}
         self.set_refs()
 
+        self.datatype = None
+        self.set_datatype()
+
+        self.default_value = None
+        self.set_default_value()
+
+    def set_datatype(self):
+        """
+        Set Datatype object (class: Text, Date, DateTime etc.)
+        """
+        pass
+
+    def encode(self, value):
+        """
+        By the self.datatype (handler):
+        >> self.datetype.encode(value)
+        """
+        pass
+
+    def decode(self, value):
+        """
+        By the self.datatype (handler):
+        >> self.datetype.decode(value)
+        """
+        pass
+
     def set_refs(self):
         """
         EXAMPLES:
