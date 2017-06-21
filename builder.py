@@ -35,7 +35,7 @@ class Builder(object):
 
         for e in self.xml_root.xpath(query):
             bind = self.binds[e.get('bind')]
-            self.controls[bind.name] = Control(self, bind, e)
+            self.controls[bind.name] = XS_TYPE_CONTROL[bind.xs_type](self, bind, e)
 
 
 class Bind(object):
@@ -45,6 +45,7 @@ class Bind(object):
         self.element = element
         self.id = element.get('id')
         self.name = element.get('name')
+        self.xs_type = element.get('xs:type', 'xf:string')
 
         parent_element = element.getparent()
 
@@ -65,32 +66,30 @@ class Control(object):
         self.refs = {}
         self.set_refs()
 
-        self.datatype = None
-        self.set_datatype()
-
+        # model_instance is like raw default_value.
+        # Still called model_instance, because of FB terminology.
         self.model_instance = None
         self.set_model_instance()
 
-    # TODO or does it belong in the Bind?
-    def set_datatype(self):
-        """
-        Set Datatype object (class: Text, Date, DateTime etc.)
-        """
-        pass
+        self.default_value = None
+        self.set_default_value()
 
     def encode(self, value):
         """
         By the self.datatype (handler):
         >> self.datetype.encode(value)
         """
-        pass
+        raise NotImplementedError
 
     def decode(self, value):
         """
         By the self.datatype (handler):
         >> self.datetype.decode(value)
         """
-        pass
+        raise NotImplementedError
+
+    def set_default_value(self):
+        raise NotImplementedError
 
     def set_model_instance(self):
         if not self.bind.parent_bind:
@@ -104,7 +103,7 @@ class Control(object):
         )
 
         res = self.builder.xml_root.xpath(query)
-        
+
         if len(res) > 0:
             self.model_instance = res[0]
 
@@ -138,6 +137,99 @@ class Control(object):
                 return res[0].text
             else:
                 return None
-        elif name == 'default_value':
-            # TODO datatype decode !!
-            return self.model_instance.text
+
+
+class StringControl(Control):
+
+    def set_default_value(self):
+        self.default_value = self.decode(getattr(self.model_instance, 'text', None))
+
+    def decode(self, value):
+        return value
+
+    def encode(self, value):
+        return value
+
+
+class DateControl(Control):
+
+    def set_default_value(self):
+        self.default_value = self.decode(self.model_instance.text)
+
+    def decode(self, value):
+        return value
+
+    def encode(self, value):
+        return value
+
+
+class TimeControl(Control):
+    def set_default_value(self):
+        self.default_value = self.decode(self.model_instance.text)
+
+    def decode(self, value):
+        return value
+
+    def encode(self, value):
+        return value
+
+
+class DateTimeControl(Control):
+    def set_default_value(self):
+        self.default_value = self.decode(self.model_instance.text)
+
+    def decode(self, value):
+        return value
+
+    def encode(self, value):
+        return value
+
+
+class BooleanControl(Control):
+    def set_default_value(self):
+        self.default_value = self.decode(self.model_instance.text)
+
+    def decode(self, value):
+        if value == 'true':
+            return True
+        elif value == 'false':
+            return False
+
+    def encode(self, value):
+        # TODO isinstance(value, bool) validate?
+        if value:
+            return 'true'
+        else:
+            return 'false'
+
+
+class AnyURIControl(Control):
+    def set_default_value(self):
+        self.default_value = self.decode(self.model_instance.text)
+
+    def decode(self, value):
+        return value
+
+    def encode(self, value):
+        return value
+
+
+class EmailControl(StringControl):
+    pass
+
+
+class DecimalControl(StringControl):
+    pass
+
+
+XS_TYPE_CONTROL = {
+    'xf:string': StringControl,
+    'xs:string': StringControl,
+    'xf:date': DateControl,
+    'xf:time': TimeControl,
+    'xf:dateTime': DateTimeControl,
+    'xf:boolean': BooleanControl,
+    'xf:anyURI': AnyURIControl,
+    'xf:email': EmailControl,
+    'xf:decimal': DecimalControl
+}

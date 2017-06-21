@@ -58,17 +58,24 @@ class BuilderTestCase(unittest.TestCase):
         _input = self.builder_1.controls['input']
         self.assertEqual(_input.label, 'Input Field')
         self.assertEqual(_input.hint, 'Standard input field')
+        self.assertEqual(_input.default_value, 'Michelle')
+
+        # Doesn't exist, but doesn't raise Exception
         self.assertEqual(_input.alert, None)
 
     def test_htmlarea_control(self):
         htmlarea = self.builder_1.controls['htmlarea']
         self.assertEqual(htmlarea.label, 'Formatted Text')
         self.assertEqual(htmlarea.hint, 'Rich text editor')
+        self.assertIn('Giuseppe Fortunino Francesco Verdi', htmlarea.default_value)
+
+        # Doesn't exist, but doesn't raise Exception
         self.assertEqual(htmlarea.alert, None)
 
     def test_output_control(self):
         _output = self.builder_1.controls['output']
         self.assertEqual(_output.label, 'Text Output')
+        self.assertEqual(_output.default_value, 'Great love and great achievements involve great risk.')
         self.assertEqual(_output.hint, None)
         self.assertEqual(_output.alert, None)
 
@@ -76,18 +83,21 @@ class BuilderTestCase(unittest.TestCase):
         secret = self.builder_1.controls['secret']
         self.assertEqual(secret.label, 'Password Field')
         self.assertEqual(secret.hint, 'The password is 42 ;)')
-        # self.assertEqual(secret.alert, None)
+        self.assertEqual(secret.default_value, '42')
+        self.assertEqual(secret.alert, None)
 
     def test_input_counter_control(self):
         input_counter = self.builder_1.controls['input-counter']
         self.assertEqual(input_counter.label, 'Input Field with Character Counter')
-        self.assertEqual(input_counter.hint, None)
+        self.assertEqual(input_counter.default_value, 'This must not be "too long"!')
         self.assertEqual(input_counter.alert, '30 characters maximum')
+        self.assertEqual(input_counter.hint, None)
 
     def test_textarea_control(self):
         textarea = self.builder_1.controls['textarea']
         self.assertEqual(textarea.label, 'Text Area')
         self.assertEqual(textarea.hint, 'Standard text area')
+        self.assertIn('Music is an art', textarea.default_value)
         self.assertEqual(textarea.alert, None)
 
     def test_textarea_counter_control(self):
