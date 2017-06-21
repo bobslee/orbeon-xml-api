@@ -17,12 +17,7 @@ class Builder(object):
         self.set_controls()
 
     def set_xml_root(self):
-        xml_root = generate_xml_root(self.xml)
-
-        if xml_root is not None:
-            sanitize_xml(xml_root)
-            # A reference causes silly issues when traversing the object.
-            self.xml_root = xml_root.__copy__()
+        self.xml_root = generate_xml_root(self.xml)
 
     def set_binds(self):
         q_left = "//*[@id='fr-form-binds']//*[name()='xforms:bind']"
@@ -61,14 +56,22 @@ class Control(object):
         self.set_refs()
 
     def set_refs(self):
+        """
+        EXAMPLES:
+
+        ref = '$form-resources/section-1/label'
+        ref_name = 'label'
+        ref_value = 'section-1/label'
+        """
         for child in self.element.iterchildren():
             if child.get('ref'):
                 ref = child.get('ref')
-                # ref_name: '$form-resources/section-1/label' becomes 'label'
-                ref_name = ref.split('/')[-1]
-                # ref_value: '$form-resources/section-1/label' becomes 'section-1/label'
-                ref_value = '/'.join(ref.split('/')[1:])
-                self.refs[ref_name] = ref_value
+                ref_items = ref.split('/')
+
+                if ref_items[0] == '$form-resources':
+                    ref_name = ref_items[-1]
+                    ref_value = '/'.join(ref_items[1:])
+                    self.refs[ref_name] = ref_value
 
     def __getattr__(self, name):
         """
@@ -82,5 +85,3 @@ class Control(object):
                 return res[0].text
             else:
                 return None
-        else:
-            return super(Control, self).__getattr__(name)

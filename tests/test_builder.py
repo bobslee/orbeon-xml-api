@@ -54,22 +54,23 @@ class BuilderTestCase(unittest.TestCase):
             self.assertIn(name, self.control_names)
             self.assertIsInstance(control, Control)
 
-    # def test_input_control(self):
-    #     _input = self.builder_1.controls['input']
-    #     self.assertEqual(_input.label, 'input/label')
-    #     self.assertEqual(_input.hint, 'input/hint')
+    def test_input_control(self):
+        _input = self.builder_1.controls['input']
+        self.assertEqual(_input.label, 'Input Field')
+        self.assertEqual(_input.hint, 'Standard input field')
+        self.assertEqual(_input.alert, None)
 
     def test_htmlarea_control(self):
         htmlarea = self.builder_1.controls['htmlarea']
         self.assertEqual(htmlarea.label, 'Formatted Text')
         self.assertEqual(htmlarea.hint, 'Rich text editor')
-        # self.assertEqual(htmlarea.alert, None)
+        self.assertEqual(htmlarea.alert, None)
 
     def test_output_control(self):
         _output = self.builder_1.controls['output']
         self.assertEqual(_output.label, 'Text Output')
-        # self.assertEqual(_output.hint, '')
-        # self.assertEqual(_output.alert, None)
+        self.assertEqual(_output.hint, None)
+        self.assertEqual(_output.alert, None)
 
     def test_secret_control(self):
         secret = self.builder_1.controls['secret']
@@ -79,18 +80,18 @@ class BuilderTestCase(unittest.TestCase):
 
     def test_input_counter_control(self):
         input_counter = self.builder_1.controls['input-counter']
-        # self.assertEqual(input_counter.label, 'Input Field with Character Counter')
-        # self.assertEqual(input_counter.hint, None)
-        # self.assertEqual(input_counter.alert, '30 characters maximum')
+        self.assertEqual(input_counter.label, 'Input Field with Character Counter')
+        self.assertEqual(input_counter.hint, None)
+        self.assertEqual(input_counter.alert, '30 characters maximum')
 
     def test_textarea_control(self):
         textarea = self.builder_1.controls['textarea']
         self.assertEqual(textarea.label, 'Text Area')
-        # self.assertEqual(textarea.hint, 'textarea/hint')
-        # self.assertEqual(textarea.alert, 'textarea/alert')
+        self.assertEqual(textarea.hint, 'Standard text area')
+        self.assertEqual(textarea.alert, None)
 
     def test_textarea_counter_control(self):
         textarea_counter = self.builder_1.controls['textarea-counter']
-        # self.assertEqual(textarea_counter.label, 'Text Area with Character counter')
-        # self.assertEqual(textarea_counter.hint, 'textarea-counter/hint')
-        # self.assertEqual(textarea_counter.alert, 'textarea-counter/alert')
+        self.assertEqual(textarea_counter.label, 'Text Area with Character counter')
+        self.assertEqual(textarea_counter.hint, None)
+        self.assertEqual(textarea_counter.alert, '140 characters at most')
