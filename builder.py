@@ -1,3 +1,5 @@
+from lxml import etree
+
 from utils import generate_xml_root, sanitize_xml
 
 
@@ -26,8 +28,7 @@ class Builder(object):
         query = "%s|%s" % (q_left, q_right)
 
         for e in self.xml_root.xpath(query):
-            id = e.get('id')
-            self.binds[id] = Bind(self, id, e)
+            self.binds[e.get('id')] = Bind(self, e)
 
     def set_controls(self):
         query = "//*[name()='fr:body']//*[@bind]"
@@ -39,11 +40,20 @@ class Builder(object):
 
 class Bind(object):
 
-    def __init__(self, builder, id, element):
+    def __init__(self, builder, element):
         self.builder = builder
-        self.id = id
-        self.name = element.get('name')
         self.element = element
+        self.id = element.get('id')
+        self.name = element.get('name')
+
+        parent_element = element.getparent()
+
+        if etree.QName(parent_element).localname == 'bind' and \
+           parent_element.get('id') != 'fr-form-binds':
+            self.parent_bind = Bind(builder, parent_element)
+        else:
+            self.parent_bind = None
+
 
 class Control(object):
 
@@ -58,9 +68,10 @@ class Control(object):
         self.datatype = None
         self.set_datatype()
 
-        self.default_value = None
-        self.set_default_value()
+        self.model_instance = None
+        self.set_model_instance()
 
+    # TODO or does it belong in the Bind?
     def set_datatype(self):
         """
         Set Datatype object (class: Text, Date, DateTime etc.)
@@ -80,6 +91,22 @@ class Control(object):
         >> self.datetype.decode(value)
         """
         pass
+
+    def set_model_instance(self):
+        if not self.bind.parent_bind:
+            return
+
+        # TODO namespace prefix Error
+        # query = "//xf:model/xf:instance/form/%s/%s" % (
+        query = "//form/%s/%s" % (
+            self.bind.parent_bind.name,
+            self.bind.name
+        )
+
+        res = self.builder.xml_root.xpath(query)
+        
+        if len(res) > 0:
+            self.model_instance = res[0]
 
     def set_refs(self):
         """
@@ -111,3 +138,6 @@ class Control(object):
                 return res[0].text
             else:
                 return None
+        elif name == 'default_value':
+            # TODO datatype decode !!
+            return self.model_instance.text

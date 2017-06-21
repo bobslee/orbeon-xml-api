@@ -10,11 +10,20 @@ def xml_from_file(path, filename):
 
 def generate_xml_root(xml):
     try:
-        # xml = xml.encode('utf-8')
-        parser = etree.XMLParser(ns_clean=True, recover=False, encoding='utf-8')
+        parser = etree.XMLParser(
+            ns_clean=True,
+            recover=False,
+            encoding='utf-8',
+            remove_blank_text=True
+        )
         root = etree.XML(xml, parser)
     except etree.XMLSyntaxError:
-        parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
+        parser = etree.XMLParser(
+            ns_clean=True,
+            recover=True,
+            encoding='utf-8',
+            remove_blank_text=True
+        )
         root = etree.XML(xml, parser)
 
     return root
