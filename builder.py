@@ -82,3 +82,5 @@ class Control(object):
                 return res[0].text
             else:
                 return None
+        else:
+            return super(Control, self).__getattr__(name)
