@@ -103,8 +103,9 @@ class BuilderTestCase(unittest.TestCase):
     def test_textarea_counter_control(self):
         textarea_counter = self.builder_1.controls['textarea-counter']
         self.assertEqual(textarea_counter.label, 'Text Area with Character counter')
-        self.assertEqual(textarea_counter.hint, None)
+        self.assertEqual(textarea_counter.default_value, "Let's write a Tweet. It must fit in 140 characters.")
         self.assertEqual(textarea_counter.alert, '140 characters at most')
+        self.assertEqual(textarea_counter.hint, None)
 
     def test_date_control(self):
         date_control = self.builder_1.controls['date']
