@@ -130,3 +130,9 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(dropdown_date_control.label, 'Dropdown Date')
         self.assertEqual(dropdown_date_control.hint, 'Date selector with dropdown menus')
         self.assertEqual(dropdown_date_control.alert, None)
+
+    def test_fields_date_control(self):
+        fields_date_control = self.builder_1.controls['fields-date']
+        self.assertEqual(fields_date_control.label, 'Fields Date')
+        self.assertEqual(fields_date_control.hint, 'Date selector with separate fields')
+        self.assertEqual(fields_date_control.alert, None)
