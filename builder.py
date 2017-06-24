@@ -1,6 +1,6 @@
 from lxml import etree
 
-from utils import generate_xml_root, sanitize_xml
+from utils import generate_xml_root
 
 
 class Builder:
