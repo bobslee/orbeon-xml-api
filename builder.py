@@ -129,6 +129,11 @@ class Control:
 
         self.element = Element(self)
 
+        # Attributes via Element (which get these dynamically)
+        self.label = self.element.label
+        self.hint = self.element.hint
+        self.alert = self.element.alert
+
     def set_parent(self):
         if self.bind.parent and self.bind.parent.name in self.builder.controls:
             self.parent = self.builder.controls[self.bind.parent.name]
