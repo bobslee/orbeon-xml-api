@@ -37,7 +37,7 @@ class BuilderTestCase(unittest.TestCase):
         super(BuilderTestCase, self).setUp()
 
         xml = xml_from_file('tests/data', 'test_controls_builder.xml')
-        self.builder_1 = Builder(xml)
+        self.builder = Builder(xml)
         self.bind_names = BINDS
         self.control_names = self._set_control_names()
 
@@ -45,17 +45,17 @@ class BuilderTestCase(unittest.TestCase):
         return [re.sub(r'-bind$', '', b) for b in self.bind_names]
 
     def test_set_binds(self):
-        for name, bind in self.builder_1.binds.items():
+        for name, bind in self.builder.binds.items():
             self.assertIn(name, self.bind_names)
             self.assertIsInstance(bind, Bind)
 
     def test_set_controls(self):
-        for name, control in self.builder_1.controls.items():
+        for name, control in self.builder.controls.items():
             self.assertIn(name, self.control_names)
             self.assertIsInstance(control, Control)
 
     def test_input_control(self):
-        _input = self.builder_1.controls['input']
+        _input = self.builder.controls['input']
 
         self.assertEqual(_input.label, 'Input Field')
         self.assertEqual(_input.hint, 'Standard input field')
@@ -69,20 +69,20 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(_input.element.alert, None)
 
     def test_input_control_bind(self):
-        _input = self.builder_1.controls['input']
+        _input = self.builder.controls['input']
 
         self.assertEqual(_input.bind.id, 'input-bind')
         self.assertEqual(_input.bind.name, 'input')
 
     def test_input_control_parent(self):
-        _input = self.builder_1.controls['input']
+        _input = self.builder.controls['input']
 
         self.assertEqual(_input.parent.bind.id, 'text-controls-bind')
         self.assertEqual(_input.parent.bind.name, 'text-controls')
         self.assertEqual(_input.parent.element.label, 'Text Controls')
 
     def test_htmlarea_control(self):
-        htmlarea = self.builder_1.controls['htmlarea']
+        htmlarea = self.builder.controls['htmlarea']
 
         self.assertEqual(htmlarea.label, 'Formatted Text')
         self.assertEqual(htmlarea.hint, 'Rich text editor')
@@ -96,13 +96,13 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(htmlarea.element.alert, None)
 
     def test_htmlarea_control_bind(self):
-        htmlarea = self.builder_1.controls['htmlarea']
+        htmlarea = self.builder.controls['htmlarea']
 
         self.assertEqual(htmlarea.bind.id, 'htmlarea-bind')
         self.assertEqual(htmlarea.bind.name, 'htmlarea')
 
     def test_htmlarea_control_parent(self):
-        htmlarea = self.builder_1.controls['htmlarea']
+        htmlarea = self.builder.controls['htmlarea']
 
         self.assertEqual(htmlarea.parent.bind.id, 'text-controls-bind')
         self.assertEqual(htmlarea.parent.bind.name, 'text-controls')
@@ -113,7 +113,7 @@ class BuilderTestCase(unittest.TestCase):
     """
 
     def test_output_control(self):
-        _output = self.builder_1.controls['output']
+        _output = self.builder.controls['output']
 
         self.assertEqual(_output.label, 'Text Output')
         self.assertEqual(_output.hint, None)
@@ -125,7 +125,7 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(_output.element.alert, None)
 
     def test_secret_control(self):
-        secret = self.builder_1.controls['secret']
+        secret = self.builder.controls['secret']
 
         self.assertEqual(secret.label, 'Password Field')
         self.assertEqual(secret.hint, 'The password is 42 ;)')
@@ -137,7 +137,7 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(secret.element.alert, None)
 
     def test_input_counter_control(self):
-        input_counter = self.builder_1.controls['input-counter']
+        input_counter = self.builder.controls['input-counter']
 
         self.assertEqual(input_counter.label, 'Input Field with Character Counter')
         self.assertEqual(input_counter.alert, '30 characters maximum')
@@ -149,7 +149,7 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(input_counter.element.hint, None)
 
     def test_textarea_control(self):
-        textarea = self.builder_1.controls['textarea']
+        textarea = self.builder.controls['textarea']
 
         self.assertEqual(textarea.label, 'Text Area')
         self.assertEqual(textarea.hint, 'Standard text area')
@@ -162,7 +162,7 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(textarea.element.alert, None)
 
     def test_textarea_counter_control(self):
-        textarea_counter = self.builder_1.controls['textarea-counter']
+        textarea_counter = self.builder.controls['textarea-counter']
 
         self.assertEqual(textarea_counter.default_value, "Let's write a Tweet. It must fit in 140 characters.")
 
@@ -171,7 +171,7 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(textarea_counter.element.hint, None)
 
     def test_date_control(self):
-        date_control = self.builder_1.controls['date']
+        date_control = self.builder.controls['date']
 
         self.assertEqual(date_control.label, 'Date')
         self.assertEqual(date_control.hint, 'Standard date field')
@@ -182,13 +182,13 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(date_control.element.alert, None)
 
     def test_date_control_bind(self):
-        date_control = self.builder_1.controls['date']
+        date_control = self.builder.controls['date']
 
         self.assertEqual(date_control.bind.id, 'date-bind')
         self.assertEqual(date_control.bind.name, 'date')
 
     def test_date_control_parent(self):
-        date_control = self.builder_1.controls['date']
+        date_control = self.builder.controls['date']
 
         self.assertEqual(date_control.parent.bind.id, 'date-time-controls-bind')
         self.assertEqual(date_control.parent.bind.name, 'date-time-controls')
@@ -197,19 +197,19 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(date_control.parent.element.label, 'Date and Time')
 
     def test_time_control(self):
-        time_control = self.builder_1.controls['time']
+        time_control = self.builder.controls['time']
         self.assertEqual(time_control.element.label, 'Time')
         self.assertEqual(time_control.element.hint, 'Standard time field')
         self.assertEqual(time_control.element.alert, None)
 
     def test_time_control_bind(self):
-        time_control = self.builder_1.controls['time']
+        time_control = self.builder.controls['time']
 
         self.assertEqual(time_control.bind.id, 'time-bind')
         self.assertEqual(time_control.bind.name, 'time')
 
     def test_time_control_parent(self):
-        time_control = self.builder_1.controls['time']
+        time_control = self.builder.controls['time']
 
         self.assertEqual(time_control.parent.bind.id, 'date-time-controls-bind')
         self.assertEqual(time_control.parent.bind.name, 'date-time-controls')
@@ -218,19 +218,19 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(time_control.parent.element.label, 'Date and Time')
 
     def test_datetime_control(self):
-        datetime_control = self.builder_1.controls['datetime']
+        datetime_control = self.builder.controls['datetime']
         self.assertEqual(datetime_control.element.label, 'Date and Time')
         self.assertEqual(datetime_control.element.hint, 'Standard date and time field')
         self.assertEqual(datetime_control.element.alert, None)
 
     def test_dropdown_date_control(self):
-        dropdown_date_control = self.builder_1.controls['dropdown-date']
+        dropdown_date_control = self.builder.controls['dropdown-date']
         self.assertEqual(dropdown_date_control.element.label, 'Dropdown Date')
         self.assertEqual(dropdown_date_control.element.hint, 'Date selector with dropdown menus')
         self.assertEqual(dropdown_date_control.element.alert, None)
 
     def test_fields_date_control(self):
-        fields_date_control = self.builder_1.controls['fields-date']
+        fields_date_control = self.builder.controls['fields-date']
         self.assertEqual(fields_date_control.element.label, 'Fields Date')
         self.assertEqual(fields_date_control.element.hint, 'Date selector with separate fields')
         self.assertEqual(fields_date_control.element.alert, None)
