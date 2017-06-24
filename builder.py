@@ -3,7 +3,7 @@ from lxml import etree
 from utils import generate_xml_root, sanitize_xml
 
 
-class Builder(object):
+class Builder:
 
     def __init__(self, xml, lang='en'):
         self.xml = xml
@@ -37,8 +37,29 @@ class Builder(object):
             bind = self.binds[e.get('bind')]
             self.controls[bind.name] = XS_TYPE_CONTROL[bind.xs_type](self, bind, e)
 
+    # TODO
+    def get_structure(self):
+        """
+        {
+            CONTROL_NAME: {
+                'xs_type': XS_TYPE,
+                'bind': Bind,
+                'control': Control,
+                'parent': {
+                    CONTROL_NAME: {
+                        'xs_type': XS_TYPE,
+                        'bind': Bind,
+                        'control': Control,
+                        'parent': None,
+                    }
+                }
+            },
+            ...
+        }
+        """
 
-class Bind(object):
+
+class Bind:
 
     def __init__(self, builder, element):
         self.builder = builder
@@ -47,21 +68,53 @@ class Bind(object):
         self.name = element.get('name')
         self.xs_type = element.get('xs:type', 'xf:string')
 
-        parent_element = element.getparent()
+        self.parent = None
+        self.set_parent()
+
+    def set_parent(self):
+        parent_element = self.element.getparent()
 
         if etree.QName(parent_element).localname == 'bind' and \
            parent_element.get('id') != 'fr-form-binds':
-            self.parent_bind = Bind(builder, parent_element)
+            self.parent = Bind(self.builder, parent_element)
         else:
-            self.parent_bind = None
+            self.parent = None
 
 
-class Control(object):
+class Element:
+    """
+    The Element of a Control
+    """
+
+    def __init__(self, control):
+        self.control = control
+
+    def __getattr__(self, name):
+        """
+        Get Element attr/property via refs.
+        For example, a 'label', 'hint', 'alert'
+        """
+        if name in self.control.refs:
+            query = "//resources/resource[@xml:lang='%s']/%s" % (
+                self.control.builder.lang,
+                self.control.refs[name]
+            )
+            res = self.control.builder.xml_root.xpath(query)
+            if len(res) > 0:
+                return res[0].text
+            else:
+                return None
+
+
+class Control:
 
     def __init__(self, builder, bind, element):
         self.builder = builder
         self.bind = bind
-        self.element = element
+        self._element = element
+
+        self.parent = None
+        self.set_parent()
 
         self.refs = {}
         self.set_refs()
@@ -74,31 +127,20 @@ class Control(object):
         self.default_value = None
         self.set_default_value()
 
-    def encode(self, value):
-        """
-        By the self.datatype (handler):
-        >> self.datetype.encode(value)
-        """
-        raise NotImplementedError
+        self.element = Element(self)
 
-    def decode(self, value):
-        """
-        By the self.datatype (handler):
-        >> self.datetype.decode(value)
-        """
-        raise NotImplementedError
-
-    def set_default_value(self):
-        raise NotImplementedError
+    def set_parent(self):
+        if self.bind.parent and self.bind.parent.name in self.builder.controls:
+            self.parent = self.builder.controls[self.bind.parent.name]
 
     def set_model_instance(self):
-        if not self.bind.parent_bind:
+        if not self.bind.parent:
             return
 
         # TODO namespace prefix Error
         # query = "//xf:model/xf:instance/form/%s/%s" % (
         query = "//form/%s/%s" % (
-            self.bind.parent_bind.name,
+            self.bind.parent.name,
             self.bind.name
         )
 
@@ -115,7 +157,7 @@ class Control(object):
         ref_name = 'label'
         ref_value = 'section-1/label'
         """
-        for child in self.element.iterchildren():
+        for child in self._element.iterchildren():
             if child.get('ref'):
                 ref = child.get('ref')
                 ref_items = ref.split('/')
@@ -125,18 +167,22 @@ class Control(object):
                     ref_value = '/'.join(ref_items[1:])
                     self.refs[ref_name] = ref_value
 
-    def __getattr__(self, name):
+    def set_default_value(self):
+        raise NotImplementedError
+
+    def encode(self, value):
         """
-        Get Element attr/property via refs.
-        For example, a 'label', 'hint', 'alert'
+        By the self.datatype (handler):
+        >> self.datetype.encode(value)
         """
-        if name in self.refs:
-            query = "//resources/resource[@xml:lang='%s']/%s" % (self.builder.lang, self.refs[name])
-            res = self.builder.xml_root.xpath(query)
-            if len(res) > 0:
-                return res[0].text
-            else:
-                return None
+        raise NotImplementedError
+
+    def decode(self, value):
+        """
+        By the self.datatype (handler):
+        >> self.datetype.decode(value)
+        """
+        raise NotImplementedError
 
 
 class StringControl(Control):
