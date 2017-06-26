@@ -30,8 +30,20 @@ class Runner:
         self.builder = None
         self.set_builder()
 
+        self.form = RunnerForm(self)
+
     def set_xml_root(self):
         self.xml_root = generate_xml_root(self.xml)
 
     def set_builder(self):
         self.builder = Builder(self.builder_xml, self.lang)
+
+
+class RunnerForm:
+
+    def __init__(self, runner):
+        self.runner = runner
+
+    # TODO implement Pythonic object/attr notation to get control values.
+    def __getattr__(self, name):
+        raise NotImplementedError

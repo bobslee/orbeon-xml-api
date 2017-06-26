@@ -1,7 +1,8 @@
 import unittest
 import re
 
-from builder import Builder, Bind, Control
+from builder import Builder, Bind
+from controls import Control
 from utils import xml_from_file
 
 TEXT_CONTROLS_BIND = ['text-controls-bind', 'input-bind', 'htmlarea-bind', 'output-bind',
