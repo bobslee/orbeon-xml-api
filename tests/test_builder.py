@@ -55,6 +55,9 @@ class BuilderTestCase(unittest.TestCase):
             self.assertIn(name, self.control_names)
             self.assertIsInstance(control, Control)
 
+    """
+    Text Controls
+    """
     def test_input(self):
         _input = self.builder.controls['input']
 
@@ -109,10 +112,7 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(htmlarea.parent.bind.name, 'text-controls')
         self.assertEqual(htmlarea.parent.element.label, 'Text Controls')
 
-    """
-    Enough for (text-controls) 'bind' and 'parent' tests.
-    """
-
+    # Enough for (text-controls) 'bind' and 'parent' tests.
     def test_output(self):
         _output = self.builder.controls['output']
 
@@ -171,6 +171,9 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(textarea_counter.element.alert, '140 characters at most')
         self.assertEqual(textarea_counter.element.hint, None)
 
+    """
+    Date Controls
+    """
     def test_date(self):
         date_control = self.builder.controls['date']
 
@@ -224,7 +227,7 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(datetime_control.element.hint, 'Standard date and time field')
         self.assertEqual(datetime_control.element.alert, None)
 
-    def test_dropdown(self):
+    def test_dropdown_date(self):
         dropdown_date = self.builder.controls['dropdown-date']
         self.assertEqual(dropdown_date.element.label, 'Dropdown Date')
         self.assertEqual(dropdown_date.element.hint, 'Date selector with dropdown menus')
@@ -235,3 +238,126 @@ class BuilderTestCase(unittest.TestCase):
         self.assertEqual(fields_date_control.element.label, 'Fields Date')
         self.assertEqual(fields_date_control.element.hint, 'Date selector with separate fields')
         self.assertEqual(fields_date_control.element.alert, None)
+
+    """
+    Selection Controls
+    """
+    def test_autocomplete(self):
+        autocomplete = self.builder.controls['autocomplete']
+        self.assertEqual(autocomplete.element.label, 'Autocomplete')
+        self.assertEqual(autocomplete.element.hint, 'Enter the name of a country')
+        # TODO code (us-code?)
+        # self.assertEqual(autocomplete.element.code, 'Country code')
+        self.assertEqual(autocomplete.element.alert, None)
+
+    def test_yesno_input(self):
+        yesno_input = self.builder.controls['yesno-input']
+        self.assertEqual(yesno_input.element.label, 'Yes/No Answer')
+        self.assertEqual(yesno_input.element.hint, None)
+
+    def test_checkbox_input(self):
+        checkbox_input = self.builder.controls['checkbox-input']
+        self.assertEqual(checkbox_input.element.label, 'Single Checkbox')
+        self.assertEqual(checkbox_input.element.hint, 'An input which captures "true" or "false"')
+
+    def test_radio_buttons(self):
+        radio_buttons = self.builder.controls['radio-buttons']
+        self.assertEqual(radio_buttons.element.label, 'Radio Buttons')
+        self.assertEqual(radio_buttons.element.hint, 'Standard radio buttons')
+        # TODO item(s) see itemset on control
+
+    def test_open_select1(self):
+        open_select1 = self.builder.controls['open-select1']
+        self.assertEqual(open_select1.element.label, 'Ice Cream Flavor')
+        self.assertEqual(open_select1.element.hint, None)
+        # TODO item(s) see itemset on control
+
+    def test_dropdown(self):
+        dropdown = self.builder.controls['dropdown']
+        self.assertEqual(dropdown.element.label, 'Dropdown Menu')
+        self.assertEqual(dropdown.element.hint, 'Standard dropdown')
+        # TODO item(s) see itemset on control
+
+    def test_dynamic_data_dropdown(self):
+        dynamic_data_dropdown = self.builder.controls['dynamic-data-dropdown']
+        self.assertEqual(dynamic_data_dropdown.element.label, 'Dynamic Data Dropdown')
+        self.assertEqual(dynamic_data_dropdown.element.hint, None)
+
+    def test_checkboxes(self):
+        checkboxes = self.builder.controls['checkboxes']
+        self.assertEqual(checkboxes.element.label, 'Checkboxes')
+        self.assertEqual(checkboxes.element.hint, 'Standard checkboxes')
+        # TODO item(s) see itemset on control
+
+    def test_multiple_list(self):
+        multiple_list = self.builder.controls['multiple-list']
+        self.assertEqual(multiple_list.element.label, 'Scrollable Checkboxes')
+        self.assertEqual(multiple_list.element.hint, 'Scrollable selector with checkboxes')
+        # TODO item(s) see itemset on control
+
+    """
+    Attachment Controls
+
+    TODO:
+    special data/binding etc.
+    """
+    def test_image_attachment(self):
+        image_attachment = self.builder.controls['image-attachment']
+        self.assertEqual(image_attachment.element.label, 'Image Attachment')
+        self.assertEqual(image_attachment.element.hint, None)
+
+    def test_file_attachment(self):
+        file_attachment = self.builder.controls['file-attachment']
+        self.assertEqual(file_attachment.element.label, 'File Attachment')
+        self.assertEqual(file_attachment.element.hint, None)
+
+    def test_static_image(self):
+        static_image = self.builder.controls['static-image']
+        self.assertEqual(static_image.element.label, 'Static Image')
+        self.assertEqual(static_image.element.hint, None)
+
+    """
+    Button Controls
+    """
+    def test_standard_button(self):
+        standard_button = self.builder.controls['standard-button']
+        self.assertEqual(standard_button.element.label, 'Standard Button')
+        self.assertEqual(standard_button.element.hint, 'Standard browser button')
+
+    def test_link_button(self):
+        link_button = self.builder.controls['link-button']
+        self.assertEqual(link_button.element.label, 'Link Button')
+        self.assertEqual(link_button.element.hint, 'Button as a link')
+
+    """
+    Typed Controls
+    """
+    def test_email(self):
+        email = self.builder.controls['email']
+        self.assertEqual(email.element.label, 'Email Address')
+        self.assertEqual(email.element.hint, 'Email field with validation')
+
+    def test_currency(self):
+        currency = self.builder.controls['currency']
+        self.assertEqual(currency.element.label, 'Currency')
+        self.assertEqual(currency.element.hint, 'Currency field')
+
+    def test_us_phone(self):
+        us_phone = self.builder.controls['us-phone']
+        self.assertEqual(us_phone.element.label, 'US Phone Number')
+        self.assertEqual(us_phone.element.hint, 'US phone number field')
+
+    def test_number(self):
+        number = self.builder.controls['number']
+        self.assertEqual(number.element.label, 'Number')
+        self.assertEqual(number.element.hint, 'Number field with validation')
+
+    def test_us_state(self):
+        us_state = self.builder.controls['us-state']
+        self.assertEqual(us_state.element.label, 'US State')
+        self.assertEqual(us_state.element.hint, 'US state selector')
+
+    def test_us_address(self):
+        us_address = self.builder.controls['us-address']
+        self.assertEqual(us_address.element.label, 'US Address Template')
+        self.assertEqual(us_address.element.hint, None)
