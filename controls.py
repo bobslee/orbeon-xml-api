@@ -142,7 +142,7 @@ class DateControl(Control):
         return datetime.strptime(value, '%Y-%m-%d').date()
 
     def encode(self, value):
-        return value
+        return datetime.strftime(value, '%Y-%m-%d')
 
 
 class TimeControl(Control):
