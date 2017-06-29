@@ -1,6 +1,6 @@
 from .test_common import CommonTestCase
-from builder import Bind
-from controls import Control
+from orbeon_xml_api.builder import Bind
+from orbeon_xml_api.controls import Control
 
 
 class BuilderTestCase(CommonTestCase):

@@ -1,5 +1,5 @@
-from builder import Builder
-from utils import generate_xml_root
+from orbeon_xml_api.builder import Builder
+from orbeon_xml_api.utils import generate_xml_root
 
 
 class Runner:

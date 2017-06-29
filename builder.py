@@ -1,9 +1,9 @@
 from lxml import etree
 
-from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
+from orbeon_xml_api.controls import StringControl, DateControl, TimeControl, DateTimeControl, \
     BooleanControl, AnyURIControl, EmailControl, DecimalControl
 
-from utils import generate_xml_root
+from orbeon_xml_api.utils import generate_xml_root
 
 XS_TYPE_CONTROL = {
     'xf:string': StringControl,
@@ -80,7 +80,7 @@ class Bind:
         self.element = element
         self.id = element.get('id')
         self.name = element.get('name')
-        self.xs_type = element.get('xs:type', 'xf:string')
+        self.xs_type = element.get('type', 'xf:string')
 
         self.parent = None
         self.set_parent()

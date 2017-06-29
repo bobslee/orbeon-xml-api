@@ -1,9 +1,9 @@
 import unittest
 import re
 
-from builder import Builder
-from runner import Runner
-from utils import xml_from_file
+from orbeon_xml_api.builder import Builder
+from orbeon_xml_api.runner import Runner
+from orbeon_xml_api.utils import xml_from_file
 
 
 class RunnerTestCase(unittest.TestCase):

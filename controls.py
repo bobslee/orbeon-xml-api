@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Element:
     """
     The Element of a Control
@@ -40,6 +42,9 @@ class Control:
         # Still called model_instance, because of FB terminology.
         self.model_instance = None
         self.set_model_instance()
+
+        self.default_raw_value = None
+        self.set_default_raw_value()
 
         self.default_value = None
         self.set_default_value()
@@ -89,6 +94,9 @@ class Control:
                     ref_value = '/'.join(ref_items[1:])
                     self.refs[ref_name] = ref_value
 
+    def set_default_raw_value(self):
+        raise NotImplementedError
+
     def set_default_value(self):
         raise NotImplementedError
 
@@ -109,6 +117,9 @@ class Control:
 
 class StringControl(Control):
 
+    def set_default_raw_value(self):
+        self.default_raw_value = getattr(self.model_instance, 'text', None)
+
     def set_default_value(self):
         self.default_value = self.decode(getattr(self.model_instance, 'text', None))
 
@@ -121,17 +132,24 @@ class StringControl(Control):
 
 class DateControl(Control):
 
+    def set_default_raw_value(self):
+        self.default_raw_value = getattr(self.model_instance, 'text', None)
+
     def set_default_value(self):
         self.default_value = self.decode(self.model_instance.text)
 
     def decode(self, value):
-        return value
+        return datetime.strptime(value, '%Y-%m-%d').date()
 
     def encode(self, value):
         return value
 
 
 class TimeControl(Control):
+
+    def set_default_raw_value(self):
+        self.default_raw_value = getattr(self.model_instance, 'text', None)
+
     def set_default_value(self):
         self.default_value = self.decode(self.model_instance.text)
 
@@ -143,6 +161,10 @@ class TimeControl(Control):
 
 
 class DateTimeControl(Control):
+
+    def set_default_raw_value(self):
+        self.default_raw_value = getattr(self.model_instance, 'text', None)
+
     def set_default_value(self):
         self.default_value = self.decode(self.model_instance.text)
 
@@ -154,6 +176,10 @@ class DateTimeControl(Control):
 
 
 class BooleanControl(Control):
+
+    def set_default_raw_value(self):
+        self.default_raw_value = getattr(self.model_instance, 'text', None)
+
     def set_default_value(self):
         self.default_value = self.decode(self.model_instance.text)
 
@@ -172,8 +198,13 @@ class BooleanControl(Control):
 
 
 class AnyURIControl(Control):
+
+    def set_default_raw_value(self):
+        self.default_raw_value = getattr(self.model_instance, 'text', None)
+
     def set_default_value(self):
-        self.default_value = self.decode(self.model_instance.text)
+        if self.model_instance is not None:
+            self.default_value = self.decode(self.model_instance.text)
 
     def decode(self, value):
         return value

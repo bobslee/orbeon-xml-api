@@ -10,6 +10,7 @@ class InputTestCase(CommonTestCase):
         self.assertEqual(_input.hint, 'Standard input field')
         self.assertEqual(_input.alert, None)
         self.assertEqual(_input.default_value, 'Michelle')
+        self.assertEqual(_input.default_raw_value, 'Michelle')
 
         self.assertEqual(_input.element.label, 'Input Field')
         self.assertEqual(_input.element.hint, 'Standard input field')
