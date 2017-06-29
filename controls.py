@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 
 class Element:
     """
@@ -154,10 +154,10 @@ class TimeControl(Control):
         self.default_value = self.decode(self.model_instance.text)
 
     def decode(self, value):
-        return value
+        return datetime.strptime(value, '%H:%M:%S').time()
 
     def encode(self, value):
-        return value
+        return time.strftime(value, '%H:%M:%S')
 
 
 class DateTimeControl(Control):
