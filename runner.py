@@ -45,5 +45,28 @@ class RunnerForm:
         self.runner = runner
 
     # TODO implement Pythonic object/attr notation to get control values.
-    def __getattr__(self, name):
-        raise NotImplementedError
+    # def __getattr__(self, name):
+    #     raise NotImplementedError
+
+    def get(self, name):
+        """
+        @param name str The control name (form element tag)
+        """
+
+        if name not in self.runner.builder.controls:
+            return False
+
+        control = self.runner.builder.controls[name]
+        query = "//form/%s/%s" % (control.parent.bind.name, name)
+
+        res = self.runner.xml_root.xpath(query)[0]
+        control.set_raw_value(res)
+        control.set_value(res)
+
+        return control
+
+    def set(self, name, value):
+        """
+        Set Runner Control XML value.
+        """
+        pass

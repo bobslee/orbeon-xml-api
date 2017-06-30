@@ -49,6 +49,9 @@ class Control:
         self.default_value = None
         self.set_default_value()
 
+        self.raw_value = None
+        self.value = None
+
         self.element = Element(self)
 
         # Attributes via Element (which get these dynamically)
@@ -100,6 +103,12 @@ class Control:
     def set_default_value(self):
         raise NotImplementedError
 
+    def set_raw_value(self, value):
+        raise NotImplementedError
+
+    def set_value(self, value):
+        raise NotImplementedError
+
     def encode(self, value):
         """
         By the self.datatype (handler):
@@ -123,6 +132,12 @@ class StringControl(Control):
     def set_default_value(self):
         self.default_value = self.decode(getattr(self.model_instance, 'text', None))
 
+    def set_raw_value(self, element):
+        self.raw_value = element.text
+
+    def set_value(self, element):
+        self.value = element.text
+
     def decode(self, value):
         return value
 
@@ -137,6 +152,12 @@ class DateControl(Control):
 
     def set_default_value(self):
         self.default_value = self.decode(self.model_instance.text)
+
+    def set_raw_value(self, element):
+        self.raw_value = element.text
+
+    def set_value(self, element):
+        self.value = self.decode(element.text)
 
     def decode(self, value):
         return datetime.strptime(value, '%Y-%m-%d').date()
