@@ -3,7 +3,7 @@ from . import CommonTestCase
 
 class InputTestCase(CommonTestCase):
 
-    def test_input(self):
+    def test_builder_input(self):
         _input = self.builder.controls['input']
 
         self.assertEqual(_input.label, 'Input Field')
@@ -18,15 +18,18 @@ class InputTestCase(CommonTestCase):
         # Doesn't exist, but shouldn't raise Exception
         self.assertEqual(_input.element.alert, None)
 
-    def test_input_bind(self):
+    def test_builder_input_bind(self):
         _input = self.builder.controls['input']
 
         self.assertEqual(_input.bind.id, 'input-bind')
         self.assertEqual(_input.bind.name, 'input')
 
-    def test_input_parent(self):
+    def test_builder_input_parent(self):
         _input = self.builder.controls['input']
 
         self.assertEqual(_input.parent.bind.id, 'text-controls-bind')
         self.assertEqual(_input.parent.bind.name, 'text-controls')
         self.assertEqual(_input.parent.element.label, 'Text Controls')
+
+    def test_runner_input(self):
+        self.assertEqual(self.runner.form.get('input'), 'John')

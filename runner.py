@@ -44,11 +44,21 @@ class RunnerForm:
     def __init__(self, runner):
         self.runner = runner
 
+        self.values = {}
+        self.set_values()
+
     # TODO implement Pythonic object/attr notation to get control values.
     # def __getattr__(self, name):
     #     raise NotImplementedError
 
-    def get(self, name):
+    def set_values(self):
+        for name, control in self.runner.builder.controls.items():
+            element = self.get_form_element(name)
+
+            if element is not False:
+                self.values[name] = control.decode_form_element(element)
+
+    def get_form_element(self, name):
         """
         @param name str The control name (form element tag)
         """
@@ -57,13 +67,22 @@ class RunnerForm:
             return False
 
         control = self.runner.builder.controls[name]
-        query = "//form/%s/%s" % (control.parent.bind.name, name)
+        if control.parent is None:
+            return False
+            # query = "//form/%s" % name
+        else:
+            query = "//form/%s/%s" % (control.parent.bind.name, name)
 
-        res = self.runner.xml_root.xpath(query)[0]
-        control.set_raw_value(res)
-        control.set_value(res)
+        res = self.runner.xml_root.xpath(query)
 
-        return control
+        # TODO Fix composite controls like 'us-address'
+        # if len(res) > 1 or not res or len(res[0].getchildren()) > 1:
+        #     return False
+
+        return res[0]
+
+    def get(self, name):
+        return self.values[name]
 
     def set(self, name, value):
         """

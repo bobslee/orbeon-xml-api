@@ -43,19 +43,3 @@ class RunnerTestCase(unittest.TestCase):
         runner = Runner(self.runner_xml, self.builder)
         self.assertIsInstance(runner, Runner)
         self.assertIsInstance(self.runner.form, RunnerForm)
-
-    def test_input(self):
-        self.assertIsInstance(self.runner.form, RunnerForm)
-
-        _input = self.runner.form.get('input')
-
-        self.assertEqual(_input.raw_value, 'John')
-        self.assertEqual(_input.value, 'John')
-
-    def test_date(self):
-        _date = self.runner.form.get('date')
-
-        date_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
-
-        self.assertEqual(_date.raw_value, '2017-07-01')
-        self.assertEqual(_date.value, date_obj)

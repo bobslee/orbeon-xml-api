@@ -6,7 +6,7 @@ from orbeon_xml_api.controls import DateControl
 
 class DateTestCase(CommonTestCase):
 
-    def test_date(self):
+    def test_builder_date(self):
         date_control = self.builder.controls['date']
 
         self.assertIsInstance(date_control, DateControl)
@@ -19,13 +19,13 @@ class DateTestCase(CommonTestCase):
         self.assertEqual(date_control.default_raw_value, '2009-10-16')
         self.assertEqual(date_control.default_value, date_obj)
 
-    def test_date_bind(self):
+    def test_builder_date_bind(self):
         date_control = self.builder.controls['date']
 
         self.assertEqual(date_control.bind.id, 'date-bind')
         self.assertEqual(date_control.bind.name, 'date')
 
-    def test_date_element(self):
+    def test_builder_date_element(self):
         date_control = self.builder.controls['date']
         self.assertEqual(date_control.element.label, 'Date')
         self.assertEqual(date_control.element.hint, 'Standard date field')
@@ -36,7 +36,7 @@ class DateTestCase(CommonTestCase):
         self.assertEqual(date_control.hint, 'Standard date field')
         self.assertEqual(date_control.alert, None)
 
-    def test_date_parent(self):
+    def test_builder_date_parent(self):
         date_control = self.builder.controls['date']
 
         self.assertEqual(date_control.parent.bind.id, 'date-time-controls-bind')
@@ -44,3 +44,7 @@ class DateTestCase(CommonTestCase):
 
         self.assertEqual(date_control.parent.label, 'Date and Time')
         self.assertEqual(date_control.parent.element.label, 'Date and Time')
+
+    def test_runner_date(self):
+        date_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
+        self.assertEqual(self.runner.form.get('date'), date_obj)

@@ -41,7 +41,7 @@ class CommonTestCase(unittest.TestCase):
         self.runner_xml = xml_from_file('tests/data', 'test_controls_runner.xml')
 
         self.builder = Builder(self.builder_xml)
-        # self.runner = Runner(self.runner_xml, self.builder)
+        self.runner = Runner(self.runner_xml, None, self.builder_xml)
 
         self.bind_names = BINDS
         self.control_names = self._set_control_names()
