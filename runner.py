@@ -30,6 +30,9 @@ class Runner:
         self.builder = None
         self.set_builder()
 
+        self.values = {}
+        self.set_values()
+
         self.form = RunnerForm(self)
 
     def set_xml_root(self):
@@ -38,21 +41,8 @@ class Runner:
     def set_builder(self):
         self.builder = Builder(self.builder_xml, self.lang)
 
-
-class RunnerForm:
-
-    def __init__(self, runner):
-        self.runner = runner
-
-        self.values = {}
-        self.set_values()
-
-    # TODO implement Pythonic object/attr notation to get control values.
-    # def __getattr__(self, name):
-    #     raise NotImplementedError
-
     def set_values(self):
-        for name, control in self.runner.builder.controls.items():
+        for name, control in self.builder.controls.items():
             element = self.get_form_element(name)
 
             if element is not False:
@@ -63,17 +53,17 @@ class RunnerForm:
         @param name str The control name (form element tag)
         """
 
-        if name not in self.runner.builder.controls:
+        if name not in self.builder.controls:
             return False
 
-        control = self.runner.builder.controls[name]
+        control = self.builder.controls[name]
         if control.parent is None:
             return False
             # query = "//form/%s" % name
         else:
             query = "//form/%s/%s" % (control.parent.bind.name, name)
 
-        res = self.runner.xml_root.xpath(query)
+        res = self.xml_root.xpath(query)
 
         # TODO Fix composite controls like 'us-address'
         # if len(res) > 1 or not res or len(res[0].getchildren()) > 1:
@@ -81,11 +71,24 @@ class RunnerForm:
 
         return res[0]
 
-    def get(self, name):
+    def get_value(self, name):
         return self.values[name]
 
-    def set(self, name, value):
+    def set_value(self, name, value):
         """
         Set Runner Control XML value.
         """
         pass
+
+
+class RunnerForm:
+
+    def __init__(self, runner):
+        self._runner = runner
+
+    def __getattr__(self, s_name):
+        name = self._runner.builder.sanitized_control_names.get(s_name, False)
+        if name:
+            return self._runner.get_value(name)
+        else:
+            return False

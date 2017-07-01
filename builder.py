@@ -32,6 +32,9 @@ class Builder:
         self.controls = {}
         self.set_controls()
 
+        self.sanitized_control_names = {}
+        self.set_sanitized_control_names()
+
     def set_xml_root(self):
         self.xml_root = generate_xml_root(self.xml)
 
@@ -50,6 +53,13 @@ class Builder:
         for e in self.xml_root.xpath(query):
             bind = self.binds[e.get('bind')]
             self.controls[bind.name] = XS_TYPE_CONTROL[bind.xs_type](self, bind, e)
+
+    def set_sanitized_control_names(self):
+        for name in self.controls.keys():
+            k = name
+            k = k.replace('-', '')
+            k = k.replace('.', '_')
+            self.sanitized_control_names[k] = name
 
     # TODO
     def get_structure(self):

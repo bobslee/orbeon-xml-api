@@ -32,4 +32,5 @@ class InputTestCase(CommonTestCase):
         self.assertEqual(_input.parent.element.label, 'Text Controls')
 
     def test_runner_input(self):
-        self.assertEqual(self.runner.form.get('input'), 'John')
+        self.assertEqual(self.runner.get_value('input'), 'John')
+        self.assertEqual(self.runner.form.input, 'John')
