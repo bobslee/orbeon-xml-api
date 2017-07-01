@@ -1,16 +1,31 @@
 from . import CommonTestCase
 
+from orbeon_xml_api.controls import StringControl
+
 
 class SecretTestCase(CommonTestCase):
 
-    def test_secret(self):
-        secret = self.builder.controls['secret']
+    def setUp(self):
+        super(SecretTestCase, self).setUp()
+        self.control = self.builder.controls['secret']
 
-        self.assertEqual(secret.label, 'Password Field')
-        self.assertEqual(secret.hint, 'The password is 42 ;)')
-        self.assertEqual(secret.alert, None)
-        self.assertEqual(secret.default_value, '42')
+    def test_control(self):
+        self.assertIsInstance(self.control, StringControl)
 
-        self.assertEqual(secret.element.label, 'Password Field')
-        self.assertEqual(secret.element.hint, 'The password is 42 ;)')
-        self.assertEqual(secret.element.alert, None)
+    def test_builder_form(self):
+        self.assertEqual(self.control.label, 'Password Field')
+        self.assertEqual(self.control.hint, 'The password is 42 ;)')
+        self.assertEqual(self.control.alert, None)
+
+        self.assertEqual(self.control.element.label, 'Password Field')
+        self.assertEqual(self.control.element.hint, 'The password is 42 ;)')
+        self.assertEqual(self.control.element.alert, None)
+
+    def test_builder_form_default_value(self):
+        self.assertEqual(self.control.default_raw_value, '42')
+        self.assertEqual(self.control.default_value, '42')
+
+    def test_runner_form(self):
+        text = 'The question to life and everything is 42.'
+        self.assertEqual(self.runner.get_value('secret'), text)
+        self.assertEqual(self.runner.form.secret, text)

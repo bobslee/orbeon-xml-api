@@ -1,9 +1,31 @@
 from . import CommonTestCase
 
+from orbeon_xml_api.controls import StringControl
+
 
 class HtmlareaTestCase(CommonTestCase):
 
-    def test_htmlarea(self):
+    def setUp(self):
+        super(HtmlareaTestCase, self).setUp()
+        self.control = self.builder.controls['htmlarea']
+
+    def test_control(self):
+        self.assertIsInstance(self.control, StringControl)
+
+    def test_builder_bind(self):
+        htmlarea = self.builder.controls['htmlarea']
+
+        self.assertEqual(htmlarea.bind.id, 'htmlarea-bind')
+        self.assertEqual(htmlarea.bind.name, 'htmlarea')
+
+    def test_builder_parent(self):
+        htmlarea = self.builder.controls['htmlarea']
+
+        self.assertEqual(htmlarea.parent.bind.id, 'text-controls-bind')
+        self.assertEqual(htmlarea.parent.bind.name, 'text-controls')
+        self.assertEqual(htmlarea.parent.element.label, 'Text Controls')
+
+    def test_builder_form(self):
         htmlarea = self.builder.controls['htmlarea']
 
         self.assertEqual(htmlarea.label, 'Formatted Text')
@@ -17,15 +39,12 @@ class HtmlareaTestCase(CommonTestCase):
         # Doesn't exist, but shouldn't raise Exception
         self.assertEqual(htmlarea.element.alert, None)
 
-    def test_htmlarea_bind(self):
-        htmlarea = self.builder.controls['htmlarea']
+    def test_builder_form_default_value(self):
+        re = '.*Giuseppe Fortunino Francesco Verdi.*'
+        self.assertRegex(self.control.default_raw_value, re)
+        self.assertRegex(self.control.default_value, re)
 
-        self.assertEqual(htmlarea.bind.id, 'htmlarea-bind')
-        self.assertEqual(htmlarea.bind.name, 'htmlarea')
-
-    def test_htmlarea_parent(self):
-        htmlarea = self.builder.controls['htmlarea']
-
-        self.assertEqual(htmlarea.parent.bind.id, 'text-controls-bind')
-        self.assertEqual(htmlarea.parent.bind.name, 'text-controls')
-        self.assertEqual(htmlarea.parent.element.label, 'Text Controls')
+    def test_runner_form(self):
+        re = '.*The Good, the Bad and the Ugly.*'
+        self.assertRegex(self.runner.get_value('htmlarea'), re)
+        self.assertRegex(self.runner.form.htmlarea, re)
