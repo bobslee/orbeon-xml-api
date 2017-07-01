@@ -9,26 +9,26 @@ class Runner:
         @param builder Builder
         @param builder_xml str
         """
-
-        if builder and builder_xml:
-            raise Exception("Constructor accepts either builder or builder_xml.")
-
-        if builder:
-            assert isinstance(builder, Builder)
-        elif builder_xml:
-            assert isinstance(builder_xml, bytes)
-        else:
-            raise Exception("Provide either the argument: builder or builder_xml.")
-
         self.xml = xml
+        self.builder = builder
         self.builder_xml = builder_xml
         self.lang = lang
 
         self.xml_root = None
         self.set_xml_root()
 
-        self.builder = None
-        self.set_builder()
+        if self.builder and self.builder_xml:
+            raise Exception("Constructor accepts either builder or builder_xml.")
+
+        if self.builder:
+            assert isinstance(self.builder, Builder)
+        elif self.builder_xml:
+            assert isinstance(self.builder_xml, bytes)
+        else:
+            raise Exception("Provide either the argument: builder or builder_xml.")
+
+        if self.builder is None and self.builder_xml:
+            self.set_builder_by_builder_xml()
 
         self.values = {}
         self.set_values()
@@ -38,7 +38,7 @@ class Runner:
     def set_xml_root(self):
         self.xml_root = generate_xml_root(self.xml)
 
-    def set_builder(self):
+    def set_builder_by_builder_xml(self):
         self.builder = Builder(self.builder_xml, self.lang)
 
     def set_values(self):

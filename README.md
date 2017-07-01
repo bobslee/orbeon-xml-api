@@ -1,23 +1,48 @@
 # orbeon-xml-api
 
-## Run unit tests
-
-```
-python -m unittest tests.test_builder
-python -m unittest tests.test_runner
-```
+## Unit tests
 
 ### nose
 
+Currently with **nose**.
+Standard Python **unittest** crashes.
+
+
+*Install nose:*
+
 ```
+pip install nose
+```
+
+*Run nosetests:*
+
+```
+nosetests
+
 nosetests tests/controls
 nosetests tests.controls
 
 nosetests tests/controls/test_input.py
 ```
 
-With STDOUT (for pdb usage) support:
+*Send nose STDOUT (pdb support):*
 
 ```
-nosetests -s tests.controls
+nosetests -s
+```
+
+*Performance tests (timers) - install nose-timer:*
+
+```
+pip install nose-timer
+
+nosetests --with-timer
+
+```
+
+### Python unittest (currently crashes)
+
+```
+python -m unittest tests.test_builder
+python -m unittest tests.test_runner
 ```
