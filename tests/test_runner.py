@@ -1,9 +1,5 @@
 import unittest
-import re
 
-from datetime import datetime
-
-from orbeon_xml_api.builder import Builder
 from orbeon_xml_api.runner import Runner, RunnerForm
 from orbeon_xml_api.utils import xml_from_file
 
