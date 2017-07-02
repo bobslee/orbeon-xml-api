@@ -181,10 +181,10 @@ class DateTimeControl(Control):
         self.default_value = self.decode(self.model_instance.text)
 
     def decode(self, value):
-        return value
+        return datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
 
     def encode(self, value):
-        return value
+        return datetime.strftime(value, '%Y-%m-%dT%H:%M:%S')
 
     def decode_form_element(self, element):
         return self.decode(element.text)
