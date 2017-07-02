@@ -5,10 +5,10 @@ from orbeon_xml_api.runner import Runner
 from orbeon_xml_api.utils import xml_from_file
 
 
-class RunnerTestCase(unittest.TestCase):
+class BenchmarkPerformanceTestCase(unittest.TestCase):
 
     def setUp(self):
-        super(RunnerTestCase, self).setUp()
+        super(BenchmarkPerformanceTestCase, self).setUp()
 
         self.runner_xml = xml_from_file('tests/data', 'test_controls_runner.xml')
         self.builder_xml = xml_from_file('tests/data', 'test_controls_builder.xml')
