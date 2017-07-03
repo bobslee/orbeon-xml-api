@@ -162,7 +162,7 @@ From Wikipedia (https://en.wikipedia.org/wiki/Music).</textarea>
             </xf:bind>
             <xf:instance xxf:readonly="true" id="fr-form-metadata">
                 <metadata>
-                    <application-name>odoo</application-name>
+                    <application-name>orbeon</application-name>
                     <form-name>controls</form-name>
                     <title xml:lang="en">controls</title>
                     <description xml:lang="en">This form shows all the built-in controls supported by Form Builder</description>
