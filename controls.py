@@ -215,6 +215,19 @@ class BooleanControl(Control):
         return self.decode(element.text)
 
 
+class Select1Control(StringControl):
+    pass
+
+
+class SelectControl(StringControl):
+
+    def decode(self, value):
+        return value.split(' ')
+
+    def encode(self, value):
+        return ' '.join(value)
+
+
 class AnyURIControl(Control):
 
     def set_default_raw_value(self):

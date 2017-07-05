@@ -1,10 +1,46 @@
 from . import CommonTestCase
 
+from orbeon_xml_api.controls import SelectControl
+
 
 class MultipleListTestCase(CommonTestCase):
 
-    # TODO item(s) see itemset on control
-    def test_multiple_list(self):
-        multiple_list = self.builder.controls['multiple-list']
-        self.assertEqual(multiple_list.element.label, 'Scrollable Checkboxes')
-        self.assertEqual(multiple_list.element.hint, 'Scrollable selector with checkboxes')
+    def setUp(self):
+        super(MultipleListTestCase, self).setUp()
+        self.control = self.builder.controls['multiple-list']
+
+    def test_control(self):
+        self.assertIsInstance(self.control, SelectControl)
+
+        string = 'cat dog fish'
+        listing = ['cat', 'dog', 'fish']
+
+        self.assertEqual(self.control.decode(string), listing)
+        self.assertEqual(self.control.encode(listing), string)
+
+    def test_builder_bind(self):
+        self.assertEqual(self.control.bind.id, 'multiple-list-bind')
+        self.assertEqual(self.control.bind.name, 'multiple-list')
+
+    def test_builder_parent(self):
+        self.assertEqual(self.control.parent.bind.id, 'selection-controls-bind')
+        self.assertEqual(self.control.parent.bind.name, 'selection-controls')
+        self.assertEqual(self.control.parent.element.label, 'Selection Controls')
+
+    def test_builder_form(self):
+        self.assertEqual(self.control.element.label, 'Scrollable Checkboxes')
+        self.assertEqual(self.control.element.hint, 'Scrollable selector with checkboxes')
+
+        # Doesn't exist, but shouldn't raise Exception
+        self.assertEqual(self.control.element.alert, None)
+
+        self.assertEqual(self.control.label, 'Scrollable Checkboxes')
+        self.assertEqual(self.control.hint, 'Scrollable selector with checkboxes')
+
+    def test_builder_form_default_value(self):
+        self.assertEqual(self.control.default_raw_value, 'cat bird')
+        self.assertEqual(self.control.default_value, ['cat', 'bird'])
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.get_value('multiple-list'), ['dog', 'fish'])
+        self.assertEqual(self.runner.form.multiplelist, ['dog', 'fish'])

@@ -1,7 +1,8 @@
 from lxml import etree
 
 from orbeon_xml_api.controls import StringControl, DateControl, TimeControl, DateTimeControl, \
-    BooleanControl, AnyURIControl, EmailControl, DecimalControl
+    BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
+    Select1Control, SelectControl
 
 from orbeon_xml_api.utils import generate_xml_root
 
@@ -29,6 +30,9 @@ class Builder:
         self.binds = {}
         self.set_binds()
 
+        self.fr_body_elements = []
+        self.set_fr_body_elements()
+
         self.controls = {}
         self.set_controls()
 
@@ -47,12 +51,17 @@ class Builder:
         for e in self.xml_root.xpath(query):
             self.binds[e.get('id')] = Bind(self, e)
 
-    def set_controls(self):
+    def set_fr_body_bind_elements(self):
         query = "//*[name()='fr:body']//*[@bind]"
+        self.fr_body_elements = self.xml_root.xpath(query)
 
-        for e in self.xml_root.xpath(query):
-            bind = self.binds[e.get('bind')]
-            self.controls[bind.name] = XF_TYPE_CONTROL[bind.xf_type](self, bind, e)
+    def set_controls(self):
+        for el in self.fr_body_elements:
+            bind = self.binds[el.get('bind')]
+            control = bind.get_fr_control_object(el)
+
+            if control is not None:
+                self.controls[bind.name] = control
 
     def set_sanitized_control_names(self):
         for name in self.controls.keys():
@@ -103,3 +112,13 @@ class Bind:
             self.parent = Bind(self.builder, parent_element)
         else:
             self.parent = None
+
+    def get_fr_control_object(self, element):
+        fr_control_tag = etree.QName(element).localname
+
+        if fr_control_tag == 'select1':
+            return Select1Control(self.builder, self, element)
+        elif fr_control_tag == 'select':
+            return SelectControl(self.builder, self, element)
+        else:
+            return XF_TYPE_CONTROL[self.xf_type](self.builder, self, element)
