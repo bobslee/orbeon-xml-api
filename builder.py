@@ -5,7 +5,7 @@ from orbeon_xml_api.controls import StringControl, DateControl, TimeControl, Dat
 
 from orbeon_xml_api.utils import generate_xml_root
 
-XS_TYPE_CONTROL = {
+XF_TYPE_CONTROL = {
     'xf:string': StringControl,
     'xs:string': StringControl,
     'xf:date': DateControl,
@@ -52,7 +52,7 @@ class Builder:
 
         for e in self.xml_root.xpath(query):
             bind = self.binds[e.get('bind')]
-            self.controls[bind.name] = XS_TYPE_CONTROL[bind.xs_type](self, bind, e)
+            self.controls[bind.name] = XF_TYPE_CONTROL[bind.xf_type](self, bind, e)
 
     def set_sanitized_control_names(self):
         for name in self.controls.keys():
@@ -66,12 +66,12 @@ class Builder:
         """
         {
             CONTROL_NAME: {
-                'xs_type': XS_TYPE,
+                'xf_type': XF_TYPE,
                 'bind': Bind,
                 'control': Control,
                 'parent': {
                     CONTROL_NAME: {
-                        'xs_type': XS_TYPE,
+                        'xf_type': XF_TYPE,
                         'bind': Bind,
                         'control': Control,
                         'parent': None,
@@ -90,7 +90,7 @@ class Bind:
         self.element = element
         self.id = element.get('id')
         self.name = element.get('name')
-        self.xs_type = element.get('type', 'xf:string')
+        self.xf_type = element.get('type', 'xf:string')
 
         self.parent = None
         self.set_parent()
