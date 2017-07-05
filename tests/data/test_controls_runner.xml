@@ -31,11 +31,11 @@
         <dynamic-data-dropdown itemset-empty="false">ca</dynamic-data-dropdown>
         <checkboxes>cat bird</checkboxes>
         <multiple-list>cat bird</multiple-list>
-        <radio-buttons>cat</radio-buttons>
+        <radio-buttons>dog</radio-buttons>
         <open-select1>Pistachio</open-select1>
-        <yesno-input>false</yesno-input>
-        <checkbox-input>false</checkbox-input>
-        <autocomplete label="United States">us</autocomplete>
+        <yesno-input>true</yesno-input>
+        <checkbox-input>true</checkbox-input>
+        <autocomplete label="United States">nl</autocomplete>
     </selection-controls>
     <attachment-controls>
         <static-image filename="Eta Carinae Nebula (384).jpg" mediatype="image/jpeg" size="193055">/fr/service/persistence/crud/orbeon/builder/data/417b8b4473f6db9e0f94b05ccb9208be/340971f98952e4b9d15a9810b1eff00fb7b8cdb1.bin</static-image>

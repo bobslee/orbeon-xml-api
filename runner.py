@@ -30,6 +30,7 @@ class Runner:
         if self.builder is None and self.builder_xml:
             self.set_builder_by_builder_xml()
 
+        self.raw_values = {}
         self.values = {}
         self.set_values()
 
@@ -46,6 +47,7 @@ class Runner:
             element = self.get_form_element(name)
 
             if element is not False:
+                self.raw_values[name] = getattr(element, 'text', None)
                 self.values[name] = control.decode_form_element(element)
 
     def get_form_element(self, name):
@@ -70,6 +72,9 @@ class Runner:
         #     return False
 
         return res[0]
+
+    def get_raw_value(self, name):
+        return self.raw_values[name]
 
     def get_value(self, name):
         return self.values[name]

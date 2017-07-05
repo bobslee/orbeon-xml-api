@@ -1,9 +1,38 @@
 from . import CommonTestCase
 
+from orbeon_xml_api.controls import BooleanControl
+
 
 class YesnoInputTestCase(CommonTestCase):
 
-    def test_yesno_input(self):
-        yesno_input = self.builder.controls['yesno-input']
-        self.assertEqual(yesno_input.element.label, 'Yes/No Answer')
-        self.assertEqual(yesno_input.element.hint, None)
+    def setUp(self):
+        super(YesnoInputTestCase, self).setUp()
+        self.control = self.builder.controls['yesno-input']
+
+    def test_control(self):
+        self.assertIsInstance(self.control, BooleanControl)
+
+    def test_builder_bind(self):
+        self.assertEqual(self.control.bind.id, 'yesno-input-bind')
+        self.assertEqual(self.control.bind.name, 'yesno-input')
+
+    def test_builder_parent(self):
+        self.assertEqual(self.control.parent.bind.id, 'selection-controls-bind')
+        self.assertEqual(self.control.parent.bind.name, 'selection-controls')
+        self.assertEqual(self.control.parent.element.label, 'Selection Controls')
+
+    def test_builder_form(self):
+        self.assertEqual(self.control.element.label, 'Yes/No Answer')
+        self.assertEqual(self.control.element.hint, None)
+
+        self.assertEqual(self.control.label, 'Yes/No Answer')
+        self.assertEqual(self.control.hint, None)
+
+    def test_builder_form_default_value(self):
+        self.assertEqual(self.control.default_raw_value, 'false')
+        self.assertEqual(self.control.default_value, False)
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.get_raw_value('yesno-input'), 'true')
+        self.assertEqual(self.runner.get_value('yesno-input'), True)
+        self.assertEqual(self.runner.form.yesnoinput, True)
