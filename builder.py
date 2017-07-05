@@ -51,7 +51,7 @@ class Builder:
         for e in self.xml_root.xpath(query):
             self.binds[e.get('id')] = Bind(self, e)
 
-    def set_fr_body_bind_elements(self):
+    def set_fr_body_elements(self):
         query = "//*[name()='fr:body']//*[@bind]"
         self.fr_body_elements = self.xml_root.xpath(query)
 
