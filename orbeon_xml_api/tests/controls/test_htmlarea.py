@@ -1,6 +1,6 @@
 from . import CommonTestCase
 
-from orbeon_xml_api.controls import StringControl
+from ..controls import StringControl
 
 
 class HtmlareaTestCase(CommonTestCase):
@@ -41,10 +41,10 @@ class HtmlareaTestCase(CommonTestCase):
 
     def test_builder_form_default_value(self):
         re = '.*Giuseppe Fortunino Francesco Verdi.*'
-        self.assertRegex(self.control.default_raw_value, re)
-        self.assertRegex(self.control.default_value, re)
+        self.assertRegexpMatches(self.control.default_raw_value, re)
+        self.assertRegexpMatches(self.control.default_value, re)
 
     def test_runner_form(self):
         re = '.*The Good, the Bad and the Ugly.*'
-        self.assertRegex(self.runner.get_value('htmlarea'), re)
-        self.assertRegex(self.runner.form.htmlarea, re)
+        self.assertRegexpMatches(self.runner.get_value('htmlarea'), re)
+        self.assertRegexpMatches(self.runner.form.htmlarea, re)

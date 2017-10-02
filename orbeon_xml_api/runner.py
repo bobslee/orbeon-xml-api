@@ -1,5 +1,5 @@
-from orbeon_xml_api.builder import Builder
-from orbeon_xml_api.utils import generate_xml_root
+from builder import Builder
+from utils import generate_xml_root
 
 
 class Runner:
@@ -20,12 +20,12 @@ class Runner:
         if self.builder and self.builder_xml:
             raise Exception("Constructor accepts either builder or builder_xml.")
 
-        if self.builder:
-            assert isinstance(self.builder, Builder)
-        elif self.builder_xml:
-            assert isinstance(self.builder_xml, bytes)
-        else:
-            raise Exception("Provide either the argument: builder or builder_xml.")
+        # if self.builder:
+        #     assert isinstance(self.builder, Builder)
+        # elif self.builder_xml:
+        #     assert isinstance(self.builder_xml, bytes)
+        # else:
+        #     raise Exception("Provide either the argument: builder or builder_xml.")
 
         if self.builder is None and self.builder_xml:
             self.set_builder_by_builder_xml()

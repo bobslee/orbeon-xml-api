@@ -145,7 +145,8 @@ class DateControl(Control):
         self.default_value = self.decode(self.model_instance.text)
 
     def decode(self, value):
-        return datetime.strptime(value, '%Y-%m-%d').date()
+        if value:
+            return datetime.strptime(value, '%Y-%m-%d').date()
 
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%d')

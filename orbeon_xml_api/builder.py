@@ -1,10 +1,10 @@
 from lxml import etree
 
-from orbeon_xml_api.controls import StringControl, DateControl, TimeControl, DateTimeControl, \
+from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
     BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
     Select1Control, SelectControl
 
-from orbeon_xml_api.utils import generate_xml_root
+from utils import generate_xml_root
 
 XF_TYPE_CONTROL = {
     'xf:string': StringControl,

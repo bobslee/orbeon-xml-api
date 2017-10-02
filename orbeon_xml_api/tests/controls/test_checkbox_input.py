@@ -1,6 +1,6 @@
 from . import CommonTestCase
 
-from orbeon_xml_api.controls import BooleanControl
+from ..controls import BooleanControl
 
 
 class CheckboxInputTestCase(CommonTestCase):

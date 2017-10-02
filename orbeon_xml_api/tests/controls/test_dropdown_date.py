@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from . import CommonTestCase
-from orbeon_xml_api.controls import DateControl
+from ..controls import DateControl
 
 
 class DropdownDateTestCase(CommonTestCase):

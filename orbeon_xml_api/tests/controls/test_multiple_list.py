@@ -1,6 +1,6 @@
 from . import CommonTestCase
 
-from orbeon_xml_api.controls import SelectControl
+from ..controls import SelectControl
 
 
 class MultipleListTestCase(CommonTestCase):

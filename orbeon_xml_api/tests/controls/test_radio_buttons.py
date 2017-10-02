@@ -1,6 +1,6 @@
 from . import CommonTestCase
 
-from orbeon_xml_api.controls import Select1Control
+from ..controls import Select1Control
 
 
 class RadioButtonsTestCase(CommonTestCase):

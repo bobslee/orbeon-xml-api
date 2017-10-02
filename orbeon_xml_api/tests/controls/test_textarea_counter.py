@@ -1,6 +1,6 @@
 from . import CommonTestCase
 
-from orbeon_xml_api.controls import StringControl
+from ..controls import StringControl
 
 
 class TextareaCounterTestCase(CommonTestCase):

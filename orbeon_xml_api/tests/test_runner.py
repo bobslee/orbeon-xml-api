@@ -1,7 +1,7 @@
 import unittest
 
-from orbeon_xml_api.runner import Runner, RunnerForm
-from orbeon_xml_api.utils import xml_from_file
+from ..runner import Runner, RunnerForm
+from ..utils import xml_from_file
 
 
 class RunnerTestCase(unittest.TestCase):
