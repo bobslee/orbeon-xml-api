@@ -27,7 +27,7 @@ class Runner:
         if self.builder:
             assert isinstance(self.builder, Builder)
         elif self.builder_xml:
-            assert isinstance(self.builder_xml, bytes)
+            assert isinstance(self.builder_xml, str)
         else:
             raise Exception("Provide either the argument: builder or builder_xml.")
 
