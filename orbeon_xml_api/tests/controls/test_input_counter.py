@@ -32,4 +32,4 @@ class InputCounterTestCase(CommonTestCase):
     def test_runner_input_counter(self):
         text = "Don't even try to make it too long!"
         self.assertEqual(self.runner.get_value('input-counter'), text)
-        self.assertEqual(self.runner.form.inputcounter, text)
+        self.assertEqual(self.runner.form.inputcounter.value, text)

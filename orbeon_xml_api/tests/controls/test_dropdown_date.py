@@ -32,4 +32,4 @@ class DropdownDateTestCase(CommonTestCase):
         dt_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
 
         self.assertEqual(self.runner.get_value('dropdown-date'), dt_obj)
-        self.assertEqual(self.runner.form.dropdowndate, dt_obj)
+        self.assertEqual(self.runner.form.dropdowndate.value, dt_obj)

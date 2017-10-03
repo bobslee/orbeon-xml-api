@@ -38,4 +38,4 @@ class InputTestCase(CommonTestCase):
 
     def test_runner_form(self):
         self.assertEqual(self.runner.get_value('input'), 'John')
-        self.assertEqual(self.runner.form.input, 'John')
+        self.assertEqual(self.runner.form.input.value, 'John')

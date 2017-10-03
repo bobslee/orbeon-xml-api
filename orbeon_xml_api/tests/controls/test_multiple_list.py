@@ -43,4 +43,8 @@ class MultipleListTestCase(CommonTestCase):
 
     def test_runner_form(self):
         self.assertEqual(self.runner.get_value('multiple-list'), ['dog', 'fish'])
-        self.assertEqual(self.runner.form.multiplelist, ['dog', 'fish'])
+        self.assertEqual(self.runner.form.multiplelist.choices_values, ['dog', 'fish'])
+
+        # TODO
+        # self.assertEqual(self.runner.form.multiplelist.choices_labels, ['Dog', 'Fish'])
+        # self.assertEqual(self.runner.form.multiplelist.choices, {'Dog': 'dog', 'Fish': 'fish'})

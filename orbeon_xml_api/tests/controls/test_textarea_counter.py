@@ -30,4 +30,4 @@ class TextareaCounterTestCase(CommonTestCase):
     def test_runner_form(self):
         text = "Let's write some code. It must fit in 1000 bytes."
         self.assertEqual(self.runner.get_value('textarea-counter'), text)
-        self.assertEqual(self.runner.form.textareacounter, text)
+        self.assertEqual(self.runner.form.textareacounter.value, text)

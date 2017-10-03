@@ -28,4 +28,4 @@ class SecretTestCase(CommonTestCase):
     def test_runner_form(self):
         text = 'The question to life and everything is 42.'
         self.assertEqual(self.runner.get_value('secret'), text)
-        self.assertEqual(self.runner.form.secret, text)
+        self.assertEqual(self.runner.form.secret.value, text)

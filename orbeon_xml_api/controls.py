@@ -1,5 +1,6 @@
 from datetime import datetime, time
 
+
 class Element:
     """
     The Element of a Control
@@ -55,6 +56,7 @@ class Control:
         self.label = self.element.label
         self.hint = self.element.hint
         self.alert = self.element.alert
+        self.raw_value = self.element.text
 
     def set_parent(self):
         if self.bind.parent and self.bind.parent.name in self.builder.controls:
@@ -94,6 +96,9 @@ class Control:
                     ref_value = '/'.join(ref_items[1:])
                     self.refs[ref_name] = ref_value
 
+    def init_runner_attrs(self, runner_element):
+        raise NotImplementedError
+
     def set_default_raw_value(self):
         raise NotImplementedError
 
@@ -120,6 +125,9 @@ class Control:
 
 class StringControl(Control):
 
+    def init_runner_attrs(self, runner_element):
+        self.value = self.decode(runner_element.text)
+
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self.model_instance, 'text', None)
 
@@ -132,11 +140,11 @@ class StringControl(Control):
     def encode(self, value):
         return value
 
-    def decode_form_element(self, element):
-        return self.decode(element.text)
-
 
 class DateControl(Control):
+
+    def init_runner_attrs(self, runner_element):
+        self.value = self.decode(runner_element.text)
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self.model_instance, 'text', None)
@@ -151,11 +159,11 @@ class DateControl(Control):
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%d')
 
-    def decode_form_element(self, element):
-        return self.decode(element.text)
-
 
 class TimeControl(Control):
+
+    def init_runner_attrs(self, runner_element):
+        self.value = self.decode(runner_element.text)
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self.model_instance, 'text', None)
@@ -169,11 +177,11 @@ class TimeControl(Control):
     def encode(self, value):
         return time.strftime(value, '%H:%M:%S')
 
-    def decode_form_element(self, element):
-        return self.decode(element.text)
-
 
 class DateTimeControl(Control):
+
+    def init_runner_attrs(self, runner_element):
+        self.value = self.decode(runner_element.text)
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self.model_instance, 'text', None)
@@ -187,11 +195,14 @@ class DateTimeControl(Control):
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%dT%H:%M:%S')
 
-    def decode_form_element(self, element):
-        return self.decode(element.text)
-
 
 class BooleanControl(Control):
+
+    # TODO
+    def init_runner_attrs(self, runner_element):
+        self.choice_value = self.decode(runner_element.text)
+        # self.choice_label = 'TODO BooleanControl'
+        # self.choice = {self.choice_label: self.choice_value}
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self.model_instance, 'text', None)
@@ -212,15 +223,32 @@ class BooleanControl(Control):
         else:
             return 'false'
 
-    def decode_form_element(self, element):
-        return self.decode(element.text)
-
 
 class Select1Control(StringControl):
-    pass
+
+    # TODO:
+    def init_runner_attrs(self, runner_element):
+        self.choice_value = self.decode(runner_element.text)
+        # self.choice_label = 'Dog'
+        # self.choice = {self.choice_label: self.choice_value}
+
+
+class OpenSelect1Control(Select1Control):
+
+    # TODO
+    def init_runner_attrs(self, runner_element):
+        self.choice_value = self.decode(runner_element.text)
+        # self.choice_label = 'Strawberry'
+        # self.choice = {'strawberry': 'Strawberry'}
 
 
 class SelectControl(StringControl):
+
+    # TODO
+    def init_runner_attrs(self, runner_element):
+        self.choices_values = self.decode(runner_element.text)
+        # self.choices_labels = ['TODO SelectControl']
+        # self.choices = {'strawberry': 'Strawberry'}
 
     def decode(self, value):
         return value.split(' ')
@@ -230,6 +258,9 @@ class SelectControl(StringControl):
 
 
 class AnyURIControl(Control):
+
+    def init_runner_attrs(self, runner_element):
+        pass
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self.model_instance, 'text', None)

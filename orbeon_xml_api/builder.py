@@ -2,7 +2,7 @@ from lxml import etree
 
 from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
     BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
-    Select1Control, SelectControl
+    Select1Control, OpenSelect1Control, SelectControl
 
 from utils import generate_xml_root
 
@@ -118,6 +118,8 @@ class Bind:
 
         if fr_control_tag == 'select1':
             return Select1Control(self.builder, self, element)
+        if fr_control_tag == 'open-select1':
+            return OpenSelect1Control(self.builder, self, element)
         elif fr_control_tag == 'select':
             return SelectControl(self.builder, self, element)
         else:

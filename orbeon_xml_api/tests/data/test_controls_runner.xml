@@ -32,7 +32,7 @@
         <checkboxes>cat bird</checkboxes>
         <multiple-list>dog fish</multiple-list>
         <radio-buttons>dog</radio-buttons>
-        <open-select1>Pistachio</open-select1>
+        <open-select1>strawberry</open-select1>
         <yesno-input>true</yesno-input>
         <checkbox-input>true</checkbox-input>
         <autocomplete label="United States">nl</autocomplete>

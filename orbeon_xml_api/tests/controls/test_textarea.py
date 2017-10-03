@@ -33,4 +33,4 @@ class TextareaTestCase(CommonTestCase):
     def test_runner_form(self):
         text = 'Programming is an art form whose medium is a computer.'
         self.assertEqual(self.runner.get_value('textarea'), text)
-        self.assertEqual(self.runner.form.textarea, text)
+        self.assertEqual(self.runner.form.textarea.value, text)

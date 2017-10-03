@@ -1,6 +1,10 @@
 from builder import Builder
 from utils import generate_xml_root
 
+from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
+    BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
+    Select1Control, OpenSelect1Control, SelectControl
+
 
 class Runner:
 
@@ -30,10 +34,14 @@ class Runner:
         if self.builder is None and self.builder_xml:
             self.set_builder_by_builder_xml()
 
+        # init
         self.raw_values = {}
         self.values = {}
-        self.set_values()
+        self.form_document = {}
 
+        self.init()
+
+        # form object
         self.form = RunnerForm(self)
 
     def set_xml_root(self):
@@ -42,13 +50,21 @@ class Runner:
     def set_builder_by_builder_xml(self):
         self.builder = Builder(self.builder_xml, self.lang)
 
-    def set_values(self):
+    def init(self):
         for name, control in self.builder.controls.items():
             element = self.get_form_element(name)
 
             if element is not False:
                 self.raw_values[name] = getattr(element, 'text', None)
-                self.values[name] = control.decode_form_element(element)
+                self.values[name] = control.decode(element.text)
+
+                # Instantiate the control class (these are imported above)
+                form_document_control_class = globals()[control.__class__.__name__]
+                form_document_control = form_document_control_class(self.builder, control.bind, element)
+
+                if form_document_control is not None:
+                    form_document_control.init_runner_attrs(element)
+                    self.form_document[name] = form_document_control
 
     def get_form_element(self, name):
         """
@@ -79,6 +95,9 @@ class Runner:
     def get_value(self, name):
         return self.values[name]
 
+    def get_form_document_control(self, name):
+        return self.form_document[name]
+
     def set_value(self, name, value):
         """
         Set Runner Control XML value.
@@ -94,6 +113,6 @@ class RunnerForm:
     def __getattr__(self, s_name):
         name = self._runner.builder.sanitized_control_names.get(s_name, False)
         if name:
-            return self._runner.get_value(name)
+            return self._runner.get_form_document_control(name)
         else:
             return False
