@@ -28,8 +28,13 @@ class DropdownDateTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, '2009-10-16')
         self.assertEqual(self.control.default_value, dt_obj)
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         dt_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
 
         self.assertEqual(self.runner.get_value('dropdown-date'), dt_obj)
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.dropdowndate.label, 'Dropdown Date')
+
+        dt_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
         self.assertEqual(self.runner.form.dropdowndate.value, dt_obj)

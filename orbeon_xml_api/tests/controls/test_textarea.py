@@ -30,7 +30,12 @@ class TextareaTestCase(CommonTestCase):
         self.assertIn('Music is an art', self.control.default_raw_value)
         self.assertIn('Music is an art', self.control.default_value)
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         text = 'Programming is an art form whose medium is a computer.'
         self.assertEqual(self.runner.get_value('textarea'), text)
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.textarea.label, 'Text Area')
+
+        text = 'Programming is an art form whose medium is a computer.'
         self.assertEqual(self.runner.form.textarea.value, text)

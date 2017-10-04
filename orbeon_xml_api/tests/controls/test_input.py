@@ -36,6 +36,9 @@ class InputTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'Michelle')
         self.assertEqual(self.control.default_value, 'Michelle')
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         self.assertEqual(self.runner.get_value('input'), 'John')
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.input.label, 'Input Field')
         self.assertEqual(self.runner.form.input.value, 'John')

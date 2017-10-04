@@ -45,8 +45,13 @@ class TimeTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, '17:47:57')
         self.assertEqual(self.control.default_value, time_obj)
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         time_obj = datetime.strptime('08:15:01', '%H:%M:%S').time()
 
         self.assertEqual(self.runner.get_value('time'), time_obj)
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.time.label, 'Time')
+
+        time_obj = datetime.strptime('08:15:01', '%H:%M:%S').time()
         self.assertEqual(self.runner.form.time.value, time_obj)

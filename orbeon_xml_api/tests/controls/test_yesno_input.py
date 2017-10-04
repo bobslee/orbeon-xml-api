@@ -32,9 +32,12 @@ class YesnoInputTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'false')
         self.assertEqual(self.control.default_value, False)
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         self.assertEqual(self.runner.get_raw_value('yesno-input'), 'true')
         self.assertEqual(self.runner.get_value('yesno-input'), True)
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.yesnoinput.label, 'Yes/No Answer')
         self.assertEqual(self.runner.form.yesnoinput.choice_label, 'Yes')
         self.assertEqual(self.runner.form.yesnoinput.choice_value, True)
         self.assertEqual(self.runner.form.yesnoinput.choice, {'Yes': True})

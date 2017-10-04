@@ -31,10 +31,12 @@ class CheckboxesTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'cat bird')
         self.assertEqual(self.control.default_value, ['cat', 'bird'])
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         self.assertEqual(self.runner.get_raw_value('checkboxes'), 'dog fish')
         self.assertEqual(self.runner.get_value('checkboxes'), ['dog', 'fish'])
 
-        self.assertEqual(self.runner.form.checkboxes.choice_values, ['dog', 'fish'])
-        self.assertEqual(self.runner.form.checkboxes.choice_labels, ['Dog', 'Fish'])
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.checkboxes.label, 'Checkboxes')
+        self.assertEqual(self.runner.form.checkboxes.choices_values, ['dog', 'fish'])
+        self.assertEqual(self.runner.form.checkboxes.choices_labels, ['Dog', 'Fish'])
         self.assertEqual(self.runner.form.checkboxes.choices, {'Dog': 'dog', 'Fish': 'fish'})

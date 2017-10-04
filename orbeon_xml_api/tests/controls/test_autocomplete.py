@@ -34,6 +34,9 @@ class AutocompleteTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'us')
         self.assertEqual(self.control.default_value, 'us')
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         self.assertEqual(self.runner.get_value('autocomplete'), 'nl')
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.autocomplete.label, 'Autocomplete')
         self.assertEqual(self.runner.form.autocomplete.value, 'nl')

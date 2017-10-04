@@ -31,10 +31,12 @@ class OpenSelect1TestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'Pistachio')
         self.assertEqual(self.control.default_value, 'Pistachio')
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         self.assertEqual(self.runner.get_raw_value('open-select1'), 'Pistachio')
         self.assertEqual(self.runner.get_value('open-select1'), 'Pistachio')
 
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.openselect1.label, 'Ice Cream Flavor')
         self.assertEqual(self.runner.form.openselect1.choice_value, 'Pistachio')
         self.assertEqual(self.runner.form.openselect1.choice_label, 'Pistachio')
         self.assertEqual(self.runner.form.openselect1.choice, {'Pistachio': 'Pistachio'})

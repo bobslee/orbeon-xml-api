@@ -44,7 +44,12 @@ class HtmlareaTestCase(CommonTestCase):
         self.assertRegexpMatches(self.control.default_raw_value, re)
         self.assertRegexpMatches(self.control.default_value, re)
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         re = '.*The Good, the Bad and the Ugly.*'
         self.assertRegexpMatches(self.runner.get_value('htmlarea'), re)
+
+    def test_runner_form(self):
+        self.assertRegexpMatches(self.runner.form.htmlarea.label, 'Formatted Text')
+
+        re = '.*The Good, the Bad and the Ugly.*'
         self.assertRegexpMatches(self.runner.form.htmlarea.value, re)

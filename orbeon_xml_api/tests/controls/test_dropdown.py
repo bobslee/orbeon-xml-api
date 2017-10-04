@@ -31,10 +31,12 @@ class DropdownTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'cat')
         self.assertEqual(self.control.default_value, 'cat')
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         self.assertEqual(self.runner.get_raw_value('dropdown'), 'bird')
         self.assertEqual(self.runner.get_value('dropdown'), 'bird')
 
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.dropdown.label, 'Dropdown Menu')
         self.assertEqual(self.runner.form.dropdown.choice_value, 'bird')
         self.assertEqual(self.runner.form.dropdown.choice_label, 'Bird')
         self.assertEqual(self.runner.form.dropdown.choice, {'Bird': 'bird'})

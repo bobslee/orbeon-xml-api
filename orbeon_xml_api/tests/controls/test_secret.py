@@ -25,7 +25,11 @@ class SecretTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, '42')
         self.assertEqual(self.control.default_value, '42')
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         text = 'The question to life and everything is 42.'
         self.assertEqual(self.runner.get_value('secret'), text)
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.secret.label, 'Password Field')
+        text = 'The question to life and everything is 42.'
         self.assertEqual(self.runner.form.secret.value, text)

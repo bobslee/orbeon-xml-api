@@ -27,7 +27,7 @@ class MultipleListTestCase(CommonTestCase):
         self.assertEqual(self.control.parent.bind.name, 'selection-controls')
         self.assertEqual(self.control.parent.element.label, 'Selection Controls')
 
-    def test_builder_form(self):
+    def test_builder_element(self):
         self.assertEqual(self.control.element.label, 'Scrollable Checkboxes')
         self.assertEqual(self.control.element.hint, 'Scrollable selector with checkboxes')
 
@@ -41,10 +41,12 @@ class MultipleListTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'cat bird')
         self.assertEqual(self.control.default_value, ['cat', 'bird'])
 
-    def test_runner_form(self):
+    def test_runner_value(self):
+        self.assertEqual(self.runner.get_raw_value('multiple-list'), 'dog fish')
         self.assertEqual(self.runner.get_value('multiple-list'), ['dog', 'fish'])
-        self.assertEqual(self.runner.form.multiplelist.choices_values, ['dog', 'fish'])
 
-        # TODO
-        # self.assertEqual(self.runner.form.multiplelist.choices_labels, ['Dog', 'Fish'])
-        # self.assertEqual(self.runner.form.multiplelist.choices, {'Dog': 'dog', 'Fish': 'fish'})
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.multiplelist.label, 'Scrollable Checkboxes')
+        self.assertEqual(self.runner.form.multiplelist.choices_values, ['dog', 'fish'])
+        self.assertEqual(self.runner.form.multiplelist.choices_labels, ['Dog', 'Fish'])
+        self.assertEqual(self.runner.form.multiplelist.choices, {'Dog': 'dog', 'Fish': 'fish'})

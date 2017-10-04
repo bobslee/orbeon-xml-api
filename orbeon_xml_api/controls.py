@@ -1,9 +1,10 @@
 from datetime import datetime, time
+from lxml import etree
 
-from utils import etree_to_dict
-
-# XXX In case etree_to_dict (implementation) isn't sufficient
-# import xmltodict, etree
+import xmltodict
+# XXX In case xmltodict (implementation) causes slowness.
+# xmltodict is used in Control its set_resource_dict() function
+# from utils import etree_to_dict
 
 
 class Element(object):
@@ -48,6 +49,9 @@ class Control(object):
         self.resource = None
         self.set_resource()
 
+        self.resource_dict = {}
+        self.set_resource_dict()
+
         # model_instance is like raw default_value.
         # Still called model_instance, because of FB terminology.
         self.model_instance = None
@@ -62,9 +66,9 @@ class Control(object):
         self.element = Element(self)
 
         # Attributes via Element (which get these dynamically)
-        self.label = self.element.label
-        self.hint = self.element.hint
-        self.alert = self.element.alert
+        self.label = self.resource_dict.get('label', None)
+        self.hint = self.resource_dict.get('hint', None)
+        self.alert = self.resource_dict.get('alert', None)
         self.raw_value = self.element.text
 
         self.init()
@@ -114,6 +118,11 @@ class Control(object):
     def set_resource(self):
         if self.bind.name in self.builder.resources:
             self.resource = self.builder.resources[self.bind.name]
+
+    def set_resource_dict(self):
+        if self.bind.name in self.builder.resources:
+            res_element = xmltodict.parse(etree.tostring(self.resource.element))
+            self.resource_dict = res_element[self.bind.name]
 
     def init_runner_attrs(self, runner_element):
         raise NotImplementedError
@@ -243,11 +252,9 @@ class BooleanControl(Control):
 class Select1Control(StringControl):
 
     def init(self):
-        # XXX In case etree_to_dict (implementation) isn't sufficient
-        # el = self.builder.resources[self.bind.name].element
-        # el_dict = xmltodict.parse(etree.tostring(el))
-        # self.resource_dict = el_dict[self.bind.name]
-        self.resource_dict = etree_to_dict(self.resource.element)
+        # XXX In case xmltodict (implementation) causes slowness.
+        # self.resource_dict = etree_to_dict(self.resource.element)
+        pass
 
     def init_runner_attrs(self, runner_element):
         self.choice_value = self.decode(runner_element.text)
@@ -272,20 +279,18 @@ class OpenSelect1Control(Select1Control):
 class SelectControl(StringControl):
 
     def init(self):
-        # XXX In case etree_to_dict (implementation) isn't sufficient
-        # el = self.builder.resources[self.bind.name].element
-        # el_dict = xmltodict.parse(etree.tostring(el))
-        # self.resource_dict = el_dict[self.bind.name]
-        self.resource_dict = etree_to_dict(self.resource.element)
+        # XXX In case xmltodict (implementation) causes slowness.
+        # self.resource_dict = etree_to_dict(self.resource.element)
+        pass
 
     def init_runner_attrs(self, runner_element):
-        self.choice_values = self.decode(runner_element.text)
-        self.choice_labels = []
+        self.choices_values = self.decode(runner_element.text)
+        self.choices_labels = []
         self.choices = {}
 
         for item in self.resource_dict['item']:
-            if item['value'] in self.choice_values:
-                self.choice_labels.append(item['label'])
+            if item['value'] in self.choices_values:
+                self.choices_labels.append(item['label'])
                 self.choices[item['label']] = item['value']
 
     def decode(self, value):

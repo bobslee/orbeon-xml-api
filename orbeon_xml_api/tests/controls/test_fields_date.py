@@ -45,8 +45,12 @@ class FieldsDateTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, '2009-10-16')
         self.assertEqual(self.control.default_value, date_obj)
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         date_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
-
         self.assertEqual(self.runner.get_value('fields-date'), date_obj)
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.fieldsdate.label, 'Fields Date')
+
+        date_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
         self.assertEqual(self.runner.form.fieldsdate.value, date_obj)

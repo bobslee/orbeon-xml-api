@@ -26,7 +26,12 @@ class OutputTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, text)
         self.assertEqual(self.control.default_value, text)
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         text = 'Great risk and less achievements involve great love.'
         self.assertEqual(self.runner.get_value('output'), text)
+        self.assertEqual(self.runner.form.output.value, text)
+
+    def test_runner_form(self):
+        text = 'Great risk and less achievements involve great love.'
+        self.assertEqual(self.runner.form.output.label, 'Text Output')
         self.assertEqual(self.runner.form.output.value, text)

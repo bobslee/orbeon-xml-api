@@ -38,8 +38,12 @@ class DateTimeTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, '2009-10-16T17:48:03')
         self.assertEqual(self.control.default_value, dt_obj)
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         dt_obj = datetime.strptime('2017-07-01T23:22:21', '%Y-%m-%dT%H:%M:%S')
-
         self.assertEqual(self.runner.get_value('datetime'), dt_obj)
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.datetime.label, 'Date and Time')
+
+        dt_obj = datetime.strptime('2017-07-01T23:22:21', '%Y-%m-%dT%H:%M:%S')
         self.assertEqual(self.runner.form.datetime.value, dt_obj)

@@ -32,8 +32,11 @@ class RadioButtonsTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'cat')
         self.assertEqual(self.control.default_value, 'cat')
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         self.assertEqual(self.runner.get_value('radio-buttons'), 'dog')
+
+    def test_runner_form(self):
+        self.assertEqual(self.runner.form.radiobuttons.label, 'Radio Buttons')
         self.assertEqual(self.runner.form.radiobuttons.choice_value, 'dog')
         self.assertEqual(self.runner.form.radiobuttons.choice_label, 'Dog')
         self.assertEqual(self.runner.form.radiobuttons.choice, {'Dog': 'dog'})

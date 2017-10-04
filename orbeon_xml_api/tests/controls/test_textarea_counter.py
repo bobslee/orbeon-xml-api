@@ -27,7 +27,11 @@ class TextareaCounterTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, "Let's write a Tweet. It must fit in 140 characters.")
         self.assertEqual(self.control.default_value, "Let's write a Tweet. It must fit in 140 characters.")
 
-    def test_runner_form(self):
+    def test_runner_value(self):
         text = "Let's write some code. It must fit in 1000 bytes."
         self.assertEqual(self.runner.get_value('textarea-counter'), text)
+
+    def test_runner_form(self):
+        text = "Let's write some code. It must fit in 1000 bytes."
+        self.assertEqual(self.runner.form.textareacounter.label, 'Text Area with Character counter')
         self.assertEqual(self.runner.form.textareacounter.value, text)
