@@ -16,27 +16,27 @@ class BenchmarkPerformanceTestCase(unittest.TestCase):
 
     # TODO remove this from API support?
     # Too slow
-    def test_performance_10_builder_xml(self):
+    def test_performance_10_runners_with_builder_xml(self):
         for i in range(1, 10):
             Runner(self.runner_xml, None, self.builder_xml)
 
-    def test_performance_100_builder_xml(self):
+    def test_performance_100_runners_with_builder_xml(self):
         for i in range(1, 100):
             Runner(self.runner_xml, None, self.builder_xml)
 
-    def test_performance_1000_builder_xml(self):
+    def test_performance_1000_runners_with_builder_xml(self):
         for i in range(1, 1000):
             Runner(self.runner_xml, None, self.builder_xml)
 
     # Fast enough ;)
-    def test_performance_10_builder(self):
+    def test_performance_10_runners_with_builder_object(self):
         for i in range(1, 10):
             Runner(self.runner_xml, self.builder)
 
-    def test_performance_100_builder(self):
+    def test_performance_100_runners_with_builder_object(self):
         for i in range(1, 100):
             Runner(self.runner_xml, self.builder)
 
-    def test_performance_1000_builder(self):
+    def test_performance_1000_runners_with_builder_object(self):
         for i in range(1, 1000):
             Runner(self.runner_xml, self.builder)
