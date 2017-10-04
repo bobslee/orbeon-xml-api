@@ -16,7 +16,7 @@ def generate_xml_root(xml):
             encoding='utf-8',
             remove_blank_text=True
         )
-        root = etree.XML(xml, parser)
+        root = etree.XML(xml.encode("utf-8"), parser)
     except etree.XMLSyntaxError:
         parser = etree.XMLParser(
             ns_clean=True,
@@ -24,7 +24,7 @@ def generate_xml_root(xml):
             encoding='utf-8',
             remove_blank_text=True
         )
-        root = etree.XML(xml, parser)
+        root = etree.XML(xml.encode("utf-8"), parser)
 
     return root
 
