@@ -47,3 +47,35 @@ def sanitize_xml(xml_root):
         mapping[e.tag] = old_tag
 
     return mapping
+
+
+def etree_to_dict(root):
+    tags_count = {}
+
+    # Count tag (types), to determine it's a single or
+    # multiple/redundant one.
+    for item in root:
+        if item.tag not in tags_count:
+            tags_count[item.tag] = 1
+        else:
+            tags_count[item.tag] += 1
+
+    datadict = {}
+    for item in root:
+        if item.tag not in datadict:
+            if tags_count[item.tag] > 1:
+                datadict[item.tag] = []
+            else:
+                datadict[item.tag] = None
+
+    for item in root:
+        d = {}
+        for elem in item:
+            d[elem.tag] = elem.text
+
+        if tags_count[item.tag] > 1:
+            datadict[item.tag].append(d)
+        else:
+            datadict[item.tag] = item.text
+
+    return datadict

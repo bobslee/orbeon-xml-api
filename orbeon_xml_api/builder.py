@@ -18,6 +18,7 @@ XF_TYPE_CONTROL = {
     'xf:decimal': DecimalControl
 }
 
+
 class Builder:
 
     def __init__(self, xml, lang='en'):
@@ -29,6 +30,9 @@ class Builder:
 
         self.binds = {}
         self.set_binds()
+
+        self.resources = {}
+        self.set_resources()
 
         self.fr_body_elements = []
         self.set_fr_body_elements()
@@ -50,6 +54,13 @@ class Builder:
 
         for e in self.xml_root.xpath(query):
             self.binds[e.get('id')] = Bind(self, e)
+
+    def set_resources(self):
+        query = "//*[@id='fr-form-resources']/resources//resource[@xml:lang='%s']/*" % self.lang
+
+        for e in self.xml_root.xpath(query):
+            name = etree.QName(e).localname
+            self.resources[name] = Resource(self, e)
 
     def set_fr_body_elements(self):
         query = "//*[name()='fr:body']//*[@bind]"
@@ -124,3 +135,10 @@ class Bind:
             return SelectControl(self.builder, self, element)
         else:
             return XF_TYPE_CONTROL[self.xf_type](self.builder, self, element)
+
+
+class Resource:
+
+    def __init__(self, builder, element):
+        self.builder = builder
+        self.element = element

@@ -1,7 +1,10 @@
 from datetime import datetime, time
+from lxml import etree
+
+from utils import etree_to_dict
 
 
-class Element:
+class Element(object):
     """
     The Element of a Control
     """
@@ -26,7 +29,7 @@ class Element:
                 return None
 
 
-class Control:
+class Control(object):
 
     def __init__(self, builder, bind, element):
         self.builder = builder
@@ -38,6 +41,10 @@ class Control:
 
         self.refs = {}
         self.set_refs()
+
+        # XXX Maybe set_refs is obsolete by following
+        self.resource = None
+        self.set_resource()
 
         # model_instance is like raw default_value.
         # Still called model_instance, because of FB terminology.
@@ -57,6 +64,12 @@ class Control:
         self.hint = self.element.hint
         self.alert = self.element.alert
         self.raw_value = self.element.text
+
+        self.init()
+
+    def init(self):
+        """ This method is called after :meth:`~._init__`."""
+        pass
 
     def set_parent(self):
         if self.bind.parent and self.bind.parent.name in self.builder.controls:
@@ -96,6 +109,10 @@ class Control:
                     ref_value = '/'.join(ref_items[1:])
                     self.refs[ref_name] = ref_value
 
+    def set_resource(self):
+        if self.bind.name in self.builder.resources:
+            self.resource = self.builder.resources[self.bind.name]
+
     def init_runner_attrs(self, runner_element):
         raise NotImplementedError
 
@@ -117,9 +134,6 @@ class Control:
         By the self.datatype (handler):
         >> self.datetype.decode(value)
         """
-        raise NotImplementedError
-
-    def decode_form_element(self, element):
         raise NotImplementedError
 
 
@@ -198,11 +212,11 @@ class DateTimeControl(Control):
 
 class BooleanControl(Control):
 
-    # TODO
     def init_runner_attrs(self, runner_element):
         self.choice_value = self.decode(runner_element.text)
-        # self.choice_label = 'TODO BooleanControl'
-        # self.choice = {self.choice_label: self.choice_value}
+        # TODO translations
+        self.choice_label = 'Yes' if self.choice_value else 'No'
+        self.choice = {self.choice_label: self.choice_value}
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self.model_instance, 'text', None)
@@ -226,29 +240,43 @@ class BooleanControl(Control):
 
 class Select1Control(StringControl):
 
-    # TODO:
+    def init(self):
+        self.resource_dict = etree_to_dict(self.resource.element)
+
     def init_runner_attrs(self, runner_element):
         self.choice_value = self.decode(runner_element.text)
-        # self.choice_label = 'Dog'
-        # self.choice = {self.choice_label: self.choice_value}
+
+        self.choice_label = None
+        for item in self.resource_dict['item']:
+            if item['value'] == self.choice_value:
+                self.choice_label = item['label']
+
+        self.choice = {self.choice_label: self.choice_value}
 
 
 class OpenSelect1Control(Select1Control):
-
-    # TODO
     def init_runner_attrs(self, runner_element):
-        self.choice_value = self.decode(runner_element.text)
-        # self.choice_label = 'Strawberry'
-        # self.choice = {'strawberry': 'Strawberry'}
+        super(OpenSelect1Control, self).init_runner_attrs(runner_element)
+
+        if self.choice_label is None:
+            self.choice_label = self.choice_value
+            self.choice = {self.choice_label: self.choice_value}
 
 
 class SelectControl(StringControl):
 
-    # TODO
+    def init(self):
+        self.resource_dict = etree_to_dict(self.resource.element)
+
     def init_runner_attrs(self, runner_element):
-        self.choices_values = self.decode(runner_element.text)
-        # self.choices_labels = ['TODO SelectControl']
-        # self.choices = {'strawberry': 'Strawberry'}
+        self.choice_values = self.decode(runner_element.text)
+        self.choice_labels = []
+        self.choices = {}
+
+        for item in self.resource_dict['item']:
+            if item['value'] in self.choice_values:
+                self.choice_labels.append(item['label'])
+                self.choices[item['label']] = item['value']
 
     def decode(self, value):
         return value.split(' ')
@@ -274,9 +302,6 @@ class AnyURIControl(Control):
 
     def encode(self, value):
         return value
-
-    def decode_form_element(self, element):
-        return self.decode(element.text)
 
 
 class EmailControl(StringControl):

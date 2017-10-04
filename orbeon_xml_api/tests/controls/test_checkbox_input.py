@@ -35,5 +35,6 @@ class CheckboxInputTestCase(CommonTestCase):
     def test_runner_form(self):
         self.assertEqual(self.runner.get_raw_value('checkbox-input'), 'true')
         self.assertEqual(self.runner.get_value('checkbox-input'), True)
-        self.assertEqual(self.runner.form.yesnoinput.choice_value, True)
-        # TODO: choice_label, choice (dict)
+        self.assertEqual(self.runner.form.checkboxinput.choice_label, 'Yes')
+        self.assertEqual(self.runner.form.checkboxinput.choice_value, True)
+        self.assertEqual(self.runner.form.checkboxinput.choice, {'Yes': True})
