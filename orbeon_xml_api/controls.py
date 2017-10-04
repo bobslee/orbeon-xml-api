@@ -1,7 +1,9 @@
 from datetime import datetime, time
-from lxml import etree
 
 from utils import etree_to_dict
+
+# XXX In case etree_to_dict (implementation) isn't sufficient
+# import xmltodict, etree
 
 
 class Element(object):
@@ -241,6 +243,10 @@ class BooleanControl(Control):
 class Select1Control(StringControl):
 
     def init(self):
+        # XXX In case etree_to_dict (implementation) isn't sufficient
+        # el = self.builder.resources[self.bind.name].element
+        # el_dict = xmltodict.parse(etree.tostring(el))
+        # self.resource_dict = el_dict[self.bind.name]
         self.resource_dict = etree_to_dict(self.resource.element)
 
     def init_runner_attrs(self, runner_element):
@@ -266,6 +272,10 @@ class OpenSelect1Control(Select1Control):
 class SelectControl(StringControl):
 
     def init(self):
+        # XXX In case etree_to_dict (implementation) isn't sufficient
+        # el = self.builder.resources[self.bind.name].element
+        # el_dict = xmltodict.parse(etree.tostring(el))
+        # self.resource_dict = el_dict[self.bind.name]
         self.resource_dict = etree_to_dict(self.resource.element)
 
     def init_runner_attrs(self, runner_element):
