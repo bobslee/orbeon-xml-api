@@ -1,10 +1,4 @@
 from datetime import datetime, time
-from lxml import etree
-
-import xmltodict
-# XXX In case xmltodict (implementation) causes slowness.
-# xmltodict is used in Control its set_resource_dict() function
-# from utils import etree_to_dict
 
 
 class Element(object):
@@ -16,20 +10,10 @@ class Element(object):
         self.control = control
 
     def __getattr__(self, name):
-        """
-        Get Element attr/property via refs.
-        For example, a 'label', 'hint', 'alert'
-        """
-        if name in self.control.refs:
-            query = "//resources/resource[@xml:lang='%s']/%s" % (
-                self.control.builder.lang,
-                self.control.refs[name]
-            )
-            res = self.control.builder.xml_root.xpath(query)
-            if len(res) > 0:
-                return res[0].text
-            else:
-                return None
+        if self.control.resource and hasattr(self.control.resource, 'element'):
+            return self.control.resource.element.get(name, None)
+        else:
+            return None
 
 
 class Control(object):
@@ -41,9 +25,6 @@ class Control(object):
 
         self.parent = None
         self.set_parent()
-
-        self.refs = {}
-        self.set_refs()
 
         # XXX Maybe set_refs is obsolete by following
         self.resource = None
@@ -95,24 +76,6 @@ class Control(object):
 
         if len(res) > 0:
             self.model_instance = res[0]
-
-    def set_refs(self):
-        """
-        EXAMPLES:
-
-        ref = '$form-resources/section-1/label'
-        ref_name = 'label'
-        ref_value = 'section-1/label'
-        """
-        for child in self._element.iterchildren():
-            if child.get('ref'):
-                ref = child.get('ref')
-                ref_items = ref.split('/')
-
-                if ref_items[0] == '$form-resources':
-                    ref_name = ref_items[-1]
-                    ref_value = '/'.join(ref_items[1:])
-                    self.refs[ref_name] = ref_value
 
     def set_resource(self):
         if self.bind.name in self.builder.resource:
@@ -245,17 +208,10 @@ class BooleanControl(Control):
 
 class Select1Control(StringControl):
 
-    def init(self):
-        # XXX In case xmltodict (implementation) causes slowness.
-        # self.resource_dict = etree_to_dict(self.resource.element)
-        pass
-
     def init_runner_attrs(self, runner_element):
         self.choice_value = self.decode(runner_element.text)
-
         self.choice_label = None
-        # import pdb
-        # pdb.set_trace()
+
         for item in self.resource.element['item']:
             if item['value'] == self.choice_value:
                 self.choice_label = item['label']
@@ -273,11 +229,6 @@ class OpenSelect1Control(Select1Control):
 
 
 class SelectControl(StringControl):
-
-    def init(self):
-        # XXX In case xmltodict (implementation) causes slowness.
-        # self.resource = etree_to_dict(self.resource.element)
-        pass
 
     def init_runner_attrs(self, runner_element):
         self.choices_values = self.decode(runner_element.text)
