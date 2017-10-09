@@ -1,9 +1,11 @@
+import collections
 from lxml import etree
+
+import xmltodict
 
 from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
     BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
     Select1Control, OpenSelect1Control, SelectControl
-
 from utils import generate_xml_root
 
 XF_TYPE_CONTROL = {
@@ -31,11 +33,11 @@ class Builder:
         self.binds = {}
         self.set_binds()
 
-        self.resources = {}
-        self.set_resources()
-
         self.fr_body_elements = []
         self.set_fr_body_elements()
+
+        self.resource = {}
+        self.set_resource()
 
         self.controls = {}
         self.set_controls()
@@ -55,12 +57,18 @@ class Builder:
         for e in self.xml_root.xpath(query):
             self.binds[e.get('id')] = Bind(self, e)
 
-    def set_resources(self):
-        query = "//*[@id='fr-form-resources']/resources//resource[@xml:lang='%s']/*" % self.lang
+    def set_resource(self):
+        query = "//*[@id='fr-form-resources']/resources//resource[@xml:lang='%s']" % self.lang
 
-        for e in self.xml_root.xpath(query):
-            name = etree.QName(e).localname
-            self.resources[name] = Resource(self, e)
+        resource = self.xml_root.xpath(query)
+
+        if len(resource) != 1:
+            raise Exception("[orbeon-xml-api] Found %s for: %s" % query)
+
+        res_dict = xmltodict.parse(etree.tostring(resource[0]))
+
+        for tag, v in res_dict.get('resource', {}).items():
+            self.resource[tag] = Resource(self, v)
 
     def set_fr_body_elements(self):
         query = "//*[name()='fr:body']//*[@bind]"

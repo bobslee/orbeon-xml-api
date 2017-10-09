@@ -49,9 +49,6 @@ class Control(object):
         self.resource = None
         self.set_resource()
 
-        self.resource_dict = {}
-        self.set_resource_dict()
-
         # model_instance is like raw default_value.
         # Still called model_instance, because of FB terminology.
         self.model_instance = None
@@ -66,9 +63,11 @@ class Control(object):
         self.element = Element(self)
 
         # Attributes via Element (which get these dynamically)
-        self.label = self.resource_dict.get('label', None)
-        self.hint = self.resource_dict.get('hint', None)
-        self.alert = self.resource_dict.get('alert', None)
+        if self.resource:
+            self.label = self.resource.element.get('label', None)
+            self.hint = self.resource.element.get('hint', None)
+            self.alert = self.resource.element.get('alert', None)
+
         self.raw_value = self.element.text
 
         self.init()
@@ -116,13 +115,8 @@ class Control(object):
                     self.refs[ref_name] = ref_value
 
     def set_resource(self):
-        if self.bind.name in self.builder.resources:
-            self.resource = self.builder.resources[self.bind.name]
-
-    def set_resource_dict(self):
-        if self.bind.name in self.builder.resources:
-            res_element = xmltodict.parse(etree.tostring(self.resource.element))
-            self.resource_dict = res_element[self.bind.name]
+        if self.bind.name in self.builder.resource:
+            self.resource = self.builder.resource[self.bind.name]
 
     def init_runner_attrs(self, runner_element):
         raise NotImplementedError
@@ -260,7 +254,9 @@ class Select1Control(StringControl):
         self.choice_value = self.decode(runner_element.text)
 
         self.choice_label = None
-        for item in self.resource_dict['item']:
+        # import pdb
+        # pdb.set_trace()
+        for item in self.resource.element['item']:
             if item['value'] == self.choice_value:
                 self.choice_label = item['label']
 
@@ -280,7 +276,7 @@ class SelectControl(StringControl):
 
     def init(self):
         # XXX In case xmltodict (implementation) causes slowness.
-        # self.resource_dict = etree_to_dict(self.resource.element)
+        # self.resource = etree_to_dict(self.resource.element)
         pass
 
     def init_runner_attrs(self, runner_element):
@@ -288,7 +284,7 @@ class SelectControl(StringControl):
         self.choices_labels = []
         self.choices = {}
 
-        for item in self.resource_dict['item']:
+        for item in self.resource.element['item']:
             if item['value'] in self.choices_values:
                 self.choices_labels.append(item['label'])
                 self.choices[item['label']] = item['value']
