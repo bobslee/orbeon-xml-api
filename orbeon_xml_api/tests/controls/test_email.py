@@ -5,11 +5,6 @@ from ..controls import StringControl
 
 class EmailTestCase(CommonTestCase):
 
-    def test_email(self):
-        email = self.builder.controls['email']
-        self.assertEqual(email.element.label, 'Email Address')
-        self.assertEqual(email.element.hint, 'Email field with validation')
-
     def setUp(self):
         super(EmailTestCase, self).setUp()
         self.control = self.builder.controls['email']
@@ -24,18 +19,18 @@ class EmailTestCase(CommonTestCase):
     def test_builder_parent(self):
         self.assertEqual(self.control.parent.bind.id, 'typed-controls-bind')
         self.assertEqual(self.control.parent.bind.name, 'typed-controls')
-        self.assertEqual(self.control.parent.element.label, 'Typed Controls')
+        self.assertEqual(self.control.parent.resource_element.label, 'Typed Controls')
 
     def test_builder_form(self):
         self.assertEqual(self.control.label, 'Email Address')
         self.assertEqual(self.control.hint, 'Email field with validation')
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.element.label, 'Email Address')
-        self.assertEqual(self.control.element.hint, 'Email field with validation')
+        self.assertEqual(self.control.resource_element.label, 'Email Address')
+        self.assertEqual(self.control.resource_element.hint, 'Email field with validation')
 
         # Doesn't exist, but shouldn't raise Exception
-        self.assertEqual(self.control.element.alert, None)
+        self.assertEqual(self.control.resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         self.assertEqual(self.control.default_raw_value, 'info@orbeon.com')

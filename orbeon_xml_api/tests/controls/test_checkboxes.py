@@ -18,11 +18,11 @@ class CheckboxesTestCase(CommonTestCase):
     def test_builder_parent(self):
         self.assertEqual(self.control.parent.bind.id, 'selection-controls-bind')
         self.assertEqual(self.control.parent.bind.name, 'selection-controls')
-        self.assertEqual(self.control.parent.element.label, 'Selection Controls')
+        self.assertEqual(self.control.parent.resource_element.label, 'Selection Controls')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.element.label, 'Checkboxes')
-        self.assertEqual(self.control.element.hint, 'Standard checkboxes')
+        self.assertEqual(self.control.resource_element.label, 'Checkboxes')
+        self.assertEqual(self.control.resource_element.hint, 'Standard checkboxes')
 
         self.assertEqual(self.control.label, 'Checkboxes')
         self.assertEqual(self.control.hint, 'Standard checkboxes')

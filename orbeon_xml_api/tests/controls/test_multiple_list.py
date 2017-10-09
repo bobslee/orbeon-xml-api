@@ -25,14 +25,14 @@ class MultipleListTestCase(CommonTestCase):
     def test_builder_parent(self):
         self.assertEqual(self.control.parent.bind.id, 'selection-controls-bind')
         self.assertEqual(self.control.parent.bind.name, 'selection-controls')
-        self.assertEqual(self.control.parent.element.label, 'Selection Controls')
+        self.assertEqual(self.control.parent.resource_element.label, 'Selection Controls')
 
     def test_builder_element(self):
-        self.assertEqual(self.control.element.label, 'Scrollable Checkboxes')
-        self.assertEqual(self.control.element.hint, 'Scrollable selector with checkboxes')
+        self.assertEqual(self.control.resource_element.label, 'Scrollable Checkboxes')
+        self.assertEqual(self.control.resource_element.hint, 'Scrollable selector with checkboxes')
 
         # Doesn't exist, but shouldn't raise Exception
-        self.assertEqual(self.control.element.alert, None)
+        self.assertEqual(self.control.resource_element.alert, None)
 
         self.assertEqual(self.control.label, 'Scrollable Checkboxes')
         self.assertEqual(self.control.hint, 'Scrollable selector with checkboxes')

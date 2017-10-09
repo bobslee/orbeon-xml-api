@@ -1,9 +1,9 @@
 from datetime import datetime, time
 
 
-class Element(object):
+class ResourceElement(object):
     """
-    The Element of a Control
+    The Resource Element of a Control (fr-form-resources)
     """
 
     def __init__(self, control):
@@ -21,7 +21,7 @@ class Control(object):
     def __init__(self, builder, bind, element):
         self.builder = builder
         self.bind = bind
-        self._element = element
+        self.element = element
 
         self.parent = None
         self.set_parent()
@@ -41,7 +41,7 @@ class Control(object):
         self.default_value = None
         self.set_default_value()
 
-        self.element = Element(self)
+        self.resource_element = ResourceElement(self)
 
         # Attributes via Element (which get these dynamically)
         if self.resource:
@@ -278,7 +278,12 @@ class DecimalControl(Control):
         self.default_value = self.decode(self.model_instance.text)
 
     def decode(self, value):
-        return float(value)
+        precision = int(self.element.get('digits-after-decimal', 1))
+
+        if precision > 0:
+            return float(value)
+        else:
+            return int(value)
 
     def encode(self, value):
         return str(value)

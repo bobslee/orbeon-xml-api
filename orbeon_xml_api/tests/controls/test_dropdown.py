@@ -18,11 +18,11 @@ class DropdownTestCase(CommonTestCase):
     def test_builder_parent(self):
         self.assertEqual(self.control.parent.bind.id, 'selection-controls-bind')
         self.assertEqual(self.control.parent.bind.name, 'selection-controls')
-        self.assertEqual(self.control.parent.element.label, 'Selection Controls')
+        self.assertEqual(self.control.parent.resource_element.label, 'Selection Controls')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.element.label, 'Dropdown Menu')
-        self.assertEqual(self.control.element.hint, 'Standard dropdown')
+        self.assertEqual(self.control.resource_element.label, 'Dropdown Menu')
+        self.assertEqual(self.control.resource_element.hint, 'Standard dropdown')
 
         self.assertEqual(self.control.label, 'Dropdown Menu')
         self.assertEqual(self.control.hint, 'Standard dropdown')

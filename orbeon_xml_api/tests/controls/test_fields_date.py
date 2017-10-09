@@ -27,12 +27,12 @@ class FieldsDateTestCase(CommonTestCase):
         self.assertEqual(self.control.parent.bind.name, 'date-time-controls')
 
         self.assertEqual(self.control.parent.label, 'Date and Time')
-        self.assertEqual(self.control.parent.element.label, 'Date and Time')
+        self.assertEqual(self.control.parent.resource_element.label, 'Date and Time')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.element.label, 'Fields Date')
-        self.assertEqual(self.control.element.hint, 'Date selector with separate fields')
-        self.assertEqual(self.control.element.alert, None)
+        self.assertEqual(self.control.resource_element.label, 'Fields Date')
+        self.assertEqual(self.control.resource_element.hint, 'Date selector with separate fields')
+        self.assertEqual(self.control.resource_element.alert, None)
 
         # Shortcut via element
         self.assertEqual(self.control.label, 'Fields Date')

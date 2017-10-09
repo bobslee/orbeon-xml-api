@@ -23,9 +23,9 @@ class DateTimeTestCase(CommonTestCase):
         self.assertEqual(self.control.bind.name, 'datetime')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.element.label, 'Date and Time')
-        self.assertEqual(self.control.element.hint, 'Standard date and time field')
-        self.assertEqual(self.control.element.alert, None)
+        self.assertEqual(self.control.resource_element.label, 'Date and Time')
+        self.assertEqual(self.control.resource_element.hint, 'Standard date and time field')
+        self.assertEqual(self.control.resource_element.alert, None)
 
         # Shortcut via element
         self.assertEqual(self.control.label, 'Date and Time')

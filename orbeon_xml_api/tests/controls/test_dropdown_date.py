@@ -18,9 +18,9 @@ class DropdownDateTestCase(CommonTestCase):
         self.assertEqual(self.control.bind.name, 'dropdown-date')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.element.label, 'Dropdown Date')
-        self.assertEqual(self.control.element.hint, 'Date selector with dropdown menus')
-        self.assertEqual(self.control.element.alert, None)
+        self.assertEqual(self.control.resource_element.label, 'Dropdown Date')
+        self.assertEqual(self.control.resource_element.hint, 'Date selector with dropdown menus')
+        self.assertEqual(self.control.resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         dt_obj = datetime.strptime('2009-10-16', '%Y-%m-%d').date()

@@ -5,11 +5,6 @@ from ..controls import DecimalControl
 
 class CurrencyTestCase(CommonTestCase):
 
-    def test_currency(self):
-        currency = self.builder.controls['currency']
-        self.assertEqual(currency.element.label, 'Currency')
-        self.assertEqual(currency.element.hint, 'Currency field')
-
     def setUp(self):
         super(CurrencyTestCase, self).setUp()
         self.control = self.builder.controls['currency']
@@ -24,18 +19,18 @@ class CurrencyTestCase(CommonTestCase):
     def test_builder_parent(self):
         self.assertEqual(self.control.parent.bind.id, 'typed-controls-bind')
         self.assertEqual(self.control.parent.bind.name, 'typed-controls')
-        self.assertEqual(self.control.parent.element.label, 'Typed Controls')
+        self.assertEqual(self.control.parent.resource_element.label, 'Typed Controls')
 
     def test_builder_form(self):
         self.assertEqual(self.control.label, 'Currency')
         self.assertEqual(self.control.hint, 'Currency field')
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.element.label, 'Currency')
-        self.assertEqual(self.control.element.hint, 'Currency field')
+        self.assertEqual(self.control.resource_element.label, 'Currency')
+        self.assertEqual(self.control.resource_element.hint, 'Currency field')
 
         # Doesn't exist, but shouldn't raise Exception
-        self.assertEqual(self.control.element.alert, None)
+        self.assertEqual(self.control.resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         self.assertEqual(self.control.default_raw_value, '10.99')

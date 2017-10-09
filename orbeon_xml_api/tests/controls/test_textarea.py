@@ -21,10 +21,10 @@ class TextareaTestCase(CommonTestCase):
         self.assertEqual(self.control.hint, 'Standard text area')
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.element.label, 'Text Area')
-        self.assertEqual(self.control.element.hint, 'Standard text area')
+        self.assertEqual(self.control.resource_element.label, 'Text Area')
+        self.assertEqual(self.control.resource_element.hint, 'Standard text area')
 
-        self.assertEqual(self.control.element.alert, None)
+        self.assertEqual(self.control.resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         self.assertIn('Music is an art', self.control.default_raw_value)
