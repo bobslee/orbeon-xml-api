@@ -13,7 +13,7 @@
         <secret>The question to life and everything is 42.</secret>
     </text-controls>
     <typed-controls>
-        <email>info@orbeon.com</email>
+        <email>bob@novacode.nl</email>
         <us-phone>5555555555</us-phone>
         <number>299792458</number>
         <currency>10.99</currency>
@@ -28,7 +28,7 @@
     </date-time-controls>
     <selection-controls>
         <dropdown>bird</dropdown>
-        <dynamic-data-dropdown itemset-empty="false">ca</dynamic-data-dropdown>
+        <dynamic-data-dropdown itemset-empty="false">de</dynamic-data-dropdown>
         <checkboxes>dog fish</checkboxes>
         <multiple-list>dog fish</multiple-list>
         <radio-buttons>dog</radio-buttons>
