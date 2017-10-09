@@ -29,7 +29,12 @@ class InputCounterTestCase(CommonTestCase):
         self.assertEqual(self.control.default_raw_value, 'This must not be "too long"!')
         self.assertEqual(self.control.default_value, 'This must not be "too long"!')
 
-    def test_runner_input_counter(self):
+    def test_runner_input_counter_value(self):
         text = "Don't even try to make it too long!"
         self.assertEqual(self.runner.get_value('input-counter'), text)
+
+    def test_runner_input_counter_form(self):
+        self.assertEqual(self.runner.form.inputcounter.label, 'Input Field with Character Counter')
+
+        text = "Don't even try to make it too long!"
         self.assertEqual(self.runner.form.inputcounter.value, text)
