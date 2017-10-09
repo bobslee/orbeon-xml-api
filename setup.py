@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='orbeon-xml-api',
-    version='1.0.0.dev6',
+    version='0.1.0.dev1',
     description='A Python object API for Orbeon XML',
     url='https://github.com/bobslee/orbeon-xml-api',
     author='Bob Leers',
