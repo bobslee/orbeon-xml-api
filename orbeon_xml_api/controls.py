@@ -266,9 +266,23 @@ class AnyURIControl(Control):
         return value
 
 
+class DecimalControl(Control):
+
+    def init_runner_attrs(self, runner_element):
+        self.value = self.decode(runner_element.text)
+
+    def set_default_raw_value(self):
+        self.default_raw_value = getattr(self.model_instance, 'text', None)
+
+    def set_default_value(self):
+        self.default_value = self.decode(self.model_instance.text)
+
+    def decode(self, value):
+        return float(value)
+
+    def encode(self, value):
+        return str(value)
+
+
 class EmailControl(StringControl):
-    pass
-
-
-class DecimalControl(StringControl):
     pass
