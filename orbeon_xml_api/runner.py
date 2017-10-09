@@ -37,7 +37,7 @@ class Runner:
         # init
         self.raw_values = {}
         self.values = {}
-        self.form_document_controls = {}
+        self.form_controls = {}
 
         self.init()
 
@@ -59,12 +59,12 @@ class Runner:
                 self.values[name] = control.decode(element.text)
 
                 # Instantiate the control class (these are imported above)
-                form_document_control_class = globals()[control.__class__.__name__]
-                form_document_control_obj = form_document_control_class(self.builder, control.bind, element)
+                form_control_class = globals()[control.__class__.__name__]
+                form_control_obj = form_control_class(self.builder, control.bind, element)
 
-                if form_document_control_obj is not None:
-                    form_document_control_obj.init_runner_attrs(element)
-                    self.form_document_controls[name] = form_document_control_obj
+                if form_control_obj is not None:
+                    form_control_obj.init_runner_attrs(element)
+                    self.form_controls[name] = form_control_obj
 
     def get_form_element(self, name):
         """
@@ -95,8 +95,8 @@ class Runner:
     def get_value(self, name):
         return self.values[name]
 
-    def get_form_document_control(self, name):
-        return self.form_document_controls[name]
+    def get_form_control(self, name):
+        return self.form_controls[name]
 
     def set_value(self, name, value):
         """
@@ -113,6 +113,6 @@ class RunnerForm:
     def __getattr__(self, s_name):
         name = self._runner.builder.sanitized_control_names.get(s_name, False)
         if name:
-            return self._runner.get_form_document_control(name)
+            return self._runner.get_form_control(name)
         else:
             return False
