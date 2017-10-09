@@ -1,4 +1,3 @@
-import collections
 from lxml import etree
 
 import xmltodict
@@ -20,15 +19,22 @@ XF_TYPE_CONTROL = {
     'xf:decimal': DecimalControl
 }
 
+# TODO any_uri
+CONTROL_DECODERS = ['string', 'date', 'any_uri']
+
 
 class Builder:
 
-    def __init__(self, xml, lang='en'):
+    def __init__(self, xml, lang='en', **kwargs):
         self.xml = xml
         self.lang = lang
 
         self.xml_root = None
         self.set_xml_root()
+
+        self.control_decoders = {}
+        if kwargs.get('control_decoders', False):
+            self.set_control_decoders(kwargs['control_decoders'])
 
         self.binds = {}
         self.set_binds()
@@ -88,6 +94,19 @@ class Builder:
             k = k.replace('-', '')
             k = k.replace('.', '_')
             self.sanitized_control_names[k] = name
+
+    def set_control_decoders(self, control_decoders):
+        for k, v in control_decoders.items():
+            self.add_control_decoder(k, v)
+
+    def add_control_decoder(self, name, decoder_obj):
+        if name not in CONTROL_DECODERS:
+            raise Exception("Unsupported Control Decoder: %s" % name)
+
+        if not callable(getattr(decoder_obj, 'decode', None)):
+            raise Exception("Method `decode()` is missing in Control Decoder for: %s" % name)
+
+        self.control_decoders[name] = decoder_obj
 
     # TODO
     def get_structure(self):

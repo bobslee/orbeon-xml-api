@@ -117,6 +117,8 @@ class StringControl(Control):
         self.default_value = self.decode(getattr(self.model_instance, 'text', None))
 
     def decode(self, value):
+        if self.builder.control_decoders.get('string', False):
+            return self.builder.control_decoders.get('string').decode(value)
         return value
 
     def encode(self, value):
@@ -135,7 +137,12 @@ class DateControl(Control):
         self.default_value = self.decode(self.model_instance.text)
 
     def decode(self, value):
-        if value:
+        if not value:
+            return
+
+        if self.builder.control_decoders.get('date', False):
+            return self.builder.control_decoders.get('date').decode(value)
+        else:
             return datetime.strptime(value, '%Y-%m-%d').date()
 
     def encode(self, value):
@@ -250,7 +257,7 @@ class SelectControl(StringControl):
 class AnyURIControl(Control):
 
     def init_runner_attrs(self, runner_element):
-        pass
+        self.value = self.decode(runner_element.text)
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self.model_instance, 'text', None)

@@ -37,7 +37,7 @@ class Runner:
         # init
         self.raw_values = {}
         self.values = {}
-        self.form_controls = {}
+        self.controls = {}
 
         self.init()
 
@@ -59,12 +59,12 @@ class Runner:
                 self.values[name] = control.decode(element.text)
 
                 # Instantiate the control class (these are imported above)
-                form_control_class = globals()[control.__class__.__name__]
-                form_control_obj = form_control_class(self.builder, control.bind, element)
+                control_class = globals()[control.__class__.__name__]
+                control_obj = control_class(self.builder, control.bind, element)
 
-                if form_control_obj is not None:
-                    form_control_obj.init_runner_attrs(element)
-                    self.form_controls[name] = form_control_obj
+                if control_obj is not None:
+                    control_obj.init_runner_attrs(element)
+                    self.controls[name] = control_obj
 
     def get_form_element(self, name):
         """
@@ -96,7 +96,7 @@ class Runner:
         return self.values[name]
 
     def get_form_control(self, name):
-        return self.form_controls[name]
+        return self.controls[name]
 
     def set_value(self, name, value):
         """
