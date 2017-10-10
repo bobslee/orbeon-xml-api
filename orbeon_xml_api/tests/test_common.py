@@ -17,9 +17,12 @@ SELECTION_CONTROLS_BIND = ['selection-controls-bind', 'autocomplete-bind', 'yesn
                            'multiple-list-bind']
 
 # What about? image-attachments-iteration-bind
-ATTACHMENT_CONTROLS_BIND = ['attachment-controls-bind', 'image-attachments-bind',
-                            'image-attachments-iteration-bind', 'image-attachment-bind',
-                            'file-attachment-bind', 'static-image-bind']
+# ATTACHMENT_CONTROLS_BIND = ['attachment-controls-bind', 'image-attachments-bind',
+#                             'image-attachments-iteration-bind', 'image-attachment-bind',
+#                             'file-attachment-bind', 'static-image-bind']
+
+ATTACHMENT_CONTROLS_BIND = ['attachment-controls-bind', 'image-attachment-bind', 'static-image-bind',
+                            'image-annotation-bind']
 
 BUTTONS_BIND = ['buttons-bind', 'standard-button-bind', 'link-button-bind']
 
@@ -37,8 +40,8 @@ class CommonTestCase(unittest.TestCase):
     def setUp(self):
         super(CommonTestCase, self).setUp()
 
-        self.builder_xml = xml_from_file('tests/data', 'test_controls_builder.xml')
-        self.runner_xml = xml_from_file('tests/data', 'test_controls_runner.xml')
+        self.builder_xml = xml_from_file('tests/data', 'test_controls_builder_no-image-attachments-iteration.xml')
+        self.runner_xml = xml_from_file('tests/data', 'test_controls_runner_no-image-attachments-iteration.xml')
 
         self.builder = Builder(self.builder_xml)
         self.runner = Runner(self.runner_xml, None, self.builder_xml)

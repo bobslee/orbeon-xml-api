@@ -28,7 +28,7 @@ class ControlDecoderTestCase(unittest.TestCase):
     def setUp(self):
         super(ControlDecoderTestCase, self).setUp()
 
-        self.builder_xml = xml_from_file('tests/data', 'test_controls_builder.xml')
+        self.builder_xml = xml_from_file('tests/data', 'test_controls_builder_no-image-attachments-iteration.xml')
         self.runner_xml = xml_from_file('tests/data', 'test_controls_runner.xml')
 
     def test_simple_input_decoder(self):

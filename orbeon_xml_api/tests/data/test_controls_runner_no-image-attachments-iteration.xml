@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <text-controls>
+        <htmlarea>&lt;div style="text-align: left;"&gt;
+        &lt;p&gt;&lt;strong&gt;The Good, the Bad and the Ugly.&lt;/strong&gt;&amp;nbsp;(Italian:&amp;nbsp;&lt;a shape="rect" title="Help:IPA for Italian" href="https://en.wikipedia.org/wiki/Help:IPA_for_Italian"&gt;[d͡ʒuˈzɛppe ˈverdi]&lt;/a&gt;; 9 or 10 October 1813&amp;nbsp;– 27 January 1901) was an&amp;nbsp;&lt;a shape="rect" title="Italians" href="https://en.wikipedia.org/wiki/Italians"&gt;Italian&lt;/a&gt;&amp;nbsp;&lt;a shape="rect" title="Romantic music" href="https://en.wikipedia.org/wiki/Romantic_music"&gt;Romantic&lt;/a&gt;&amp;nbsp;composer primarily known for his operas. He is considered, together with&amp;nbsp;&lt;a shape="rect" title="Richard Wagner" href="https://en.wikipedia.org/wiki/Richard_Wagner"&gt;Richard Wagner&lt;/a&gt;, the preeminent opera composer of the nineteenth century.&amp;nbsp;Verdi dominated the Italian opera scene after the eras of&amp;nbsp;&lt;a shape="rect" title="Vincenzo Bellini" href="https://en.wikipedia.org/wiki/Vincenzo_Bellini"&gt;Bellini&lt;/a&gt;,&amp;nbsp;&lt;a shape="rect" title="Gaetano Donizetti" href="https://en.wikipedia.org/wiki/Gaetano_Donizetti"&gt;Donizetti&lt;/a&gt;&amp;nbsp;and&amp;nbsp;&lt;a shape="rect" title="Gioachino Rossini" href="https://en.wikipedia.org/wiki/Gioachino_Rossini"&gt;Rossini&lt;/a&gt;. His works are frequently performed in opera houses throughout the world and, transcending the boundaries of the genre, some of his themes have long since taken root in popular culture, as "&lt;a shape="rect" title="La donna è mobile" href="https://en.wikipedia.org/wiki/La_donna_%C3%A8_mobile"&gt;La donna è mobile&lt;/a&gt;" from&amp;nbsp;&lt;em&gt;&lt;a shape="rect" class="mw-redirect" title="Rigoletto (opera)" href="https://en.wikipedia.org/wiki/Rigoletto_(opera)"&gt;Rigoletto&lt;/a&gt;&lt;/em&gt;, "&lt;a shape="rect" title="Libiamo ne' lieti calici" href="https://en.wikipedia.org/wiki/Libiamo_ne%27_lieti_calici"&gt;Libiamo ne' lieti calici&lt;/a&gt;" (The Drinking Song) from&amp;nbsp;&lt;em&gt;&lt;a shape="rect" title="La traviata" href="https://en.wikipedia.org/wiki/La_traviata"&gt;La traviata&lt;/a&gt;&lt;/em&gt;, "&lt;a shape="rect" title="Va, pensiero" href="https://en.wikipedia.org/wiki/Va,_pensiero"&gt;Va, pensiero&lt;/a&gt;" (The Chorus of the Hebrew Slaves) from&amp;nbsp;&lt;em&gt;&lt;a shape="rect" title="Nabucco" href="https://en.wikipedia.org/wiki/Nabucco"&gt;Nabucco&lt;/a&gt;&lt;/em&gt;, the "Coro di zingari" (&lt;a shape="rect" title="Anvil Chorus" href="https://en.wikipedia.org/wiki/Anvil_Chorus"&gt;Anvil Chorus&lt;/a&gt;) from&amp;nbsp;&lt;em&gt;&lt;a shape="rect" title="Il trovatore" href="https://en.wikipedia.org/wiki/Il_trovatore"&gt;Il trovatore&lt;/a&gt;&lt;/em&gt;&amp;nbsp;and the "&lt;a shape="rect" title="Triumphal March" href="https://en.wikipedia.org/wiki/Triumphal_March"&gt;Grand March&lt;/a&gt;" from&amp;nbsp;&lt;em&gt;&lt;a shape="rect" title="Aida" href="https://en.wikipedia.org/wiki/Aida"&gt;Aida&lt;/a&gt;&lt;/em&gt;.&lt;/p&gt;
+        &lt;p&gt;Moved by the death of compatriot&amp;nbsp;&lt;a shape="rect" title="Alessandro Manzoni" href="https://en.wikipedia.org/wiki/Alessandro_Manzoni"&gt;Alessandro Manzoni&lt;/a&gt;, Verdi wrote&amp;nbsp;&lt;em&gt;&lt;a shape="rect" title="Requiem (Verdi)" href="https://en.wikipedia.org/wiki/Requiem_(Verdi)"&gt;Messa da Requiem&lt;/a&gt;&lt;/em&gt;&amp;nbsp;in 1874 in Manzoni's honour, a work now regarded as a masterpiece of the&amp;nbsp;&lt;a shape="rect" title="Oratorio" href="https://en.wikipedia.org/wiki/Oratorio"&gt;oratorio&lt;/a&gt;&amp;nbsp;tradition and a testimony to his capacity outside the field of opera.&amp;nbsp;Visionary and politically engaged, he remains – alongside&amp;nbsp;&lt;a shape="rect" title="Giuseppe Garibaldi" href="https://en.wikipedia.org/wiki/Giuseppe_Garibaldi"&gt;Garibaldi&lt;/a&gt;&amp;nbsp;and&amp;nbsp;&lt;a shape="rect" title="Camillo Benso, Count of Cavour" href="https://en.wikipedia.org/wiki/Camillo_Benso,_Count_of_Cavour"&gt;Cavour&lt;/a&gt;&amp;nbsp;– an emblematic figure of the reunification process of the&amp;nbsp;&lt;a shape="rect" class="mw-redirect" title="Italian peninsula" href="https://en.wikipedia.org/wiki/Italian_peninsula"&gt;Italian peninsula&lt;/a&gt;&amp;nbsp;(the&amp;nbsp;&lt;em&gt;&lt;a shape="rect" class="mw-redirect" title="Risorgimento" href="https://en.wikipedia.org/wiki/Risorgimento"&gt;Risorgimento&lt;/a&gt;&lt;/em&gt;).&lt;/p&gt;
+        &lt;/div&gt;</htmlarea>
+        <input>John</input>
+        <input-counter>Don't even try to make it too long!</input-counter>
+        <textarea>Programming is an art form whose medium is a computer.</textarea>
+        <textarea-counter>Let's write some code. It must fit in 1000 bytes.</textarea-counter>
+        <output>Great risk and less achievements involve great love.</output>
+        <secret>The question to life and everything is 42.</secret>
+    </text-controls>
+    <typed-controls>
+        <email>bob@novacode.nl</email>
+        <us-phone>1234567890</us-phone>
+        <number>19792017</number>
+        <currency>101.33</currency>
+        <us-state>CA</us-state>
+    </typed-controls>
+    <date-time-controls>
+        <date>2017-07-01</date>
+        <time>08:15:01</time>
+        <datetime>2017-07-01T23:22:21</datetime>
+        <dropdown-date>2017-07-01</dropdown-date>
+        <fields-date>2017-07-01</fields-date>
+    </date-time-controls>
+    <selection-controls>
+        <dropdown>bird</dropdown>
+        <dynamic-data-dropdown itemset-empty="false">de</dynamic-data-dropdown>
+        <checkboxes>dog fish</checkboxes>
+        <multiple-list>dog fish</multiple-list>
+        <radio-buttons>dog</radio-buttons>
+        <open-select1>Pistachio</open-select1>
+        <yesno-input>true</yesno-input>
+        <checkbox-input>true</checkbox-input>
+        <autocomplete label="United States">nl</autocomplete>
+    </selection-controls>
+    <attachment-controls>
+        <image-attachment filename="feature-fr-browser.png" mediatype="image/png" size="128457">/fr/service/persistence/crud/orbeon/runner/data/24/43dbaabe1e3aa8862fd4de321b619709d62cc097.bin</image-attachment>
+        <static-image filename="feature-fb-browser-3.png" mediatype="image/png">/fr/service/persistence/crud/orbeon/builder/data/33/a8523db8eba50aac53dfe15ece2758e6475cfc21.bin</static-image>
+        <image-annotation>
+            <image filename="feature-fr-browser.png" mediatype="image/png" size="128457">/fr/service/persistence/crud/orbeon/runner/data/24/67d46d0c00b2475d4501db6524452c3e1aa5cc26.bin</image>
+            <annotation>/fr/service/persistence/crud/orbeon/runner/data/24/a22fa09862024e0cbb9b712a47c7ab01d0403fe0.bin</annotation>
+        </image-annotation>
+    </attachment-controls>
+    <buttons>
+        <standard-button/>
+        <link-button/>
+    </buttons>
+    <us-address>
+        <street-number>1600</street-number>
+        <street-name>Pennsylvania Avenue NW</street-name>
+        <apt-suite/>
+        <city>Washington</city>
+        <state>DC</state>
+        <zip>20500</zip>
+    </us-address>
+</form>
