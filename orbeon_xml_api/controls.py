@@ -1,4 +1,7 @@
 from datetime import datetime, time
+from lxml import etree
+
+import xmltodict
 
 
 class ResourceElement(object):
@@ -268,6 +271,37 @@ class AnyURIControl(Control):
 
     def decode(self, value):
         return value
+
+    def encode(self, value):
+        return value
+
+
+class ImageAnnotationControl(Control):
+
+    def init_runner_attrs(self, runner_element):
+        decoded = self.decode(runner_element)
+
+        self.image = decoded['image']['image']
+        self.annotation = decoded['annotation']['annotation']
+
+    def set_default_raw_value(self):
+        # self.default_raw_value = getattr(self.model_instance, 'text', None)
+        self.default_raw_value = self.model_instance
+
+    def set_default_value(self):
+        if self.model_instance is not None:
+            self.default_value = self.decode(self.model_instance)
+
+    def decode(self, value):
+        res = {}
+
+        if value is None:
+            return res
+
+        for el in value.getchildren():
+            res[el.tag] = xmltodict.parse(etree.tostring(el))
+
+        return res
 
     def encode(self, value):
         return value

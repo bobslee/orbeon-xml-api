@@ -4,7 +4,7 @@ import xmltodict
 
 from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
     BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
-    Select1Control, OpenSelect1Control, SelectControl
+    Select1Control, OpenSelect1Control, SelectControl, ImageAnnotationControl
 from utils import generate_xml_root
 
 XF_TYPE_CONTROL = {
@@ -164,6 +164,8 @@ class Bind:
             return OpenSelect1Control(self.builder, self, element)
         elif fr_control_tag == 'select':
             return SelectControl(self.builder, self, element)
+        elif fr_control_tag == 'wpaint':
+            return ImageAnnotationControl(self.builder, self, element)
         else:
             return XF_TYPE_CONTROL[self.xf_type](self.builder, self, element)
 

@@ -1,10 +1,9 @@
-import unittest
-
+from .test_common import CommonTestCase
 from ..runner import Runner, RunnerForm
 from ..utils import xml_from_file
 
 
-class RunnerTestCase(unittest.TestCase):
+class RunnerTestCase(CommonTestCase):
 
     def setUp(self):
         super(RunnerTestCase, self).setUp()

@@ -3,7 +3,7 @@ from utils import generate_xml_root
 
 from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
     BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
-    Select1Control, OpenSelect1Control, SelectControl
+    Select1Control, OpenSelect1Control, SelectControl, ImageAnnotationControl
 
 
 class Runner:
@@ -54,9 +54,18 @@ class Runner:
         for name, control in self.builder.controls.items():
             element = self.get_form_element(name)
 
-            if element is not False:
-                self.raw_values[name] = getattr(element, 'text', None)
-                self.values[name] = control.decode(element.text)
+            if element is None:
+                continue
+
+            if callable(getattr(element, 'getchildren', None)):
+                children = element.getchildren()
+
+                if len(children) > 0:
+                    self.raw_values[name] = children
+                    self.values[name] = control.decode(element)
+                else:
+                    self.raw_values[name] = getattr(element, 'text', None)
+                    self.values[name] = control.decode(element.text)
 
                 # Instantiate the control class (these are imported above)
                 control_class = globals()[control.__class__.__name__]
@@ -84,8 +93,8 @@ class Runner:
         res = self.xml_root.xpath(query)
 
         # TODO Fix composite controls like 'us-address'
-        # if len(res) > 1 or not res or len(res[0].getchildren()) > 1:
-        #     return False
+        if len(res) != 1:
+            return False
 
         return res[0]
 

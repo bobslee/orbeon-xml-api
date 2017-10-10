@@ -10,8 +10,8 @@ class BenchmarkPerformanceTestCase(unittest.TestCase):
     def setUp(self):
         super(BenchmarkPerformanceTestCase, self).setUp()
 
-        self.runner_xml = xml_from_file('tests/data', 'test_controls_runner.xml')
-        self.builder_xml = xml_from_file('tests/data', 'test_controls_builder.xml')
+        self.runner_xml = xml_from_file('tests/data', 'test_controls_runner_no-image-attachments-iteration.xml')
+        self.builder_xml = xml_from_file('tests/data', 'test_controls_builder_no-image-attachments-iteration.xml')
         self.builder = Builder(self.builder_xml)
 
     # TODO remove this from API support?
