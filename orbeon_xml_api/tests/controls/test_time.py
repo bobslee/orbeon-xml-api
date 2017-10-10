@@ -1,4 +1,5 @@
 from datetime import datetime
+from lxml import etree
 
 from . import CommonTestCase
 from ..controls import TimeControl
@@ -15,24 +16,27 @@ class TimeTestCase(CommonTestCase):
 
         time_obj = datetime.strptime('17:47:57', '%H:%M:%S').time()
 
+        el = etree.Element('test')
+        el.text = '17:47:57'
+
+        self.assertEqual(self.control.decode(el), time_obj)
         self.assertEqual(self.control.encode(time_obj), '17:47:57')
-        self.assertEqual(self.control.decode('17:47:57'), time_obj)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'time-bind')
-        self.assertEqual(self.control.bind.name, 'time')
+        self.assertEqual(self.control._bind.id, 'time-bind')
+        self.assertEqual(self.control._bind.name, 'time')
 
     def test_builder_parent(self):
-        self.assertEqual(self.control.parent.bind.id, 'date-time-controls-bind')
-        self.assertEqual(self.control.parent.bind.name, 'date-time-controls')
+        self.assertEqual(self.control._parent._bind.id, 'date-time-controls-bind')
+        self.assertEqual(self.control._parent._bind.name, 'date-time-controls')
 
-        self.assertEqual(self.control.parent.label, 'Date and Time')
-        self.assertEqual(self.control.parent.resource_element.label, 'Date and Time')
+        self.assertEqual(self.control._parent.label, 'Date and Time')
+        self.assertEqual(self.control._parent._resource_element.label, 'Date and Time')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.resource_element.label, 'Time')
-        self.assertEqual(self.control.resource_element.hint, 'Standard time field')
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.label, 'Time')
+        self.assertEqual(self.control._resource_element.hint, 'Standard time field')
+        self.assertEqual(self.control._resource_element.alert, None)
 
         # Shortcut via element
         self.assertEqual(self.control.label, 'Time')

@@ -12,17 +12,17 @@ class OpenSelect1TestCase(CommonTestCase):
         self.assertIsInstance(self.control, OpenSelect1Control)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'open-select1-bind')
-        self.assertEqual(self.control.bind.name, 'open-select1')
+        self.assertEqual(self.control._bind.id, 'open-select1-bind')
+        self.assertEqual(self.control._bind.name, 'open-select1')
 
     def test_builder_parent(self):
-        self.assertEqual(self.control.parent.bind.id, 'selection-controls-bind')
-        self.assertEqual(self.control.parent.bind.name, 'selection-controls')
-        self.assertEqual(self.control.parent.resource_element.label, 'Selection Controls')
+        self.assertEqual(self.control._parent._bind.id, 'selection-controls-bind')
+        self.assertEqual(self.control._parent._bind.name, 'selection-controls')
+        self.assertEqual(self.control._parent._resource_element.label, 'Selection Controls')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.resource_element.label, 'Ice Cream Flavor')
-        self.assertEqual(self.control.resource_element.hint, None)
+        self.assertEqual(self.control._resource_element.label, 'Ice Cream Flavor')
+        self.assertEqual(self.control._resource_element.hint, None)
 
         self.assertEqual(self.control.label, 'Ice Cream Flavor')
         self.assertEqual(self.control.hint, None)
@@ -32,7 +32,7 @@ class OpenSelect1TestCase(CommonTestCase):
         self.assertEqual(self.control.default_value, 'Pistachio')
 
     def test_runner_value(self):
-        self.assertEqual(self.runner.get_raw_value('open-select1'), 'Pistachio')
+        self.assertEqual(self.runner.get_raw_value('open-select1').text, 'Pistachio')
         self.assertEqual(self.runner.get_value('open-select1'), 'Pistachio')
 
     def test_runner_form(self):

@@ -13,8 +13,8 @@ class ResourceElement(object):
         self.control = control
 
     def __getattr__(self, name):
-        if self.control.resource and hasattr(self.control.resource, 'element'):
-            return self.control.resource.element.get(name, None)
+        if self.control._resource and hasattr(self.control._resource, 'element'):
+            return self.control._resource.element.get(name, None)
         else:
             return None
 
@@ -22,20 +22,20 @@ class ResourceElement(object):
 class Control(object):
 
     def __init__(self, builder, bind, element):
-        self.builder = builder
-        self.bind = bind
-        self.element = element
+        self._builder = builder
+        self._bind = bind
+        self._element = element
 
-        self.parent = None
+        self._parent = None
         self.set_parent()
 
         # XXX Maybe set_refs is obsolete by following
-        self.resource = None
+        self._resource = None
         self.set_resource()
 
         # model_instance is like raw default_value.
         # Still called model_instance, because of FB terminology.
-        self.model_instance = None
+        self._model_instance = None
         self.set_model_instance()
 
         self.default_raw_value = None
@@ -44,15 +44,15 @@ class Control(object):
         self.default_value = None
         self.set_default_value()
 
-        self.resource_element = ResourceElement(self)
+        self._resource_element = ResourceElement(self)
 
         # Attributes via Element (which get these dynamically)
-        if self.resource:
-            self.label = self.resource.element.get('label', None)
-            self.hint = self.resource.element.get('hint', None)
-            self.alert = self.resource.element.get('alert', None)
+        if self._resource:
+            self.label = self._resource.element.get('label', None)
+            self.hint = self._resource.element.get('hint', None)
+            self.alert = self._resource.element.get('alert', None)
 
-        self.raw_value = self.element.text
+        self._raw_value = self._element.text
 
         self.init()
 
@@ -61,30 +61,30 @@ class Control(object):
         pass
 
     def set_parent(self):
-        if self.bind.parent and self.bind.parent.name in self.builder.controls:
-            self.parent = self.builder.controls[self.bind.parent.name]
+        if self._bind.parent and self._bind.parent.name in self._builder.controls:
+            self._parent = self._builder.controls[self._bind.parent.name]
 
     def set_model_instance(self):
-        if not self.bind.parent:
+        if not self._bind.parent:
             return
 
         # TODO namespace prefix Error
         # query = "//xf:model/xf:instance/form/%s/%s" % (
         query = "//form/%s/%s" % (
-            self.bind.parent.name,
-            self.bind.name
+            self._bind.parent.name,
+            self._bind.name
         )
 
-        res = self.builder.xml_root.xpath(query)
+        res = self._builder.xml_root.xpath(query)
 
         if len(res) > 0:
-            self.model_instance = res[0]
+            self._model_instance = res[0]
 
     def set_resource(self):
-        if self.bind.name in self.builder.resource:
-            self.resource = self.builder.resource[self.bind.name]
+        if self._bind.name in self._builder.resource:
+            self._resource = self._builder.resource[self._bind.name]
 
-    def init_runner_attrs(self, runner_element):
+    def init_runner_form_attrs(self, runner_element):
         raise NotImplementedError
 
     def set_default_raw_value(self):
@@ -100,7 +100,7 @@ class Control(object):
         """
         raise NotImplementedError
 
-    def decode(self, value):
+    def decode(self, element):
         """
         By the self.datatype (handler):
         >> self.datetype.decode(value)
@@ -110,19 +110,22 @@ class Control(object):
 
 class StringControl(Control):
 
-    def init_runner_attrs(self, runner_element):
-        self.value = self.decode(runner_element.text)
+    def init_runner_form_attrs(self, runner_element):
+        self.value = self.decode(runner_element)
 
     def set_default_raw_value(self):
-        self.default_raw_value = getattr(self.model_instance, 'text', None)
+        self.default_raw_value = getattr(self._model_instance, 'text', None)
 
     def set_default_value(self):
-        self.default_value = self.decode(getattr(self.model_instance, 'text', None))
+        self.default_value = self.decode(self._model_instance)
 
-    def decode(self, value):
-        if self.builder.control_decoders.get('string', False):
-            return self.builder.control_decoders.get('string').decode(value)
-        return value
+    def decode(self, element):
+        if self._builder.control_decoders.get('string', False):
+            return self._builder.control_decoders.get('string').decode(element)
+        # if isinstance(element, basestring):
+        #     return value
+        elif hasattr(element, 'text'):
+            return element.text
 
     def encode(self, value):
         return value
@@ -130,23 +133,23 @@ class StringControl(Control):
 
 class DateControl(Control):
 
-    def init_runner_attrs(self, runner_element):
-        self.value = self.decode(runner_element.text)
+    def init_runner_form_attrs(self, runner_element):
+        self.value = self.decode(runner_element)
 
     def set_default_raw_value(self):
-        self.default_raw_value = getattr(self.model_instance, 'text', None)
+        self.default_raw_value = getattr(self._model_instance, 'text', None)
 
     def set_default_value(self):
-        self.default_value = self.decode(self.model_instance.text)
+        self.default_value = self.decode(self._model_instance)
 
-    def decode(self, value):
-        if not value:
+    def decode(self, element):
+        if element is None or not hasattr(element, 'text'):
             return
 
-        if self.builder.control_decoders.get('date', False):
-            return self.builder.control_decoders.get('date').decode(value)
+        if self._builder.control_decoders.get('date', False):
+            return self._builder.control_decoders.get('date').decode(element.text)
         else:
-            return datetime.strptime(value, '%Y-%m-%d').date()
+            return datetime.strptime(element.text, '%Y-%m-%d').date()
 
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%d')
@@ -154,17 +157,20 @@ class DateControl(Control):
 
 class TimeControl(Control):
 
-    def init_runner_attrs(self, runner_element):
-        self.value = self.decode(runner_element.text)
+    def init_runner_form_attrs(self, runner_element):
+        self.value = self.decode(runner_element)
 
     def set_default_raw_value(self):
-        self.default_raw_value = getattr(self.model_instance, 'text', None)
+        self.default_raw_value = getattr(self._model_instance, 'text', None)
 
     def set_default_value(self):
-        self.default_value = self.decode(self.model_instance.text)
+        self.default_value = self.decode(self._model_instance)
 
-    def decode(self, value):
-        return datetime.strptime(value, '%H:%M:%S').time()
+    def decode(self, element):
+        if element is None or not hasattr(element, 'text'):
+            return
+        else:
+            return datetime.strptime(element.text, '%H:%M:%S').time()
 
     def encode(self, value):
         return time.strftime(value, '%H:%M:%S')
@@ -172,17 +178,20 @@ class TimeControl(Control):
 
 class DateTimeControl(Control):
 
-    def init_runner_attrs(self, runner_element):
-        self.value = self.decode(runner_element.text)
+    def init_runner_form_attrs(self, runner_element):
+        self.value = self.decode(runner_element)
 
     def set_default_raw_value(self):
-        self.default_raw_value = getattr(self.model_instance, 'text', None)
+        self.default_raw_value = getattr(self._model_instance, 'text', None)
 
     def set_default_value(self):
-        self.default_value = self.decode(self.model_instance.text)
+        self.default_value = self.decode(self._model_instance)
 
-    def decode(self, value):
-        return datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
+    def decode(self, element):
+        if element is None or not hasattr(element, 'text'):
+            return
+        else:
+            return datetime.strptime(element.text, '%Y-%m-%dT%H:%M:%S')
 
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%dT%H:%M:%S')
@@ -190,22 +199,22 @@ class DateTimeControl(Control):
 
 class BooleanControl(Control):
 
-    def init_runner_attrs(self, runner_element):
-        self.choice_value = self.decode(runner_element.text)
+    def init_runner_form_attrs(self, runner_element):
+        self.choice_value = self.decode(runner_element)
         # TODO translations
         self.choice_label = 'Yes' if self.choice_value else 'No'
         self.choice = {self.choice_label: self.choice_value}
 
     def set_default_raw_value(self):
-        self.default_raw_value = getattr(self.model_instance, 'text', None)
+        self.default_raw_value = getattr(self._model_instance, 'text', None)
 
     def set_default_value(self):
-        self.default_value = self.decode(self.model_instance.text)
+        self.default_value = self.decode(self._model_instance)
 
-    def decode(self, value):
-        if value == 'true':
+    def decode(self, element):
+        if element.text == 'true':
             return True
-        elif value == 'false':
+        elif element.text == 'false':
             return False
 
     def encode(self, value):
@@ -218,11 +227,11 @@ class BooleanControl(Control):
 
 class Select1Control(StringControl):
 
-    def init_runner_attrs(self, runner_element):
-        self.choice_value = self.decode(runner_element.text)
+    def init_runner_form_attrs(self, runner_element):
+        self.choice_value = self.decode(runner_element)
         self.choice_label = None
 
-        for item in self.resource.element['item']:
+        for item in self._resource.element['item']:
             if item['value'] == self.choice_value:
                 self.choice_label = item['label']
 
@@ -230,8 +239,8 @@ class Select1Control(StringControl):
 
 
 class OpenSelect1Control(Select1Control):
-    def init_runner_attrs(self, runner_element):
-        super(OpenSelect1Control, self).init_runner_attrs(runner_element)
+    def init_runner_form_attrs(self, runner_element):
+        super(OpenSelect1Control, self).init_runner_form_attrs(runner_element)
 
         if self.choice_label is None:
             self.choice_label = self.choice_value
@@ -240,18 +249,19 @@ class OpenSelect1Control(Select1Control):
 
 class SelectControl(StringControl):
 
-    def init_runner_attrs(self, runner_element):
-        self.choices_values = self.decode(runner_element.text)
+    def init_runner_form_attrs(self, runner_element):
+        self.choices_values = self.decode(runner_element)
         self.choices_labels = []
         self.choices = {}
 
-        for item in self.resource.element['item']:
+        for item in self._resource.element['item']:
             if item['value'] in self.choices_values:
                 self.choices_labels.append(item['label'])
                 self.choices[item['label']] = item['value']
 
-    def decode(self, value):
-        return value.split(' ')
+    def decode(self, element):
+        if hasattr(element, 'text'):
+            return element.text.split(' ')
 
     def encode(self, value):
         return ' '.join(value)
@@ -259,28 +269,41 @@ class SelectControl(StringControl):
 
 class AnyUriControl(Control):
 
-    def init_runner_attrs(self, runner_element):
+    def init_runner_form_attrs(self, runner_element):
         decoded = self.decode(runner_element)
 
         self.uri = decoded['uri']
         self.value = decoded['value']
+        self.filename = decoded.get('element', None).get('@filename')
 
     def set_default_raw_value(self):
-        self.default_raw_value = self.model_instance
+        self.default_raw_value = self._model_instance
 
     def set_default_value(self):
-        if self.model_instance is not None:
-            self.default_value = self.decode(self.model_instance)
+        if self._model_instance is not None:
+            self.default_value = self.decode(self._model_instance)
 
-    def decode(self, value):
+    def decode(self, element):
         # TODO: Quick and dirty, I don't like it! (Because of deadline).
         # This needs to be revised!
-        if self.builder.control_decoders.get('any_uri', False):
-            return self.builder.control_decoders.get('any_uri').decode(value)
-        elif isinstance(value, basestring):
-            return {'uri': value, 'value': value}
+
+        if self._builder.control_decoders.get('any_uri', False):
+            return self._builder.control_decoders.get('any_uri').decode(element)
+        # elif isinstance(element.text, basestring):
+        #     res = {'uri': value.text, 'value': value.text}
+        #     element = xmltodict.parse(etree.tostring(self._element))
+        #     if self._bind.name in element:
+        #         res['element'] = xmltodict.parse(etree.tostring(self._element))[self._bind.name]
+        #     # else:
+        #     #     res['element'] = xmltodict.parse(etree.tostring(self._element))                
+        #     return res
         else:
-            return {'uri': value.text, 'value': value.text}
+            res = {'uri': element.text, 'value': element.text}
+            element_dict = xmltodict.parse(etree.tostring(element))
+            if self._bind.name in element_dict:
+                res['element'] = element_dict[self._bind.name]
+
+            return res
 
     def encode(self, value):
         return value
@@ -288,30 +311,31 @@ class AnyUriControl(Control):
 
 class ImageAnnotationControl(Control):
 
-    def init_runner_attrs(self, runner_element):
+    def init_runner_form_attrs(self, runner_element):
         decoded = self.decode(runner_element)
 
-        self.image = decoded['image']['image']
-        self.annotation = decoded['annotation']['annotation']
+        if decoded:
+            self.image = decoded['image']['image']
+            self.annotation = decoded['annotation']['annotation']
 
     def set_default_raw_value(self):
-        # self.default_raw_value = getattr(self.model_instance, 'text', None)
-        self.default_raw_value = self.model_instance
+        # self.default_raw_value = getattr(self._model_instance, 'text', None)
+        self.default_raw_value = self._model_instance
 
     def set_default_value(self):
-        if self.model_instance is not None:
-            self.default_value = self.decode(self.model_instance)
+        if self._model_instance is not None:
+            self.default_value = self.decode(self._model_instance)
 
-    def decode(self, value):
-        if self.builder.control_decoders.get('image_annotation', False):
-            return self.builder.control_decoders.get('image_annotation').decode(value)
+    def decode(self, element):
+        if self._builder.control_decoders.get('image_annotation', False):
+            return self._builder.control_decoders.get('image_annotation').decode(element.text)
         else:
             res = {}
 
-            if value is None:
+            if element is None or element.text is None:
                 return res
 
-            for el in value.getchildren():
+            for el in element.getchildren():
                 res[el.tag] = xmltodict.parse(etree.tostring(el))
 
             return res
@@ -322,22 +346,22 @@ class ImageAnnotationControl(Control):
 
 class DecimalControl(Control):
 
-    def init_runner_attrs(self, runner_element):
-        self.value = self.decode(runner_element.text)
+    def init_runner_form_attrs(self, runner_element):
+        self.value = self.decode(runner_element)
 
     def set_default_raw_value(self):
-        self.default_raw_value = getattr(self.model_instance, 'text', None)
+        self.default_raw_value = getattr(self._model_instance, 'text', None)
 
     def set_default_value(self):
-        self.default_value = self.decode(self.model_instance.text)
+        self.default_value = self.decode(self._model_instance)
 
-    def decode(self, value):
-        precision = int(self.element.get('digits-after-decimal', 1))
+    def decode(self, element):
+        precision = int(self._element.get('digits-after-decimal', 1))
 
-        if precision > 0:
-            return float(value)
-        else:
-            return int(value)
+        if precision > 0 and hasattr(element, 'text'):
+            return float(element.text)
+        elif hasattr(element, 'text'):
+            return int(element.text)
 
     def encode(self, value):
         return str(value)

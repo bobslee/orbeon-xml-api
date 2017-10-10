@@ -13,17 +13,17 @@ class YesnoInputTestCase(CommonTestCase):
         self.assertIsInstance(self.control, BooleanControl)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'yesno-input-bind')
-        self.assertEqual(self.control.bind.name, 'yesno-input')
+        self.assertEqual(self.control._bind.id, 'yesno-input-bind')
+        self.assertEqual(self.control._bind.name, 'yesno-input')
 
     def test_builder_parent(self):
-        self.assertEqual(self.control.parent.bind.id, 'selection-controls-bind')
-        self.assertEqual(self.control.parent.bind.name, 'selection-controls')
-        self.assertEqual(self.control.parent.resource_element.label, 'Selection Controls')
+        self.assertEqual(self.control._parent._bind.id, 'selection-controls-bind')
+        self.assertEqual(self.control._parent._bind.name, 'selection-controls')
+        self.assertEqual(self.control._parent._resource_element.label, 'Selection Controls')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.resource_element.label, 'Yes/No Answer')
-        self.assertEqual(self.control.resource_element.hint, None)
+        self.assertEqual(self.control._resource_element.label, 'Yes/No Answer')
+        self.assertEqual(self.control._resource_element.hint, None)
 
         self.assertEqual(self.control.label, 'Yes/No Answer')
         self.assertEqual(self.control.hint, None)
@@ -33,7 +33,7 @@ class YesnoInputTestCase(CommonTestCase):
         self.assertEqual(self.control.default_value, False)
 
     def test_runner_value(self):
-        self.assertEqual(self.runner.get_raw_value('yesno-input'), 'true')
+        self.assertEqual(self.runner.get_raw_value('yesno-input').text, 'true')
         self.assertEqual(self.runner.get_value('yesno-input'), True)
 
     def test_runner_form(self):

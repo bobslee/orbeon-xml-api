@@ -1,4 +1,5 @@
 from datetime import datetime
+from lxml import etree
 
 from . import CommonTestCase
 from ..controls import DateTimeControl
@@ -15,17 +16,20 @@ class DateTimeTestCase(CommonTestCase):
 
         dt_obj = datetime.strptime('2017-07-01T17:48:03', '%Y-%m-%dT%H:%M:%S')
 
+        el = etree.Element('test')
+        el.text = '2017-07-01T17:48:03'
+
         self.assertEqual(self.control.encode(dt_obj), '2017-07-01T17:48:03')
-        self.assertEqual(self.control.decode('2017-07-01T17:48:03'), dt_obj)
+        self.assertEqual(self.control.decode(el), dt_obj)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'datetime-bind')
-        self.assertEqual(self.control.bind.name, 'datetime')
+        self.assertEqual(self.control._bind.id, 'datetime-bind')
+        self.assertEqual(self.control._bind.name, 'datetime')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.resource_element.label, 'Date and Time')
-        self.assertEqual(self.control.resource_element.hint, 'Standard date and time field')
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.label, 'Date and Time')
+        self.assertEqual(self.control._resource_element.hint, 'Standard date and time field')
+        self.assertEqual(self.control._resource_element.alert, None)
 
         # Shortcut via element
         self.assertEqual(self.control.label, 'Date and Time')

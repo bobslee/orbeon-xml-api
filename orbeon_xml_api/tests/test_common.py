@@ -40,6 +40,7 @@ class CommonTestCase(unittest.TestCase):
     def setUp(self):
         super(CommonTestCase, self).setUp()
 
+        self.maxDiff = None
         self.builder_xml = xml_from_file('tests/data', 'test_controls_builder_no-image-attachments-iteration.xml')
         self.runner_xml = xml_from_file('tests/data', 'test_controls_runner_no-image-attachments-iteration.xml')
 

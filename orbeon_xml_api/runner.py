@@ -64,15 +64,15 @@ class Runner:
                     self.raw_values[name] = children
                     self.values[name] = control.decode(element)
                 else:
-                    self.raw_values[name] = getattr(element, 'text', None)
-                    self.values[name] = control.decode(element.text)
+                    self.raw_values[name] = element
+                    self.values[name] = control.decode(element)
 
                 # Instantiate the control class (these are imported above)
                 control_class = globals()[control.__class__.__name__]
-                control_obj = control_class(self.builder, control.bind, element)
+                control_obj = control_class(self.builder, control._bind, element)
 
                 if control_obj is not None:
-                    control_obj.init_runner_attrs(element)
+                    control_obj.init_runner_form_attrs(element)
                     self.controls[name] = control_obj
 
     def get_form_element(self, name):
@@ -84,11 +84,11 @@ class Runner:
             return False
 
         control = self.builder.controls[name]
-        if control.parent is None:
+        if control._parent is None:
             return False
             # query = "//form/%s" % name
         else:
-            query = "//form/%s/%s" % (control.parent.bind.name, name)
+            query = "//form/%s/%s" % (control._parent._bind.name, name)
 
         res = self.xml_root.xpath(query)
 
