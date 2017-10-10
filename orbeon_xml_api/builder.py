@@ -20,7 +20,7 @@ XF_TYPE_CONTROL = {
 }
 
 # TODO any_uri
-CONTROL_DECODERS = ['string', 'date', 'any_uri']
+CONTROL_DECODERS = ['string', 'date', 'any_uri', 'image-annotation']
 
 
 class Builder:

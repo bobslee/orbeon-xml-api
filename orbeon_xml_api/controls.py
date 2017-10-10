@@ -293,15 +293,18 @@ class ImageAnnotationControl(Control):
             self.default_value = self.decode(self.model_instance)
 
     def decode(self, value):
-        res = {}
+        if self.builder.control_decoders.get('image-annotation', False):
+            return self.builder.control_decoders.get('image-annotation').decode(value)
+        else:
+            res = {}
 
-        if value is None:
+            if value is None:
+                return res
+
+            for el in value.getchildren():
+                res[el.tag] = xmltodict.parse(etree.tostring(el))
+
             return res
-
-        for el in value.getchildren():
-            res[el.tag] = xmltodict.parse(etree.tostring(el))
-
-        return res
 
     def encode(self, value):
         return value
