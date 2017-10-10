@@ -55,6 +55,10 @@ class Builder:
         self.xml_root = generate_xml_root(self.xml)
 
     def set_binds(self):
+        # TODO
+        # Fix/handle duplicates, due to iteration control(s)
+        # Consider whether a self.binds pair, should assign a value as a list, with duplicates.
+        # Refactor other code.
         q_left = "//*[@id='fr-form-binds']//*[name()='xforms:bind']"
         q_right = "//*[@id='fr-form-binds']//*[name()='xf:bind']"
 
