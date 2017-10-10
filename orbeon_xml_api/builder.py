@@ -3,7 +3,7 @@ from lxml import etree
 import xmltodict
 
 from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
-    BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
+    BooleanControl, AnyUriControl, EmailControl, DecimalControl, \
     Select1Control, OpenSelect1Control, SelectControl, ImageAnnotationControl
 from utils import generate_xml_root
 
@@ -14,13 +14,12 @@ XF_TYPE_CONTROL = {
     'xf:time': TimeControl,
     'xf:dateTime': DateTimeControl,
     'xf:boolean': BooleanControl,
-    'xf:anyURI': AnyURIControl,
+    'xf:anyURI': AnyUriControl,
     'xf:email': EmailControl,
     'xf:decimal': DecimalControl
 }
 
-# TODO any_uri
-CONTROL_DECODERS = ['string', 'date', 'any_uri', 'image-annotation']
+CONTROL_DECODERS = ['string', 'date', 'any_uri', 'image_annotation']
 
 
 class Builder:

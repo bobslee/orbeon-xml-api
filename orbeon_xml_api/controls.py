@@ -257,20 +257,30 @@ class SelectControl(StringControl):
         return ' '.join(value)
 
 
-class AnyURIControl(Control):
+class AnyUriControl(Control):
 
     def init_runner_attrs(self, runner_element):
-        self.value = self.decode(runner_element.text)
+        decoded = self.decode(runner_element)
+
+        self.uri = decoded['uri']
+        self.value = decoded['value']
 
     def set_default_raw_value(self):
-        self.default_raw_value = getattr(self.model_instance, 'text', None)
+        self.default_raw_value = self.model_instance
 
     def set_default_value(self):
         if self.model_instance is not None:
-            self.default_value = self.decode(self.model_instance.text)
+            self.default_value = self.decode(self.model_instance)
 
     def decode(self, value):
-        return value
+        # TODO: Quick and dirty, I don't like it! (Because of deadline).
+        # This needs to be revised!
+        if self.builder.control_decoders.get('any_uri', False):
+            return self.builder.control_decoders.get('any_uri').decode(value)
+        elif isinstance(value, basestring):
+            return {'uri': value, 'value': value}
+        else:
+            return {'uri': value.text, 'value': value.text}
 
     def encode(self, value):
         return value
@@ -293,8 +303,8 @@ class ImageAnnotationControl(Control):
             self.default_value = self.decode(self.model_instance)
 
     def decode(self, value):
-        if self.builder.control_decoders.get('image-annotation', False):
-            return self.builder.control_decoders.get('image-annotation').decode(value)
+        if self.builder.control_decoders.get('image_annotation', False):
+            return self.builder.control_decoders.get('image_annotation').decode(value)
         else:
             res = {}
 

@@ -2,7 +2,7 @@ from builder import Builder
 from utils import generate_xml_root
 
 from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
-    BooleanControl, AnyURIControl, EmailControl, DecimalControl, \
+    BooleanControl, AnyUriControl, EmailControl, DecimalControl, \
     Select1Control, OpenSelect1Control, SelectControl, ImageAnnotationControl
 
 

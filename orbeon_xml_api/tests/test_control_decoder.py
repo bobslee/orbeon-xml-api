@@ -39,6 +39,46 @@ class ImageAnnotationDecoder(object):
         return res
 
 
+class AnyUriDecoderStaticImage(object):
+
+    def decode(self, value):
+        res = {'uri': None, 'value': None}
+
+        if value is None:
+            return res
+
+        if isinstance(value, basestring):
+            return {
+                'uri': "%s BY THE %s" % (value, self.__class__.__name__),
+                'value': "%s BY THE %s" % (value, self.__class__.__name__)
+            }
+        else:
+            return {
+                'uri': "%s BY THE %s" % (value.text, self.__class__.__name__),
+                'value': "%s BY THE %s" % (value.text, self.__class__.__name__)
+            }
+
+
+class AnyUriDecoderImageAttachment(object):
+
+    def decode(self, value):
+        res = {'uri': None, 'value': None}
+
+        if value is None:
+            return res
+
+        if isinstance(value, basestring):
+            return {
+                'uri': "%s FROM %s" % (value, self.__class__.__name__),
+                'value': "%s FROM %s" % (value, self.__class__.__name__)
+            }
+        else:
+            return {
+                'uri': "%s FROM %s" % (value.text, self.__class__.__name__),
+                'value': "%s FROM %s" % (value.text, self.__class__.__name__)
+            }
+
+
 class ControlDecoderTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -69,9 +109,34 @@ class ControlDecoderTestCase(unittest.TestCase):
         date_obj_add_10_days = datetime.strptime('2017-07-11', '%Y-%m-%d').date()
         self.assertEqual(self.runner.form.date.value, date_obj_add_10_days)
 
+    def test_image_attachment_decoder(self):
+        control_decoders = {
+            'any_uri': AnyUriDecoderImageAttachment()
+        }
+        self.builder = Builder(self.builder_xml, 'en', control_decoders=control_decoders)
+        self.runner = Runner(self.runner_xml, self.builder)
+
+        expected = "%s FROM AnyUriDecoderImageAttachment" % '/fr/service/persistence/crud/orbeon/runner/data/24/43dbaabe1e3aa8862fd4de321b619709d62cc097.bin'
+
+        self.assertEqual(self.runner.form.imageattachment.uri, expected)
+        self.assertEqual(self.runner.form.imageattachment.value, expected)
+
+    def test_static_image_decoder(self):
+        control_decoders = {
+            'any_uri': AnyUriDecoderStaticImage()
+        }
+        self.builder = Builder(self.builder_xml, 'en', control_decoders=control_decoders)
+        self.runner = Runner(self.runner_xml, self.builder)
+
+        expected = "%s BY THE AnyUriDecoderStaticImage" % '/fr/service/persistence/crud/orbeon/builder/data/33/a8523db8eba50aac53dfe15ece2758e6475cfc21.bin'
+
+        self.assertEqual(self.runner.form.staticimage.uri, expected)
+        self.assertEqual(self.runner.form.staticimage.value, expected)
+
+
     def test_image_annotation_decoder(self):
         control_decoders = {
-            'image-annotation': ImageAnnotationDecoder()
+            'image_annotation': ImageAnnotationDecoder()
         }
         self.builder = Builder(self.builder_xml, 'en', control_decoders=control_decoders)
         self.runner = Runner(self.runner_xml, self.builder)
