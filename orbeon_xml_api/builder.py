@@ -104,8 +104,8 @@ class Builder:
             self.add_control_object(k, v)
 
     def set_control_context(self, context):
-        for k, v in self._control_objects.items():
-            self.v.add_context(context)
+        for name, control_obj in self._control_objects.items():
+            control_obj.add_context(context)
 
     def add_control_object(self, name, control_obj):
         supported = False
