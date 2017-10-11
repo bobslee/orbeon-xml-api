@@ -30,15 +30,15 @@ class Runner:
         if self.builder is None and self.builder_xml:
             self.set_builder_by_builder_xml()
 
+        # form object
+        self.form = RunnerForm(self)
+
         # init
         self.raw_values = {}
         self.values = {}
         self.controls = {}
 
         self.init()
-
-        # form object
-        self.form = RunnerForm(self)
 
     def set_xml_root(self):
         self.xml_root = generate_xml_root(self.xml)
