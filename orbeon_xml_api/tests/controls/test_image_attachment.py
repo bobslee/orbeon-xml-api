@@ -8,7 +8,7 @@ class ImageAttachmentTestCase(CommonTestCase):
     def setUp(self):
         super(ImageAttachmentTestCase, self).setUp()
         self.control = self.builder.controls['image-attachment']
-        self.image_attachment_value = '/fr/service/persistence/crud/orbeon/runner/data/24/43dbaabe1e3aa8862fd4de321b619709d62cc097.bin'
+        self.image_attachment_value = '/fr/service/persistence/crud/orbeon/runner/data/24/79novacode17.bin'
 
     def test_control(self):
         self.assertIsInstance(self.control, AnyUriControl)

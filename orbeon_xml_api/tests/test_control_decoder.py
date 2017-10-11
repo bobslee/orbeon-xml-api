@@ -121,7 +121,7 @@ class ControlDecoderTestCase(unittest.TestCase):
         self.builder = Builder(self.builder_xml, 'en', control_decoders=control_decoders)
         self.runner = Runner(self.runner_xml, self.builder)
 
-        expected = "%s FROM AnyUriDecoderImageAttachment" % '/fr/service/persistence/crud/orbeon/runner/data/24/43dbaabe1e3aa8862fd4de321b619709d62cc097.bin'
+        expected = "%s FROM AnyUriDecoderImageAttachment" % '/fr/service/persistence/crud/orbeon/runner/data/24/79novacode17.bin'
 
         self.assertEqual(self.runner.form.imageattachment.uri, expected)
         self.assertEqual(self.runner.form.imageattachment.value, expected)
