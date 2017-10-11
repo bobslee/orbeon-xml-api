@@ -157,7 +157,7 @@ class DateControl(Control):
             return
 
         if self._builder.control_decoders.get('date', False):
-            return self._builder.control_decoders.get('date').decode(element.text)
+            return self._builder.control_decoders.get('date').decode(element)
         else:
             return datetime.strptime(element.text, '%Y-%m-%d').date()
 
@@ -296,7 +296,9 @@ class AnyUriControl(Control):
 
         self.uri = decoded['uri']
         self.value = decoded['value']
-        self.filename = decoded.get('element', None).get('@filename')
+
+        if decoded.get('element', False) and decoded.get('element').get('@filename', False):
+            self.filename = decoded.get('element', None).get('@filename')
 
     def set_default_raw_value(self):
         self.default_raw_value = self._model_instance
@@ -355,10 +357,8 @@ class ImageAnnotationControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
-        # import pdb
-        # pdb.set_trace()
         if self._builder.control_decoders.get('image_annotation', False):
-            return self._builder.control_decoders.get('image_annotation').decode(element.text)
+            return self._builder.control_decoders.get('image_annotation').decode(element)
         else:
             res = {}
 

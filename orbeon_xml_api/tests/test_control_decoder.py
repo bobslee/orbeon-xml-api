@@ -14,26 +14,31 @@ class StringDecoder(object):
         self.username = 'novacode'
         self.api_token = 'abc123'
 
-    def decode(self, value):
-        new_value = "%s FROM StringDecoder" % value
-        return new_value
+    def decode(self, element):
+        if hasattr(element, 'text'):
+            new_value = "%s FROM StringDecoder" % element.text
+            return new_value
 
 
 class DateDecoder(object):
 
-    def decode(self, value):
-        return datetime.strptime(value, '%Y-%m-%d').date() + timedelta(days=10)
+    def decode(self, element):
+        # import pdb
+        # pdb.set_trace()
+        if element is None or not hasattr(element, 'text'):
+            return
+        return datetime.strptime(element.text, '%Y-%m-%d').date() + timedelta(days=10)
 
 
 class ImageAnnotationDecoder(object):
 
-    def decode(self, value):
+    def decode(self, element):
         res = {}
 
-        if value is None:
+        if element is None:
             return res
 
-        for el in value.getchildren():
+        for el in element.getchildren():
             res[el.tag] = {el.tag: "%s FROM ImageAnnotationDecoder" % el.tag}
 
         return res
@@ -41,22 +46,22 @@ class ImageAnnotationDecoder(object):
 
 class AnyUriDecoderStaticImage(object):
 
-    def decode(self, value):
+    def decode(self, element):
         res = {'uri': None, 'value': None}
 
-        if value is None:
+        if element is None:
             return res
 
-        if isinstance(value, basestring):
+        if isinstance(element.text, basestring):
             return {
-                'uri': "%s BY THE %s" % (value, self.__class__.__name__),
-                'value': "%s BY THE %s" % (value, self.__class__.__name__)
+                'uri': "%s BY THE %s" % (element.text, self.__class__.__name__),
+                'value': "%s BY THE %s" % (element.text, self.__class__.__name__)
             }
-        else:
-            return {
-                'uri': "%s BY THE %s" % (value.text, self.__class__.__name__),
-                'value': "%s BY THE %s" % (value.text, self.__class__.__name__)
-            }
+        # else:
+        #     return {
+        #         'uri': "%s BY THE %s" % (ele.text, self.__class__.__name__),
+        #         'value': "%s BY THE %s" % (value.text, self.__class__.__name__)
+        #     }
 
 
 class AnyUriDecoderImageAttachment(object):
@@ -128,11 +133,10 @@ class ControlDecoderTestCase(unittest.TestCase):
         self.builder = Builder(self.builder_xml, 'en', control_decoders=control_decoders)
         self.runner = Runner(self.runner_xml, self.builder)
 
-        expected = "%s BY THE AnyUriDecoderStaticImage" % '/fr/service/persistence/crud/orbeon/builder/data/33/a8523db8eba50aac53dfe15ece2758e6475cfc21.bin'
+        expected = "%s BY THE AnyUriDecoderStaticImage" % '/fr/service/persistence/crud/orbeon/runner/data/33/17novacode79.bin'
 
         self.assertEqual(self.runner.form.staticimage.uri, expected)
         self.assertEqual(self.runner.form.staticimage.value, expected)
-
 
     def test_image_annotation_decoder(self):
         control_decoders = {
