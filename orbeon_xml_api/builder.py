@@ -33,6 +33,9 @@ class Builder:
         if kwargs.get('controls', False):
             self.set_control_objects(kwargs['controls'])
 
+        if kwargs.get('context', False):
+            self.set_control_context(kwargs['context'])
+
         self.binds = {}
         self.set_binds()
 
@@ -99,6 +102,10 @@ class Builder:
     def set_control_objects(self, control_objects):
         for k, v in control_objects.items():
             self.add_control_object(k, v)
+
+    def set_control_context(self, context):
+        for k, v in self._control_objects:
+            self.v.add_context(context)
 
     def add_control_object(self, name, control_obj):
         supported = False

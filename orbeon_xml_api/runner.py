@@ -97,6 +97,7 @@ class Runner:
     def get_value(self, name):
         return self.values[name]
 
+    # TODO try/catch KeyError: return ErrorControl with *name* annotated?
     def get_form_control(self, name):
         return self.controls[name]
 

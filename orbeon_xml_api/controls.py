@@ -26,6 +26,8 @@ class Control(object):
         self._bind = bind
         self._element = element
 
+        self._context = None
+
         self._parent = None
         self.set_parent()
 
@@ -60,6 +62,9 @@ class Control(object):
     def init(self):
         """ This method is called after :meth:`~._init__`."""
         pass
+
+    def add_context(self, context):
+        self._context = context
 
     def set_parent(self):
         if self._bind.parent and self._bind.parent.name in self._builder.controls:
