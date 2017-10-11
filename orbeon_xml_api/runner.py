@@ -1,4 +1,4 @@
-from builder import Builder
+from builder import Builder, XF_TYPE_CONTROL
 from utils import generate_xml_root
 
 from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
@@ -61,9 +61,12 @@ class Runner:
                 self.raw_values[name] = element
                 self.values[name] = control.decode(element)
 
-                # Instantiate the control class (these are imported above)
-                control_class = globals()[control.__class__.__name__]
-                control_obj = control_class(self.builder, control._bind, element)
+                if control not in XF_TYPE_CONTROL.values():
+                    control_obj = control
+                else:
+                    # Instantiate the control class (these are imported above)
+                    control_class = globals()[control.__class__.__name__]
+                    control_obj = control_class(self.builder, control._bind, element)
 
                 if control_obj is not None:
                     control_obj.init_runner_form_attrs(element)

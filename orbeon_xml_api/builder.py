@@ -19,8 +19,6 @@ XF_TYPE_CONTROL = {
     'xf:decimal': DecimalControl
 }
 
-CONTROL_DECODERS = ['string', 'date', 'any_uri', 'image_annotation']
-
 
 class Builder:
 
@@ -31,9 +29,9 @@ class Builder:
         self.xml_root = None
         self.set_xml_root()
 
-        self.control_decoders = {}
-        if kwargs.get('control_decoders', False):
-            self.set_control_decoders(kwargs['control_decoders'])
+        self._control_objects = {}
+        if kwargs.get('controls', False):
+            self.set_control_objects(kwargs['controls'])
 
         self.binds = {}
         self.set_binds()
@@ -98,18 +96,27 @@ class Builder:
             k = k.replace('.', '_')
             self.sanitized_control_names[k] = name
 
-    def set_control_decoders(self, control_decoders):
-        for k, v in control_decoders.items():
-            self.add_control_decoder(k, v)
+    def set_control_objects(self, control_objects):
+        for k, v in control_objects.items():
+            self.add_control_object(k, v)
 
-    def add_control_decoder(self, name, decoder_obj):
-        if name not in CONTROL_DECODERS:
-            raise Exception("Unsupported Control Decoder: %s" % name)
+    def add_control_object(self, name, control_obj):
+        supported = False
+        for klass in XF_TYPE_CONTROL.values():
+            if name == klass.__name__:
+                supported = True
 
-        if not callable(getattr(decoder_obj, 'decode', None)):
-            raise Exception("Method `decode()` is missing in Control Decoder for: %s" % name)
+        if not supported:
+            for parent in control_obj.__bases__:
+                if parent.__name__ == 'ImageAnnotationControl':
+                    supported = True
 
-        self.control_decoders[name] = decoder_obj
+        # If still not supported
+        # TODO refactor to nicer code
+        if not supported:
+            raise Exception("Unsupported Control Object: %s" % name)
+
+        self._control_objects[name] = control_obj
 
     # TODO
     def get_structure(self):
@@ -158,15 +165,36 @@ class Bind:
         fr_control_tag = etree.QName(element).localname
 
         if fr_control_tag == 'select1':
-            return Select1Control(self.builder, self, element)
+            if self.builder._control_objects.get('Select1Control', False):
+                return self.builder._control_objects.get('Select1Control')(self.builder, self, element)
+            else:
+                return Select1Control(self.builder, self, element)
+
         if fr_control_tag == 'open-select1':
-            return OpenSelect1Control(self.builder, self, element)
+            if self.builder._control_objects.get('OpenSelect1Control', False):
+                return self.builder._control_objects.get('OpenSelect1Control')(self.builder, self, element)
+            else:
+                return OpenSelect1Control(self.builder, self, element)
+
         elif fr_control_tag == 'select':
-            return SelectControl(self.builder, self, element)
+            if self.builder._control_objects.get('SelectControl', False):
+                return self.builder._control_objects.get('SelectControl')(self.builder, self, element)
+            else:
+                return SelectControl(self.builder, self, element)
+
         elif fr_control_tag == 'wpaint':
-            return ImageAnnotationControl(self.builder, self, element)
+            if self.builder._control_objects.get('ImageAnnotationControl', False):
+                return self.builder._control_objects.get('ImageAnnotationControl')(self.builder, self, element)
+            else:
+                return ImageAnnotationControl(self.builder, self, element)
+
         else:
-            return XF_TYPE_CONTROL[self.xf_type](self.builder, self, element)
+            control_class_name = XF_TYPE_CONTROL[self.xf_type].__name__
+
+            if self.builder._control_objects.get(control_class_name, False):
+                return self.builder._control_objects.get(control_class_name)(self.builder, self, element)
+            else:
+                return XF_TYPE_CONTROL[self.xf_type](self.builder, self, element)
 
 
 class Resource:

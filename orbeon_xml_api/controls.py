@@ -127,11 +127,7 @@ class StringControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
-        if self._builder.control_decoders.get('string', False):
-            return self._builder.control_decoders.get('string').decode(element)
-        # if isinstance(element, basestring):
-        #     return value
-        elif hasattr(element, 'text'):
+        if hasattr(element, 'text'):
             return element.text
 
     def encode(self, value):
@@ -156,10 +152,7 @@ class DateControl(Control):
         if element is None or not hasattr(element, 'text'):
             return
 
-        if self._builder.control_decoders.get('date', False):
-            return self._builder.control_decoders.get('date').decode(element)
-        else:
-            return datetime.strptime(element.text, '%Y-%m-%d').date()
+        return datetime.strptime(element.text, '%Y-%m-%d').date()
 
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%d')
@@ -314,23 +307,12 @@ class AnyUriControl(Control):
         # TODO: Quick and dirty, I don't like it! (Because of deadline).
         # This needs to be revised!
 
-        if self._builder.control_decoders.get('any_uri', False):
-            return self._builder.control_decoders.get('any_uri').decode(element)
-        # elif isinstance(element.text, basestring):
-        #     res = {'uri': value.text, 'value': value.text}
-        #     element = xmltodict.parse(etree.tostring(self._element))
-        #     if self._bind.name in element:
-        #         res['element'] = xmltodict.parse(etree.tostring(self._element))[self._bind.name]
-        #     # else:
-        #     #     res['element'] = xmltodict.parse(etree.tostring(self._element))                
-        #     return res
-        else:
-            res = {'uri': element.text, 'value': element.text}
-            element_dict = xmltodict.parse(etree.tostring(element))
-            if self._bind.name in element_dict:
-                res['element'] = element_dict[self._bind.name]
+        res = {'uri': element.text, 'value': element.text}
+        element_dict = xmltodict.parse(etree.tostring(element))
+        if self._bind.name in element_dict:
+            res['element'] = element_dict[self._bind.name]
 
-            return res
+        return res
 
     def encode(self, value):
         return value
@@ -357,18 +339,15 @@ class ImageAnnotationControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
-        if self._builder.control_decoders.get('image_annotation', False):
-            return self._builder.control_decoders.get('image_annotation').decode(element)
-        else:
-            res = {}
+        res = {}
 
-            if element is None:
-                return res
-
-            for el in element.getchildren():
-                res[el.tag] = xmltodict.parse(etree.tostring(el))
-
+        if element is None:
             return res
+
+        for el in element.getchildren():
+            res[el.tag] = xmltodict.parse(etree.tostring(el))
+
+        return res
 
     def encode(self, value):
         return value
