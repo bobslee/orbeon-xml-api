@@ -1,10 +1,6 @@
 from builder import Builder, XF_TYPE_CONTROL
 from utils import generate_xml_root
 
-from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
-    BooleanControl, AnyUriControl, EmailControl, DecimalControl, \
-    Select1Control, OpenSelect1Control, SelectControl, ImageAnnotationControl
-
 
 class Runner:
 
