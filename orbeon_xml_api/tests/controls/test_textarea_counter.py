@@ -13,13 +13,13 @@ class TextareaCounterTestCase(CommonTestCase):
         self.assertIsInstance(self.control, StringControl)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'textarea-counter-bind')
-        self.assertEqual(self.control.bind.name, 'textarea-counter')
+        self.assertEqual(self.control._bind.id, 'textarea-counter-bind')
+        self.assertEqual(self.control._bind.name, 'textarea-counter')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.resource_element.label, 'Text Area with Character counter')
-        self.assertEqual(self.control.resource_element.alert, '140 characters at most')
-        self.assertEqual(self.control.resource_element.hint, None)
+        self.assertEqual(self.control._resource_element.label, 'Text Area with Character counter')
+        self.assertEqual(self.control._resource_element.alert, '140 characters at most')
+        self.assertEqual(self.control._resource_element.hint, None)
 
         self.assertEqual(self.control.default_value, "Let's write a Tweet. It must fit in 140 characters.")
 

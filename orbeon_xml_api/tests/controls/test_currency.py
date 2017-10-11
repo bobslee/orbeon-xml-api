@@ -13,24 +13,24 @@ class CurrencyTestCase(CommonTestCase):
         self.assertIsInstance(self.control, DecimalControl)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'currency-bind')
-        self.assertEqual(self.control.bind.name, 'currency')
+        self.assertEqual(self.control._bind.id, 'currency-bind')
+        self.assertEqual(self.control._bind.name, 'currency')
 
     def test_builder_parent(self):
-        self.assertEqual(self.control.parent.bind.id, 'typed-controls-bind')
-        self.assertEqual(self.control.parent.bind.name, 'typed-controls')
-        self.assertEqual(self.control.parent.resource_element.label, 'Typed Controls')
+        self.assertEqual(self.control._parent._bind.id, 'typed-controls-bind')
+        self.assertEqual(self.control._parent._bind.name, 'typed-controls')
+        self.assertEqual(self.control._parent._resource_element.label, 'Typed Controls')
 
     def test_builder_form(self):
         self.assertEqual(self.control.label, 'Currency')
         self.assertEqual(self.control.hint, 'Currency field')
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.resource_element.label, 'Currency')
-        self.assertEqual(self.control.resource_element.hint, 'Currency field')
+        self.assertEqual(self.control._resource_element.label, 'Currency')
+        self.assertEqual(self.control._resource_element.hint, 'Currency field')
 
         # Doesn't exist, but shouldn't raise Exception
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         self.assertEqual(self.control.default_raw_value, '10.99')

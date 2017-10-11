@@ -52,7 +52,8 @@ class Control(object):
             self.hint = self._resource.element.get('hint', None)
             self.alert = self._resource.element.get('alert', None)
 
-        self._raw_value = self._element.text
+        self._raw_value = None
+        self.set_raw_value()
 
         self.init()
 
@@ -93,6 +94,9 @@ class Control(object):
     def set_default_value(self):
         raise NotImplementedError
 
+    def set_raw_value(self):
+        raise NotImplementedError
+
     def encode(self, value):
         """
         By the self.datatype (handler):
@@ -119,6 +123,9 @@ class StringControl(Control):
     def set_default_value(self):
         self.default_value = self.decode(self._model_instance)
 
+    def set_raw_value(self):
+        self._raw_value = self._element.text
+
     def decode(self, element):
         if self._builder.control_decoders.get('string', False):
             return self._builder.control_decoders.get('string').decode(element)
@@ -141,6 +148,9 @@ class DateControl(Control):
 
     def set_default_value(self):
         self.default_value = self.decode(self._model_instance)
+
+    def set_raw_value(self):
+        self._raw_value = self._element.text
 
     def decode(self, element):
         if element is None or not hasattr(element, 'text'):
@@ -166,6 +176,9 @@ class TimeControl(Control):
     def set_default_value(self):
         self.default_value = self.decode(self._model_instance)
 
+    def set_raw_value(self):
+        self._raw_value = self._element.text
+
     def decode(self, element):
         if element is None or not hasattr(element, 'text'):
             return
@@ -186,6 +199,9 @@ class DateTimeControl(Control):
 
     def set_default_value(self):
         self.default_value = self.decode(self._model_instance)
+
+    def set_raw_value(self):
+        self._raw_value = self._element.text
 
     def decode(self, element):
         if element is None or not hasattr(element, 'text'):
@@ -210,6 +226,9 @@ class BooleanControl(Control):
 
     def set_default_value(self):
         self.default_value = self.decode(self._model_instance)
+
+    def set_raw_value(self):
+        self._raw_value = self._element.text
 
     def decode(self, element):
         if element.text == 'true':
@@ -236,6 +255,9 @@ class Select1Control(StringControl):
                 self.choice_label = item['label']
 
         self.choice = {self.choice_label: self.choice_value}
+
+    def set_raw_value(self):
+        self._raw_value = self._element.text
 
 
 class OpenSelect1Control(Select1Control):
@@ -283,6 +305,9 @@ class AnyUriControl(Control):
         if self._model_instance is not None:
             self.default_value = self.decode(self._model_instance)
 
+    def set_raw_value(self):
+        self._raw_value = self._element.text
+
     def decode(self, element):
         # TODO: Quick and dirty, I don't like it! (Because of deadline).
         # This needs to be revised!
@@ -326,13 +351,18 @@ class ImageAnnotationControl(Control):
         if self._model_instance is not None:
             self.default_value = self.decode(self._model_instance)
 
+    def set_raw_value(self):
+        self._raw_value = self._element.text
+
     def decode(self, element):
+        # import pdb
+        # pdb.set_trace()
         if self._builder.control_decoders.get('image_annotation', False):
             return self._builder.control_decoders.get('image_annotation').decode(element.text)
         else:
             res = {}
 
-            if element is None or element.text is None:
+            if element is None:
                 return res
 
             for el in element.getchildren():
@@ -354,6 +384,9 @@ class DecimalControl(Control):
 
     def set_default_value(self):
         self.default_value = self.decode(self._model_instance)
+
+    def set_raw_value(self):
+        self._raw_value = self._element.text
 
     def decode(self, element):
         precision = int(self._element.get('digits-after-decimal', 1))

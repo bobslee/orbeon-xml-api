@@ -15,15 +15,15 @@ class HtmlareaTestCase(CommonTestCase):
     def test_builder_bind(self):
         htmlarea = self.builder.controls['htmlarea']
 
-        self.assertEqual(htmlarea.bind.id, 'htmlarea-bind')
-        self.assertEqual(htmlarea.bind.name, 'htmlarea')
+        self.assertEqual(htmlarea._bind.id, 'htmlarea-bind')
+        self.assertEqual(htmlarea._bind.name, 'htmlarea')
 
     def test_builder_parent(self):
         htmlarea = self.builder.controls['htmlarea']
 
-        self.assertEqual(htmlarea.parent.bind.id, 'text-controls-bind')
-        self.assertEqual(htmlarea.parent.bind.name, 'text-controls')
-        self.assertEqual(htmlarea.parent.resource_element.label, 'Text Controls')
+        self.assertEqual(htmlarea._parent._bind.id, 'text-controls-bind')
+        self.assertEqual(htmlarea._parent._bind.name, 'text-controls')
+        self.assertEqual(htmlarea._parent._resource_element.label, 'Text Controls')
 
     def test_builder_form(self):
         htmlarea = self.builder.controls['htmlarea']
@@ -33,11 +33,11 @@ class HtmlareaTestCase(CommonTestCase):
         self.assertEqual(htmlarea.alert, None)
         self.assertIn('Giuseppe Fortunino Francesco Verdi', htmlarea.default_value)
 
-        self.assertEqual(htmlarea.resource_element.label, 'Formatted Text')
-        self.assertEqual(htmlarea.resource_element.hint, 'Rich text editor')
+        self.assertEqual(htmlarea._resource_element.label, 'Formatted Text')
+        self.assertEqual(htmlarea._resource_element.hint, 'Rich text editor')
 
         # Doesn't exist, but shouldn't raise Exception
-        self.assertEqual(htmlarea.resource_element.alert, None)
+        self.assertEqual(htmlarea._resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         re = '.*Giuseppe Fortunino Francesco Verdi.*'

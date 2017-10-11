@@ -17,9 +17,9 @@ class SecretTestCase(CommonTestCase):
         self.assertEqual(self.control.hint, 'The password is 42 ;)')
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.resource_element.label, 'Password Field')
-        self.assertEqual(self.control.resource_element.hint, 'The password is 42 ;)')
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.label, 'Password Field')
+        self.assertEqual(self.control._resource_element.hint, 'The password is 42 ;)')
+        self.assertEqual(self.control._resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         self.assertEqual(self.control.default_raw_value, '42')

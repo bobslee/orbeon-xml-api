@@ -58,14 +58,8 @@ class Runner:
                 continue
 
             if callable(getattr(element, 'getchildren', None)):
-                children = element.getchildren()
-
-                if len(children) > 0:
-                    self.raw_values[name] = children
-                    self.values[name] = control.decode(element)
-                else:
-                    self.raw_values[name] = element
-                    self.values[name] = control.decode(element)
+                self.raw_values[name] = element
+                self.values[name] = control.decode(element)
 
                 # Instantiate the control class (these are imported above)
                 control_class = globals()[control.__class__.__name__]

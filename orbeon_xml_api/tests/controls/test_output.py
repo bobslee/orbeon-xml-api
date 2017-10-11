@@ -17,9 +17,9 @@ class OutputTestCase(CommonTestCase):
         self.assertEqual(self.control.hint, None)
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.resource_element.label, 'Text Output')
-        self.assertEqual(self.control.resource_element.hint, None)
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.label, 'Text Output')
+        self.assertEqual(self.control._resource_element.hint, None)
+        self.assertEqual(self.control._resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         text = 'Great love and great achievements involve great risk.'

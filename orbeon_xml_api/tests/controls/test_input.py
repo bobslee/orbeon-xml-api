@@ -13,24 +13,24 @@ class InputTestCase(CommonTestCase):
         self.assertIsInstance(self.control, StringControl)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'input-bind')
-        self.assertEqual(self.control.bind.name, 'input')
+        self.assertEqual(self.control._bind.id, 'input-bind')
+        self.assertEqual(self.control._bind.name, 'input')
 
     def test_builder_parent(self):
-        self.assertEqual(self.control.parent.bind.id, 'text-controls-bind')
-        self.assertEqual(self.control.parent.bind.name, 'text-controls')
-        self.assertEqual(self.control.parent.resource_element.label, 'Text Controls')
+        self.assertEqual(self.control._parent._bind.id, 'text-controls-bind')
+        self.assertEqual(self.control._parent._bind.name, 'text-controls')
+        self.assertEqual(self.control._parent._resource_element.label, 'Text Controls')
 
     def test_builder_form(self):
         self.assertEqual(self.control.label, 'Input Field')
         self.assertEqual(self.control.hint, 'Standard input field')
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.resource_element.label, 'Input Field')
-        self.assertEqual(self.control.resource_element.hint, 'Standard input field')
+        self.assertEqual(self.control._resource_element.label, 'Input Field')
+        self.assertEqual(self.control._resource_element.hint, 'Standard input field')
 
         # Doesn't exist, but shouldn't raise Exception
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         self.assertEqual(self.control.default_raw_value, 'Michelle')

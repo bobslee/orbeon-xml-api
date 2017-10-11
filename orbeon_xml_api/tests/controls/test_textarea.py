@@ -13,18 +13,18 @@ class TextareaTestCase(CommonTestCase):
         self.assertIsInstance(self.control, StringControl)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'textarea-bind')
-        self.assertEqual(self.control.bind.name, 'textarea')
+        self.assertEqual(self.control._bind.id, 'textarea-bind')
+        self.assertEqual(self.control._bind.name, 'textarea')
 
     def test_builder_form(self):
         self.assertEqual(self.control.label, 'Text Area')
         self.assertEqual(self.control.hint, 'Standard text area')
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.resource_element.label, 'Text Area')
-        self.assertEqual(self.control.resource_element.hint, 'Standard text area')
+        self.assertEqual(self.control._resource_element.label, 'Text Area')
+        self.assertEqual(self.control._resource_element.hint, 'Standard text area')
 
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         self.assertIn('Music is an art', self.control.default_raw_value)

@@ -13,17 +13,17 @@ class InputCounterTestCase(CommonTestCase):
         self.assertIsInstance(self.control, StringControl)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'input-counter-bind')
-        self.assertEqual(self.control.bind.name, 'input-counter')
+        self.assertEqual(self.control._bind.id, 'input-counter-bind')
+        self.assertEqual(self.control._bind.name, 'input-counter')
 
     def test_builder_form(self):
         self.assertEqual(self.control.label, 'Input Field with Character Counter')
         self.assertEqual(self.control.alert, '30 characters maximum')
         self.assertEqual(self.control.hint, None)
 
-        self.assertEqual(self.control.resource_element.label, 'Input Field with Character Counter')
-        self.assertEqual(self.control.resource_element.alert, '30 characters maximum')
-        self.assertEqual(self.control.resource_element.hint, None)
+        self.assertEqual(self.control._resource_element.label, 'Input Field with Character Counter')
+        self.assertEqual(self.control._resource_element.alert, '30 characters maximum')
+        self.assertEqual(self.control._resource_element.hint, None)
 
     def test_builder_form_default_value(self):
         self.assertEqual(self.control.default_raw_value, 'This must not be "too long"!')

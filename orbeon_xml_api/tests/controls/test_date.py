@@ -1,4 +1,5 @@
 from datetime import datetime
+from lxml import etree
 
 from . import CommonTestCase
 from ..controls import DateControl
@@ -15,24 +16,27 @@ class DateTestCase(CommonTestCase):
 
         date_obj = datetime.strptime('2009-10-16', '%Y-%m-%d').date()
 
+        el = etree.Element('test')
+        el.text = '2009-10-16'
+
         self.assertEqual(self.control.encode(date_obj), '2009-10-16')
-        self.assertEqual(self.control.decode('2009-10-16'), date_obj)
+        self.assertEqual(self.control.decode(el), date_obj)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'date-bind')
-        self.assertEqual(self.control.bind.name, 'date')
+        self.assertEqual(self.control._bind.id, 'date-bind')
+        self.assertEqual(self.control._bind.name, 'date')
 
     def test_builder_parent(self):
-        self.assertEqual(self.control.parent.bind.id, 'date-time-controls-bind')
-        self.assertEqual(self.control.parent.bind.name, 'date-time-controls')
+        self.assertEqual(self.control._parent._bind.id, 'date-time-controls-bind')
+        self.assertEqual(self.control._parent._bind.name, 'date-time-controls')
 
-        self.assertEqual(self.control.parent.label, 'Date and Time')
-        self.assertEqual(self.control.parent.resource_element.label, 'Date and Time')
+        self.assertEqual(self.control._parent.label, 'Date and Time')
+        self.assertEqual(self.control._parent._resource_element.label, 'Date and Time')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.resource_element.label, 'Date')
-        self.assertEqual(self.control.resource_element.hint, 'Standard date field')
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.label, 'Date')
+        self.assertEqual(self.control._resource_element.hint, 'Standard date field')
+        self.assertEqual(self.control._resource_element.alert, None)
 
         # Shortcut via element
         self.assertEqual(self.control.label, 'Date')

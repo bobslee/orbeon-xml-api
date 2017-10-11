@@ -13,17 +13,17 @@ class CheckboxInputTestCase(CommonTestCase):
         self.assertIsInstance(self.control, BooleanControl)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'checkbox-input-bind')
-        self.assertEqual(self.control.bind.name, 'checkbox-input')
+        self.assertEqual(self.control._bind.id, 'checkbox-input-bind')
+        self.assertEqual(self.control._bind.name, 'checkbox-input')
 
     def test_builder_parent(self):
-        self.assertEqual(self.control.parent.bind.id, 'selection-controls-bind')
-        self.assertEqual(self.control.parent.bind.name, 'selection-controls')
-        self.assertEqual(self.control.parent.resource_element.label, 'Selection Controls')
+        self.assertEqual(self.control._parent._bind.id, 'selection-controls-bind')
+        self.assertEqual(self.control._parent._bind.name, 'selection-controls')
+        self.assertEqual(self.control._parent._resource_element.label, 'Selection Controls')
 
     def test_builder_form(self):
-        self.assertEqual(self.control.resource_element.label, 'Single Checkbox')
-        self.assertEqual(self.control.resource_element.hint, 'An input which captures "true" or "false"')
+        self.assertEqual(self.control._resource_element.label, 'Single Checkbox')
+        self.assertEqual(self.control._resource_element.hint, 'An input which captures "true" or "false"')
 
         self.assertEqual(self.control.label, 'Single Checkbox')
         self.assertEqual(self.control.hint, 'An input which captures "true" or "false"')
@@ -33,7 +33,7 @@ class CheckboxInputTestCase(CommonTestCase):
         self.assertEqual(self.control.default_value, False)
 
     def test_runner_value(self):
-        self.assertEqual(self.runner.get_raw_value('checkbox-input'), 'true')
+        self.assertEqual(self.runner.get_raw_value('checkbox-input').text, 'true')
         self.assertEqual(self.runner.get_value('checkbox-input'), True)
 
     def test_runner_form(self):

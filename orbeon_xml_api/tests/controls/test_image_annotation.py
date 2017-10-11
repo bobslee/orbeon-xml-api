@@ -34,22 +34,22 @@ class ImageAnnotationTestCase(CommonTestCase):
         self.assertIsInstance(self.control, ImageAnnotationControl)
 
     def test_builder_bind(self):
-        self.assertEqual(self.control.bind.id, 'image-annotation-bind')
-        self.assertEqual(self.control.bind.name, 'image-annotation')
+        self.assertEqual(self.control._bind.id, 'image-annotation-bind')
+        self.assertEqual(self.control._bind.name, 'image-annotation')
 
     def test_builder_parent(self):
-        self.assertEqual(self.control.parent.bind.id, 'attachment-controls-bind')
-        self.assertEqual(self.control.parent.bind.name, 'attachment-controls')
-        self.assertEqual(self.control.parent.resource_element.label, 'Image and File Attachments')
+        self.assertEqual(self.control._parent._bind.id, 'attachment-controls-bind')
+        self.assertEqual(self.control._parent._bind.name, 'attachment-controls')
+        self.assertEqual(self.control._parent._resource_element.label, 'Image and File Attachments')
 
     def test_builder_form(self):
         self.assertEqual(self.control.label, 'Image Annotation')
         self.assertEqual(self.control.hint, None)
         self.assertEqual(self.control.alert, None)
 
-        self.assertEqual(self.control.resource_element.label, 'Image Annotation')
-        self.assertEqual(self.control.resource_element.hint, None)
-        self.assertEqual(self.control.resource_element.alert, None)
+        self.assertEqual(self.control._resource_element.label, 'Image Annotation')
+        self.assertEqual(self.control._resource_element.hint, None)
+        self.assertEqual(self.control._resource_element.alert, None)
 
     def test_builder_form_default_value(self):
         self.assertEqual(self.control.default_raw_value.__class__.__name__, '_Element')

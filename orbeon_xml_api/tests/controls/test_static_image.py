@@ -23,9 +23,9 @@ class StaticImageTestCase(CommonTestCase):
         self.assertEqual(self.control._parent._resource_element.label, 'Image and File Attachments')
 
     def test_builder_form(self):
-        self.assertEqual(self.control._label, 'Static Image')
-        self.assertEqual(self.control._hint, None)
-        self.assertEqual(self.control._alert, None)
+        self.assertEqual(self.control.label, 'Static Image')
+        self.assertEqual(self.control.hint, None)
+        self.assertEqual(self.control.alert, None)
 
         self.assertEqual(self.control._resource_element.label, 'Static Image')
         self.assertEqual(self.control._resource_element.hint, None)
