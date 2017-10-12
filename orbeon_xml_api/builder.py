@@ -107,8 +107,8 @@ class Builder:
             raise Exception("[orbeon-xml-api] Found %s elements for: %s" % (len(resource), query))
 
         parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
-        resource_root = etree.XML(etree.tostring(resource[0]).encode('utf-8'), parser)
-        resource_xml = etree.tostring(resource_root)
+        resource_root = etree.XML(etree.tostring(resource[0], encoding="unicode").encode('utf-8'), parser)
+        resource_xml = etree.tostring(resource_root, encoding="unicode")
         res_dict = xmltodict.parse(resource_xml)
 
         for tag, v in res_dict.get('resource', {}).items():

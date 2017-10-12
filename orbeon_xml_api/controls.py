@@ -49,6 +49,10 @@ class Control(object):
         self._resource_element = ResourceElement(self)
 
         # Attributes via Element (which get these dynamically)
+        self.label = None
+        self.hint = None
+        self.alert = None
+
         if self._resource:
             self.label = self._resource.element.get('label', None)
             self.hint = self._resource.element.get('hint', None)
@@ -253,6 +257,9 @@ class Select1Control(StringControl):
         self.choice_value = self.decode(runner_element)
         self.choice_label = None
 
+        if not hasattr(self._resource_element, 'element'):
+            return
+
         for item in self._resource.element['item']:
             if item['value'] == self.choice_value:
                 self.choice_label = item['label']
@@ -374,7 +381,7 @@ class ImageAnnotationControl(Control):
             return res
 
         for el in element.getchildren():
-            res[el.tag] = xmltodict.parse(etree.tostring(el))
+            res[el.tag] = xmltodict.parse(etree.tostring(el, encoding="unicode"))
 
         return res
 
@@ -399,13 +406,13 @@ class DecimalControl(Control):
     def decode(self, element):
         if element is None or not hasattr(element, 'text') or element.text is None:
             return None
+        else:
+            precision = int(self._element.get('digits-after-decimal', 1))
 
-        precision = int(self._element.get('digits-after-decimal', 1))
-
-        if precision > 0 and hasattr(element, 'text'):
-            return float(element.text)
-        elif hasattr(element, 'text'):
-            return int(element.text)
+            if precision > 0 and hasattr(element, 'text'):
+                return float(element.text)
+            elif hasattr(element, 'text'):
+                return int(element.text)
 
     def encode(self, value):
         return str(value)
