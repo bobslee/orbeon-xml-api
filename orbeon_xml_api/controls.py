@@ -132,7 +132,9 @@ class StringControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
-        if hasattr(element, 'text'):
+        if element is None or not hasattr(element, 'text') or element.text is None:
+            return None
+        else:
             return element.text
 
     def encode(self, value):
@@ -154,10 +156,10 @@ class DateControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
-        if element is None or not hasattr(element, 'text'):
-            return
-
-        return datetime.strptime(element.text, '%Y-%m-%d').date()
+        if element is None or not hasattr(element, 'text') or element.text is None:
+            return None
+        else:
+            return datetime.strptime(element.text, '%Y-%m-%d').date()
 
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%d')
@@ -178,8 +180,8 @@ class TimeControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
-        if element is None or not hasattr(element, 'text'):
-            return
+        if element is None or not hasattr(element, 'text') or element.text is None:
+            return None
         else:
             return datetime.strptime(element.text, '%H:%M:%S').time()
 
@@ -202,8 +204,8 @@ class DateTimeControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
-        if element is None or not hasattr(element, 'text'):
-            return
+        if element is None or not hasattr(element, 'text') or element.text is None:
+            return None
         else:
             return datetime.strptime(element.text, '%Y-%m-%dT%H:%M:%S')
 
@@ -229,10 +231,13 @@ class BooleanControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
-        if element.text == 'true':
-            return True
-        elif element.text == 'false':
-            return False
+        if element is None or not hasattr(element, 'text') or element.text is None:
+            return None
+        else:
+            if element.text == 'true':
+                return True
+            elif element.text == 'false':
+                return False
 
     def encode(self, value):
         # TODO isinstance(value, bool) validate?
@@ -274,13 +279,30 @@ class SelectControl(StringControl):
         self.choices_labels = []
         self.choices = {}
 
+        if not self.choices_values:
+            return
+
         for item in self._resource.element['item']:
-            if item['value'] in self.choices_values:
-                self.choices_labels.append(item['label'])
-                self.choices[item['label']] = item['value']
+            label = None
+            value = None
+
+            if isinstance(item, basestring):
+                if item == 'label':
+                    label = item
+                if item == 'value':
+                    value = item
+            else:
+                label = item['label']
+                value = item['value']
+
+            if value in self.choices_values:
+                self.choices_labels.append(label)
+                self.choices[label] = value
 
     def decode(self, element):
-        if hasattr(element, 'text'):
+        if element is None or not hasattr(element, 'text') or element.text is None:
+            return []
+        else:
             return element.text.split(' ')
 
     def encode(self, value):
@@ -295,8 +317,8 @@ class AnyUriControl(Control):
         self.uri = decoded['uri']
         self.value = decoded['value']
 
-        if decoded.get('element', False) and decoded.get('element').get('@filename', False):
-            self.filename = decoded.get('element', None).get('@filename')
+        # if decoded.get('element', False) and decoded.get('element').get('@filename', False):
+        #     self.filename = decoded.get('element', None).get('@filename')
 
     def set_default_raw_value(self):
         self.default_raw_value = self._model_instance
@@ -311,11 +333,13 @@ class AnyUriControl(Control):
     def decode(self, element):
         # TODO: Quick and dirty, I don't like it! (Because of deadline).
         # This needs to be revised!
-
-        res = {'uri': element.text, 'value': element.text}
-        element_dict = xmltodict.parse(etree.tostring(element))
-        if self._bind.name in element_dict:
-            res['element'] = element_dict[self._bind.name]
+        if element is None or not hasattr(element, 'text') or element.text is None:
+            res = {'uri': None, 'value': None, 'element': None}
+        else:
+            res = {'uri': element.text, 'value': element.text}
+            element_dict = xmltodict.parse(etree.tostring(element))
+            if self._bind.name in element_dict:
+                res['element'] = element_dict[self._bind.name]
 
         return res
 
@@ -373,6 +397,9 @@ class DecimalControl(Control):
         self._raw_value = self._element.text
 
     def decode(self, element):
+        if element is None or not hasattr(element, 'text') or element.text is None:
+            return None
+
         precision = int(self._element.get('digits-after-decimal', 1))
 
         if precision > 0 and hasattr(element, 'text'):

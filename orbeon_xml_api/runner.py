@@ -99,7 +99,8 @@ class Runner:
 
     # TODO try/catch KeyError: return ErrorControl with *name* annotated?
     def get_form_control(self, name):
-        return self.controls[name]
+        if name in self.controls:
+            return self.controls[name]
 
     def set_value(self, name, value):
         """

@@ -10,13 +10,43 @@ from utils import generate_xml_root
 XF_TYPE_CONTROL = {
     'xf:string': StringControl,
     'xs:string': StringControl,
+    'xforms:string': StringControl,
+
     'xf:date': DateControl,
+    'xs:date': DateControl,
+    'xforms:date': DateControl,
+
     'xf:time': TimeControl,
+    'xs:time': TimeControl,
+    'xforms:time': TimeControl,
+
     'xf:dateTime': DateTimeControl,
+    'xs:dateTime': DateTimeControl,
+    'xforms:dateTime': DateTimeControl,
+
     'xf:boolean': BooleanControl,
+    'xs:boolean': BooleanControl,
+    'xforms:boolean': BooleanControl,
+
     'xf:anyURI': AnyUriControl,
+    'xs:anyURI': AnyUriControl,
+    'xforms:anyURI': AnyUriControl,
+
     'xf:email': EmailControl,
-    'xf:decimal': DecimalControl
+    'xs:email': EmailControl,
+    'xforms:email': EmailControl,
+
+    'xf:decimal': DecimalControl,
+    'xs:decimal': DecimalControl,
+    'xforms:decimal': DecimalControl,
+
+    'xf:integer': DecimalControl,
+    'xs:integer': DecimalControl,
+    'xforms:integer': DecimalControl,
+
+    'xf:double': DecimalControl,
+    'xs:double': DecimalControl,
+    'xforms:double': DecimalControl,
 }
 
 
@@ -74,9 +104,12 @@ class Builder:
         resource = self.xml_root.xpath(query)
 
         if len(resource) != 1:
-            raise Exception("[orbeon-xml-api] Found %s for: %s" % query)
+            raise Exception("[orbeon-xml-api] Found %s elements for: %s" % (len(resource), query))
 
-        res_dict = xmltodict.parse(etree.tostring(resource[0]))
+        parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
+        resource_root = etree.XML(etree.tostring(resource[0]).encode('utf-8'), parser)
+        resource_xml = etree.tostring(resource_root)
+        res_dict = xmltodict.parse(resource_xml)
 
         for tag, v in res_dict.get('resource', {}).items():
             self.resource[tag] = Resource(self, v)
@@ -95,6 +128,9 @@ class Builder:
 
     def set_sanitized_control_names(self):
         for name in self.controls.keys():
+            if name is None:
+                continue
+
             k = name
             k = k.replace('-', '')
             k = k.replace('.', '_')
@@ -153,11 +189,21 @@ class Bind:
         self.builder = builder
         self.element = element
         self.id = element.get('id')
-        self.name = element.get('name')
+
+        self.name = None
+        self.set_name()
+
         self.xf_type = element.get('type', 'xf:string')
 
         self.parent = None
         self.set_parent()
+
+    def set_name(self):
+        # XXX Maybe also add a `ref` property set_ref()
+        if self.element.get('name'):
+            self.name = self.element.get('name')
+        elif self.element.get('ref'):
+            self.name = self.element.get('ref')
 
     def set_parent(self):
         parent_element = self.element.getparent()
