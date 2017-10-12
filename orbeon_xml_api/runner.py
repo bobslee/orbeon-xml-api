@@ -1,5 +1,5 @@
 from builder import Builder, XF_TYPE_CONTROL
-from utils import generate_xml_root
+from utils import generate_xml_root, unaccent_unicode
 
 
 class Runner:
@@ -30,6 +30,9 @@ class Runner:
         if self.builder is None and self.builder_xml:
             self.set_builder_by_builder_xml()
 
+        self._form = {}
+        self.set_form()
+
         # form object
         self.form = RunnerForm(self)
 
@@ -46,6 +49,14 @@ class Runner:
     def set_builder_by_builder_xml(self):
         self.builder = Builder(self.builder_xml, self.lang)
 
+    def set_form(self):
+        query = "//form/*/*"
+        res = self.xml_root.xpath(query)
+
+        for e in res:
+            tag = u"%s" % e.tag
+            self._form[unaccent_unicode(tag)] = e
+
     def init(self):
         for name, control in self.builder.controls.items():
             element = self.get_form_element(name)
@@ -53,20 +64,20 @@ class Runner:
             if element is None:
                 continue
 
-            if callable(getattr(element, 'getchildren', None)):
-                self.raw_values[name] = element
-                self.values[name] = control.decode(element)
+            # if callable(getattr(element, 'getchildren', None)):
+            self.raw_values[name] = element
+            self.values[name] = control.decode(element)
 
-                if control not in XF_TYPE_CONTROL.values():
-                    control_obj = control
-                else:
-                    # Instantiate the control class (these are imported above)
-                    control_class = globals()[control.__class__.__name__]
-                    control_obj = control_class(self.builder, control._bind, element)
+            if control not in XF_TYPE_CONTROL.values():
+                control_obj = control
+            else:
+                # Instantiate the control class (these are imported above)
+                control_class = globals()[control.__class__.__name__]
+                control_obj = control_class(self.builder, control._bind, element)
 
-                if control_obj is not None:
-                    control_obj.init_runner_form_attrs(element)
-                    self.controls[name] = control_obj
+            if control_obj is not None:
+                control_obj.init_runner_form_attrs(element)
+                self.controls[name] = control_obj
 
     def get_form_element(self, name):
         """
@@ -77,19 +88,11 @@ class Runner:
             return False
 
         control = self.builder.controls[name]
+
         if control._parent is None:
             return False
-            # query = "//form/%s" % name
-        else:
-            query = "//form/%s/%s" % (control._parent._bind.name, name)
 
-        res = self.xml_root.xpath(query)
-
-        # TODO Fix composite controls like 'us-address'
-        if len(res) != 1:
-            return False
-
-        return res[0]
+        return self._form[name]
 
     def get_raw_value(self, name):
         return self.raw_values[name]

@@ -5,8 +5,9 @@ import xmltodict
 from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
     BooleanControl, AnyUriControl, EmailControl, DecimalControl, \
     Select1Control, OpenSelect1Control, SelectControl, ImageAnnotationControl
-from utils import generate_xml_root
+from utils import generate_xml_root, unaccent_unicode
 
+# `xforms:` types are here for backwards compatibility.
 XF_TYPE_CONTROL = {
     'xf:string': StringControl,
     'xs:string': StringControl,
@@ -96,7 +97,8 @@ class Builder:
         query = "%s|%s" % (q_left, q_right)
 
         for e in self.xml_root.xpath(query):
-            self.binds[e.get('id')] = Bind(self, e)
+            bind_id = u"%s" % e.get('id')
+            self.binds[unaccent_unicode(bind_id)] = Bind(self, e)
 
     def set_resource(self):
         query = "//*[@id='fr-form-resources']/resources//resource[@xml:lang='%s']" % self.lang
@@ -107,12 +109,13 @@ class Builder:
             raise Exception("[orbeon-xml-api] Found %s elements for: %s" % (len(resource), query))
 
         parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
-        resource_root = etree.XML(etree.tostring(resource[0], encoding="unicode").encode('utf-8'), parser)
+        resource_root = etree.XML(etree.tostring(resource[0], encoding='UTF-8'), parser)
         resource_xml = etree.tostring(resource_root, encoding="unicode")
         res_dict = xmltodict.parse(resource_xml)
 
         for tag, v in res_dict.get('resource', {}).items():
-            self.resource[tag] = Resource(self, v)
+            tag = u"%s" % tag
+            self.resource[unaccent_unicode(tag)] = Resource(self, v)
 
     def set_fr_body_elements(self):
         query = "//*[name()='fr:body']//*[@bind]"
@@ -120,7 +123,8 @@ class Builder:
 
     def set_controls(self):
         for el in self.fr_body_elements:
-            bind = self.binds[el.get('bind')]
+            el_bind = u"%s" % el.get('bind')
+            bind = self.binds[unaccent_unicode(el_bind)]
             control = bind.get_fr_control_object(el)
 
             if control is not None:
@@ -188,7 +192,9 @@ class Bind:
     def __init__(self, builder, element):
         self.builder = builder
         self.element = element
-        self.id = element.get('id')
+
+        el_id = u"%s" % element.get('id')
+        self.id = unaccent_unicode(el_id)
 
         self.name = None
         self.set_name()
@@ -201,9 +207,11 @@ class Bind:
     def set_name(self):
         # XXX Maybe also add a `ref` property set_ref()
         if self.element.get('name'):
-            self.name = self.element.get('name')
+            name = u"%s" % self.element.get('name')
+            self.name = unaccent_unicode(name)
         elif self.element.get('ref'):
-            self.name = self.element.get('ref')
+            ref = u"%s" % self.element.get('ref')
+            self.name = unaccent_unicode(ref)
 
     def set_parent(self):
         parent_element = self.element.getparent()

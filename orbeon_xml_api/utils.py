@@ -1,11 +1,12 @@
 from lxml import etree
 
 import os
+import unicodedata
 
 
 def xml_from_file(path, filename):
     cwd = os.path.dirname(os.path.realpath(__file__))
-    return etree.tostring(etree.parse("%s/%s/%s" % (cwd, path, filename)))
+    return etree.tostring(etree.parse("%s/%s/%s" % (cwd, path, filename)), encoding='UTF-8')
 
 
 def generate_xml_root(xml):
@@ -16,7 +17,7 @@ def generate_xml_root(xml):
             encoding='utf-8',
             remove_blank_text=True
         )
-        root = etree.XML(xml.encode("utf-8"), parser)
+        root = etree.XML(xml, parser)
     except etree.XMLSyntaxError:
         parser = etree.XMLParser(
             ns_clean=True,
@@ -24,9 +25,13 @@ def generate_xml_root(xml):
             encoding='utf-8',
             remove_blank_text=True
         )
-        root = etree.XML(xml.encode("utf-8"), parser)
+        root = etree.XML(xml, parser)
 
     return root
+
+
+def unaccent_unicode(unicode_str):
+    return unicodedata.normalize('NFKD', unicode_str).encode('ASCII', 'ignore')
 
 
 def sanitize_xml(xml_root):

@@ -344,7 +344,7 @@ class AnyUriControl(Control):
             res = {'uri': None, 'value': None, 'element': None}
         else:
             res = {'uri': element.text, 'value': element.text}
-            element_dict = xmltodict.parse(etree.tostring(element))
+            element_dict = xmltodict.parse(etree.tostring(element, encoding='UTF-8'))
             if self._bind.name in element_dict:
                 res['element'] = element_dict[self._bind.name]
 
@@ -381,7 +381,7 @@ class ImageAnnotationControl(Control):
             return res
 
         for el in element.getchildren():
-            res[el.tag] = xmltodict.parse(etree.tostring(el, encoding="unicode"))
+            res[el.tag] = xmltodict.parse(etree.tostring(el, encoding='UTF-8'))
 
         return res
 
