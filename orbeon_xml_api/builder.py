@@ -83,6 +83,9 @@ class Builder:
         self.sanitized_control_names = {}
         self.set_sanitized_control_names()
 
+        self._form = {}
+        self.set_form()
+
     def set_xml_root(self):
         self.xml_root = generate_xml_root(self.xml)
 
@@ -146,6 +149,15 @@ class Builder:
 
     def set_context(self, context):
         self.context = context
+
+    def set_form(self):
+        query = "//*[@id='fr-form-instance']/form"
+        res = self.xml_root.xpath(query)
+
+        if len(res) != 1:
+            raise Exception("[orbeon-xml-api] Found %s <form> for: %s" % (len(res), query))
+
+        self._form = res[0]
 
     def add_control_object(self, name, control_obj):
         supported = False

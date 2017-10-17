@@ -1,3 +1,4 @@
+from copy import deepcopy
 from lxml import etree
 
 from builder import Builder, XF_TYPE_CONTROL
@@ -117,28 +118,21 @@ class Runner:
         """
         pass
 
-    def merge(self, new_builder_obj):
-        parser = etree.XMLParser(ns_clean=True, encoding='utf-8')
-        target_resource = new_builder_obj.resource.copy()
+    def merge(self, builder_obj):
+        merge_form = deepcopy(builder_obj._form)
 
-        form_root = etree.XML('<?xml version="1.0" encoding="UTF-8"?><form></form>', parser)
-
-        for tag, resource in target_resource.items():
+        for element in merge_form.iter():
+            tag = element.tag
             if tag in self.builder.controls.keys():
                 form_element = self.get_form_element(tag)
 
                 if form_element is not None:
-                    form_root.append(form_element)
-            else:
-                new_control = new_builder_obj.controls.get(tag, False)
-
-                if new_control:
-                    form_root.append(new_control._model_instance)
+                    element = form_element
 
         # Unicode support
-        merged_xml = etree.tostring(form_root)
-        merged_xml = bytes(bytearray(merged_xml, encoding='utf-8'))
-        merged_runner = Runner(merged_xml, new_builder_obj)
+        merge_form_xml = etree.tostring(merge_form)
+        merge_form_xml = bytes(bytearray(merge_form_xml, encoding='utf-8'))
+        merged_runner = Runner(merge_form_xml, builder_obj)
 
         return merged_runner
 

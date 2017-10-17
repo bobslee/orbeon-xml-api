@@ -27,7 +27,10 @@ class RunnerMergeBuilderTestCase(CommonTestCase, XmlTestCase):
 
         # Original data
         self.assertXpathsOnlyOne(root, ['//input'])
-        #self.assertXpathValues(root, '//input/text()', ('John'))
+        self.assertEqual(merged_runner.form.input.label, 'Input Field')
+        self.assertEqual(merged_runner.form.input.value, 'Michelle')
 
         # New controls
         self.assertXpathsOnlyOne(root, ['//input-2'])
+        self.assertEqual(merged_runner.form.input2.label, 'Input Field 2')
+        self.assertEqual(merged_runner.form.input2._parent._bind.name, 'text-controls')
