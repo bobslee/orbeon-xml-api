@@ -151,13 +151,11 @@ class Builder:
         self.context = context
 
     def set_form(self):
-        query = "//*[@id='fr-form-instance']/form"
+        query = "//*[@id='fr-form-instance']/form/*"
         res = self.xml_root.xpath(query)
 
-        if len(res) != 1:
-            raise Exception("[orbeon-xml-api] Found %s <form> for: %s" % (len(res), query))
-
-        self._form = res[0]
+        for element in res[0].iter():
+            self._form[element.tag] = element
 
     def add_control_object(self, name, control_obj):
         supported = False

@@ -36,15 +36,18 @@ class Runner:
         self._form = {}
         self.set_form()
 
-        # form object
-        self.form = RunnerForm(self)
-
         # init
         self.raw_values = {}
         self.values = {}
         self.controls = {}
 
         self.init()
+
+        # XXX by setter in RunnerForm
+        # runner_form = RunnerForm()
+        # runner_form.runner = self
+        # self.form = runner_form
+        self.form = RunnerForm(self)
 
     def set_xml_root(self):
         self.xml_root = generate_xml_root(self.xml)
@@ -119,18 +122,49 @@ class Runner:
         pass
 
     def merge(self, builder_obj):
-        merge_form = deepcopy(builder_obj._form)
+        merge_form = builder_obj._form
+        parser = etree.XMLParser(ns_clean=True, encoding='utf-8')
+        root = etree.XML('<?xml version="1.0" encoding="UTF-8"?><form></form>', parser)
 
-        for element in merge_form.iter():
-            tag = element.tag
+        parents = {}
+
+        for tag, element in merge_form.iteritems():
+
             if tag in self.builder.controls.keys():
+                control = self.builder.controls[tag]
                 form_element = self.get_form_element(tag)
 
+                parent_control = control._parent
+
+                if hasattr(parent_control, '_bind') and parent_control._bind.name not in parents:
+                    parent_form_element = self.builder._form[parent_control._bind.name]
+                    parents[parent_control._bind.name] = etree.Element(parent_form_element.tag)
+                    root.append(parents[parent_control._bind.name])
+
                 if form_element is not None:
-                    element = form_element
+                    # Register the (seen) parent.
+                    # The form/field Control
+                    parents[parent_control._bind.name].append(form_element)
+            else:
+                new_control = builder_obj.controls.get(tag, False)
+                parent_control = new_control._parent
+
+                if hasattr(parent_control, '_bind') and parent_control._bind.name not in parents:
+                    parent_form_element = builder_obj._form[parent_control._bind.name]
+                    parents[parent_control._bind.name] = etree.Element(parent_form_element.tag)
+                    root.append(parents[parent_control._bind.name])
+
+                if new_control and new_control._model_instance is not None:
+                    # root.append(new_control._model_instance)
+                    parents[parent_control._bind.name].append(new_control._model_instance)
+                elif new_control and hasattr(new_control._parent, '_bind'):
+                    # Especially stuff like *sections*
+                    some_element = etree.Element(new_control._parent._element.tag)
+                    parents[parent_control._bind.name] = some_element
+                    root.append(parents[parent_control._bind.name])
 
         # Unicode support
-        merge_form_xml = etree.tostring(merge_form)
+        merge_form_xml = etree.tostring(root)
         merge_form_xml = bytes(bytearray(merge_form_xml, encoding='utf-8'))
         merged_runner = Runner(merge_form_xml, builder_obj)
 
@@ -140,7 +174,18 @@ class Runner:
 class RunnerForm:
 
     def __init__(self, runner):
+        # XXX getter/setter initialisation
+        # self._runner = None
         self._runner = runner
+
+    # def get_runner(self):
+    #     return self._runner
+
+    # def set_runner(self, runner):
+    #     self._runner = runner
+
+    # XXX getter/setter (Fixes max resursion depth?)
+    # runner = property(get_runner, set_runner)
 
     def __getattr__(self, s_name):
         name = self._runner.builder.sanitized_control_names.get(s_name, False)

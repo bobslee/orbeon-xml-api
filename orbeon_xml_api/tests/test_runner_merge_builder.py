@@ -25,10 +25,10 @@ class RunnerMergeBuilderTestCase(CommonTestCase, XmlTestCase):
 
         root = self.assertXmlDocument(merged_runner.xml)
 
-        # Original data
+        # Check original data (not harmed by merge)
         self.assertXpathsOnlyOne(root, ['//input'])
         self.assertEqual(merged_runner.form.input.label, 'Input Field')
-        self.assertEqual(merged_runner.form.input.value, 'Michelle')
+        self.assertEqual(merged_runner.form.input.value, 'John')
 
         # New controls
         self.assertXpathsOnlyOne(root, ['//input-2'])
