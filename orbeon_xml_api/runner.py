@@ -1,3 +1,5 @@
+from lxml import etree
+
 from builder import Builder, XF_TYPE_CONTROL
 from utils import generate_xml_root, unaccent_unicode
 
@@ -59,7 +61,11 @@ class Runner:
 
     def init(self):
         for name, control in self.builder.controls.items():
-            element = self.get_form_element(name)
+            # XXX Silence maybe isn't the proper way!
+            try:
+                element = self.get_form_element(name)
+            except:
+                continue
 
             if element is None:
                 continue
@@ -90,7 +96,7 @@ class Runner:
         control = self.builder.controls[name]
 
         if control._parent is None:
-            return False
+            return None
 
         return self._form[name]
 
@@ -110,6 +116,31 @@ class Runner:
         Set Runner Control XML value.
         """
         pass
+
+    def merge(self, new_builder_obj):
+        parser = etree.XMLParser(ns_clean=True, encoding='utf-8')
+        target_resource = new_builder_obj.resource.copy()
+
+        form_root = etree.XML('<?xml version="1.0" encoding="UTF-8"?><form></form>', parser)
+
+        for tag, resource in target_resource.items():
+            if tag in self.builder.controls.keys():
+                form_element = self.get_form_element(tag)
+
+                if form_element is not None:
+                    form_root.append(form_element)
+            else:
+                new_control = new_builder_obj.controls.get(tag, False)
+
+                if new_control:
+                    form_root.append(new_control._model_instance)
+
+        # Unicode support
+        merged_xml = etree.tostring(form_root)
+        merged_xml = bytes(bytearray(merged_xml, encoding='utf-8'))
+        merged_runner = Runner(merged_xml, new_builder_obj)
+
+        return merged_runner
 
 
 class RunnerForm:
