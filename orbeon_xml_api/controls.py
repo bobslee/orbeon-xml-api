@@ -165,7 +165,10 @@ class DateControl(Control):
         if element is None or not hasattr(element, 'text') or element.text is None:
             return None
         else:
-            return datetime.strptime(element.text, '%Y-%m-%d').date()
+            try:
+                return datetime.strptime(element.text, '%Y-%m-%d').date()
+            except:
+                return "%s (!)" % element.text
 
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%d')
@@ -190,7 +193,10 @@ class TimeControl(Control):
         if element is None or not hasattr(element, 'text') or element.text is None:
             return None
         else:
-            return datetime.strptime(element.text, '%H:%M:%S').time()
+            try:
+                return datetime.strptime(element.text, '%H:%M:%S').time()
+            except:
+                return "%s (!)" % element.text
 
     def encode(self, value):
         return time.strftime(value, '%H:%M:%S')
@@ -215,7 +221,10 @@ class DateTimeControl(Control):
         if element is None or not hasattr(element, 'text') or element.text is None:
             return None
         else:
-            return datetime.strptime(element.text, '%Y-%m-%dT%H:%M:%S')
+            try:
+                return datetime.strptime(element.text, '%Y-%m-%dT%H:%M:%S')
+            except:
+                return "%s (!)" % element.text
 
     def encode(self, value):
         return datetime.strftime(value, '%Y-%m-%dT%H:%M:%S')
