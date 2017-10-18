@@ -1,3 +1,4 @@
+import re
 from lxml import etree
 
 from builder import Builder, XF_TYPE_CONTROL
@@ -121,9 +122,11 @@ class Runner:
         """
         pass
 
-    def merge(self, builder_obj):
+    def merge(self, builder_obj, **kwargs):
         parser = etree.XMLParser(ns_clean=True, encoding='utf-8')
         root = etree.XML('<?xml version="1.0" encoding="UTF-8"?><form></form>', parser)
+
+        no_copy_prefix = kwargs.get('no_copy_prefix', None)
 
         parents = {}
 
@@ -150,10 +153,12 @@ class Runner:
                         parents[k_parent_control._bind.name] = k_el_parent
                         root.append(k_el_parent)
 
-                    # Register the (seen) parent.
-                    # The form/field Control
-                    parents[k_parent_control._bind.name].append(k_form_element)
-                    # root.append(k_form_element)
+                    if no_copy_prefix is not None and re.search(r"^%s" % no_copy_prefix, tag) is not None:
+                        # Instead of the Runner control, add the Builder model_instance
+                        parents[k_parent_control._bind.name].append(k_control._model_instance)
+                    else:
+                        parents[k_parent_control._bind.name].append(k_form_element)
+                        # root.append(k_form_element)
             else:
                 # n_: New elements
                 n_new_control = builder_obj.controls.get(tag, False)

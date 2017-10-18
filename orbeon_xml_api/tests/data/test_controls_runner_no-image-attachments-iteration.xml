@@ -11,6 +11,7 @@
         <textarea-counter>Let's write some code. It must fit in 1000 bytes.</textarea-counter>
         <output>Great risk and less achievements involve great love.</output>
         <secret>The question to life and everything is 42.</secret>
+        <NC.no-copy-field>After merge this should be empty.</NC.no-copy-field>
     </text-controls>
     <typed-controls>
         <email>bob@novacode.nl</email>
