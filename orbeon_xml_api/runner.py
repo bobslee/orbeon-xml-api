@@ -1,4 +1,3 @@
-from copy import deepcopy
 from lxml import etree
 
 from builder import Builder, XF_TYPE_CONTROL
