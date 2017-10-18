@@ -35,3 +35,4 @@ class TextareaCounterTestCase(CommonTestCase):
         text = "Let's write some code. It must fit in 1000 bytes."
         self.assertEqual(self.runner.form.textareacounter.label, 'Text Area with Character counter')
         self.assertEqual(self.runner.form.textareacounter.value, text)
+        self.assertEqual(self.runner.form.textareacounter.raw_value, text)

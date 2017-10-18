@@ -39,3 +39,4 @@ class TextareaTestCase(CommonTestCase):
 
         text = 'Programming is an art form whose medium is a computer.'
         self.assertEqual(self.runner.form.textarea.value, text)
+        self.assertEqual(self.runner.form.textarea.raw_value, text)

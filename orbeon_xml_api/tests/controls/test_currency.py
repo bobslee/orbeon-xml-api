@@ -44,4 +44,5 @@ class CurrencyTestCase(CommonTestCase):
     def test_runner_form(self):
         self.assertEqual(self.runner.form.currency.label, 'Currency')
         self.assertEqual(self.runner.form.currency.value, 101.33)
+        self.assertEqual(self.runner.form.currency.raw_value, '101.33')
         self.assertIsInstance(self.runner.form.currency.value, float)

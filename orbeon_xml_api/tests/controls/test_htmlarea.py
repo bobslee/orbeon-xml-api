@@ -53,3 +53,4 @@ class HtmlareaTestCase(CommonTestCase):
 
         re = '.*The Good, the Bad and the Ugly.*'
         self.assertRegexpMatches(self.runner.form.htmlarea.value, re)
+        self.assertRegexpMatches(self.runner.form.htmlarea.raw_value, re)

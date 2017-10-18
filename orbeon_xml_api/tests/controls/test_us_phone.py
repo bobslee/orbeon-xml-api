@@ -42,3 +42,4 @@ class UsPhoneTestCase(CommonTestCase):
     def test_runner_form(self):
         self.assertEqual(self.runner.form.usphone.label, 'US Phone Number')
         self.assertEqual(self.runner.form.usphone.value, '1234567890')
+        self.assertEqual(self.runner.form.usphone.raw_value, '1234567890')

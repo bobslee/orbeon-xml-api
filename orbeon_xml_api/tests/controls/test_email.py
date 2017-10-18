@@ -42,3 +42,4 @@ class EmailTestCase(CommonTestCase):
     def test_runner_form(self):
         self.assertEqual(self.runner.form.email.label, 'Email Address')
         self.assertEqual(self.runner.form.email.value, 'bob@novacode.nl')
+        self.assertEqual(self.runner.form.email.raw_value, 'bob@novacode.nl')

@@ -40,3 +40,4 @@ class AutocompleteTestCase(CommonTestCase):
     def test_runner_form(self):
         self.assertEqual(self.runner.form.autocomplete.label, 'Autocomplete')
         self.assertEqual(self.runner.form.autocomplete.value, 'nl')
+        self.assertEqual(self.runner.form.autocomplete.raw_value, 'nl')

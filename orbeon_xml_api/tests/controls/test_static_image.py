@@ -64,3 +64,4 @@ class StaticImageTestCase(CommonTestCase):
         self.assertEqual(self.runner.form.staticimage.label, 'Static Image')
         self.assertEqual(self.runner.form.staticimage.uri, value['uri'])
         self.assertEqual(self.runner.form.staticimage.value, value['value'])
+        self.assertEqual(self.runner.form.staticimage.raw_value, value['value'])

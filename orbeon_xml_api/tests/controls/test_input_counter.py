@@ -38,3 +38,4 @@ class InputCounterTestCase(CommonTestCase):
 
         text = "Don't even try to make it too long!"
         self.assertEqual(self.runner.form.inputcounter.value, text)
+        self.assertEqual(self.runner.form.inputcounter.raw_value, text)

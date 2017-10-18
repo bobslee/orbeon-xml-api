@@ -59,3 +59,4 @@ class TimeTestCase(CommonTestCase):
 
         time_obj = datetime.strptime('08:15:01', '%H:%M:%S').time()
         self.assertEqual(self.runner.form.time.value, time_obj)
+        self.assertEqual(self.runner.form.time.raw_value, '08:15:01')

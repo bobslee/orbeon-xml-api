@@ -53,9 +53,11 @@ class DateTestCase(CommonTestCase):
         date_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
 
         self.assertEqual(self.runner.get_value('date'), date_obj)
+        self.assertEqual(self.runner.get_raw_value('date').text, '2017-07-01')
 
     def test_runner_form(self):
         self.assertEqual(self.runner.form.date.label, 'Date')
 
         date_obj = datetime.strptime('2017-07-01', '%Y-%m-%d').date()
         self.assertEqual(self.runner.form.date.value, date_obj)
+        self.assertEqual(self.runner.form.date.raw_value, '2017-07-01')

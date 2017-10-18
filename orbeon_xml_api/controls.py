@@ -125,6 +125,7 @@ class StringControl(Control):
 
     def init_runner_form_attrs(self, runner_element):
         self.value = self.decode(runner_element)
+        self.raw_value = runner_element.text
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self._model_instance, 'text', None)
@@ -149,6 +150,7 @@ class DateControl(Control):
 
     def init_runner_form_attrs(self, runner_element):
         self.value = self.decode(runner_element)
+        self.raw_value = runner_element.text
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self._model_instance, 'text', None)
@@ -173,6 +175,7 @@ class TimeControl(Control):
 
     def init_runner_form_attrs(self, runner_element):
         self.value = self.decode(runner_element)
+        self.raw_value = runner_element.text
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self._model_instance, 'text', None)
@@ -197,6 +200,7 @@ class DateTimeControl(Control):
 
     def init_runner_form_attrs(self, runner_element):
         self.value = self.decode(runner_element)
+        self.raw_value = runner_element.text
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self._model_instance, 'text', None)
@@ -224,6 +228,8 @@ class BooleanControl(Control):
         # TODO translations
         self.choice_label = 'Yes' if self.choice_value else 'No'
         self.choice = {self.choice_label: self.choice_value}
+
+        self.raw_value = runner_element.text
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self._model_instance, 'text', None)
@@ -265,6 +271,7 @@ class Select1Control(StringControl):
                 self.choice_label = item['label']
 
         self.choice = {self.choice_label: self.choice_value}
+        self.raw_value = runner_element.text
 
     def set_raw_value(self):
         self._raw_value = self._element.text
@@ -282,6 +289,7 @@ class OpenSelect1Control(Select1Control):
 class SelectControl(StringControl):
 
     def init_runner_form_attrs(self, runner_element):
+        self.raw_value = runner_element.text
         self.choices_values = self.decode(runner_element)
         self.choices_labels = []
         self.choices = {}
@@ -319,6 +327,7 @@ class SelectControl(StringControl):
 class AnyUriControl(Control):
 
     def init_runner_form_attrs(self, runner_element):
+        self.raw_value = runner_element.text
         decoded = self.decode(runner_element)
 
         self.uri = decoded['uri']
@@ -357,6 +366,7 @@ class AnyUriControl(Control):
 class ImageAnnotationControl(Control):
 
     def init_runner_form_attrs(self, runner_element):
+        self.raw_value = runner_element.text
         decoded = self.decode(runner_element)
 
         if decoded:
@@ -393,6 +403,7 @@ class DecimalControl(Control):
 
     def init_runner_form_attrs(self, runner_element):
         self.value = self.decode(runner_element)
+        self.raw_value = runner_element.text
 
     def set_default_raw_value(self):
         self.default_raw_value = getattr(self._model_instance, 'text', None)

@@ -43,4 +43,5 @@ class NumberTestCase(CommonTestCase):
     def test_runner_form(self):
         self.assertEqual(self.runner.form.number.label, 'Number')
         self.assertEqual(self.runner.form.number.value, 19792017)
+        self.assertEqual(self.runner.form.number.raw_value, '19792017')
         self.assertIsInstance(self.runner.form.value, int)

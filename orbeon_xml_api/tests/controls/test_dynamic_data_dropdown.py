@@ -42,3 +42,4 @@ class DynamicDataDropdownTestCase(CommonTestCase):
     def test_runner_form(self):
         self.assertEqual(self.runner.form.dynamicdatadropdown.label, 'Dynamic Data Dropdown')
         self.assertEqual(self.runner.form.dynamicdatadropdown.value, 'de')
+        self.assertEqual(self.runner.form.dynamicdatadropdown.raw_value, 'de')

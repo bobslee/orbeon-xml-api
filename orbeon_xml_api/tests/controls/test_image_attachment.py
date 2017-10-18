@@ -48,3 +48,5 @@ class ImageAttachmentTestCase(CommonTestCase):
         self.assertEqual(self.runner.form.imageattachment.value, self.image_attachment_value)
         self.assertEqual(self.runner.form.imageattachment.uri, self.image_attachment_value)
         # self.assertEqual(self.runner.form.imageattachment.filename, 'feature-fr-browser.png')
+        self.assertEqual(self.runner.form.imageattachment.raw_value, self.image_attachment_value)
+                

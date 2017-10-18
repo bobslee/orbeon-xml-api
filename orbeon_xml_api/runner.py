@@ -66,6 +66,7 @@ class Runner:
     def init(self):
         for name, control in self.builder.controls.items():
             # XXX Silence maybe isn't the proper way!
+            element = None
             try:
                 element = self.get_form_element(name)
             except:
