@@ -122,46 +122,66 @@ class Runner:
         pass
 
     def merge(self, builder_obj):
-        merge_form = builder_obj._form
         parser = etree.XMLParser(ns_clean=True, encoding='utf-8')
         root = etree.XML('<?xml version="1.0" encoding="UTF-8"?><form></form>', parser)
 
         parents = {}
 
-        for tag, element in merge_form.iteritems():
-
+        for tag, element in builder_obj.controls.iteritems():
             if tag in self.builder.controls.keys():
-                control = self.builder.controls[tag]
-                form_element = self.get_form_element(tag)
+                # k_: Known elements (present in original runner/builder)
+                k_control = self.builder.controls.get(tag, False)
 
-                parent_control = control._parent
+                if not k_control:
+                    continue
 
-                if hasattr(parent_control, '_bind') and parent_control._bind.name not in parents:
-                    parent_form_element = self.builder._form[parent_control._bind.name]
-                    parents[parent_control._bind.name] = etree.Element(parent_form_element.tag)
-                    root.append(parents[parent_control._bind.name])
+                k_parent_control = k_control._parent
+                k_form_element = self.get_form_element(tag)
 
-                if form_element is not None:
+                # Sections (escpecially)
+                if k_parent_control is None and tag not in parents:
+                    parents[tag] = etree.Element(tag)
+                    root.append(parents[tag])
+
+                # Controls
+                if k_form_element is not None:
+                    if k_parent_control is not None and hasattr(k_parent_control, '_bind') and k_parent_control._bind.name not in parents:
+                        k_el_parent = etree.Element(k_parent_control._bind.name)
+                        parents[k_parent_control._bind.name] = k_el_parent
+                        root.append(k_el_parent)
+
                     # Register the (seen) parent.
                     # The form/field Control
-                    parents[parent_control._bind.name].append(form_element)
+                    parents[k_parent_control._bind.name].append(k_form_element)
+                    # root.append(k_form_element)
             else:
-                new_control = builder_obj.controls.get(tag, False)
-                parent_control = new_control._parent
+                # n_: New elements
+                n_new_control = builder_obj.controls.get(tag, False)
 
-                if hasattr(parent_control, '_bind') and parent_control._bind.name not in parents:
-                    parent_form_element = builder_obj._form[parent_control._bind.name]
-                    parents[parent_control._bind.name] = etree.Element(parent_form_element.tag)
-                    root.append(parents[parent_control._bind.name])
+                if not n_new_control:
+                    continue
 
-                if new_control and new_control._model_instance is not None:
+                n_parent_control = n_new_control._parent
+
+                # Sections (escpecially)
+                if n_parent_control is None and tag not in parents:
+                    parents[tag] = etree.Element(tag)
+                    root.append(parents[tag])
+                elif n_parent_control is not None and hasattr(n_parent_control, '_bind') and n_parent_control._bind.name not in parents:
+                    n_parent_form_element = builder_obj._form[n_parent_control._bind.name]
+                    n_el_parent = etree.Element(n_parent_form_element.tag)
+                    parents[n_parent_control._bind.name] = n_el_parent
+                    root.append(n_el_parent)
+
+                # Controls
+                if n_new_control and n_new_control._model_instance is not None:
                     # root.append(new_control._model_instance)
-                    parents[parent_control._bind.name].append(new_control._model_instance)
-                elif new_control and hasattr(new_control._parent, '_bind'):
+                    parents[n_parent_control._bind.name].append(n_new_control._model_instance)
+                elif n_new_control and hasattr(n_new_control._parent, '_bind'):
                     # Especially stuff like *sections*
-                    some_element = etree.Element(new_control._parent._element.tag)
-                    parents[parent_control._bind.name] = some_element
-                    root.append(parents[parent_control._bind.name])
+                    some_element = etree.Element(n_new_control._parent._element.tag)
+                    parents[n_parent_control._bind.name] = some_element
+                    root.append(parents[n_parent_control._bind.name])
 
         # Unicode support
         merge_form_xml = etree.tostring(root)
