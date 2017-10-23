@@ -217,4 +217,4 @@ class RunnerForm:
         if name:
             return self._runner.get_form_control(name)
         else:
-            return False
+            return None
