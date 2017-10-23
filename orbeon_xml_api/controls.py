@@ -276,7 +276,10 @@ class Select1Control(StringControl):
             return
 
         for item in self._resource.element['item']:
-            if item['value'] == self.choice_value:
+            # XXX Seems a buggy assumption. Things like 'label'.
+            if isinstance(item, basestring):
+                continue
+            elif item['value'] == self.choice_value:
                 self.choice_label = item['label']
 
         self.choice = {self.choice_label: self.choice_value}
