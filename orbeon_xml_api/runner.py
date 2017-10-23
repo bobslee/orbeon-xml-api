@@ -123,6 +123,7 @@ class Runner:
         pass
 
     def merge(self, builder_obj, **kwargs):
+        # TODO Move and rebuild into RunnerCopyBuilderMerge (class)
         parser = etree.XMLParser(ns_clean=True, encoding='utf-8')
         root = etree.XML('<?xml version="1.0" encoding="UTF-8"?><form></form>', parser)
 
