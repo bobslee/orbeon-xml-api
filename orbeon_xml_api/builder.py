@@ -157,8 +157,9 @@ class Builder:
         query = "//*[@id='fr-form-instance']/form/*"
         res = self.xml_root.xpath(query)
 
-        for element in res[0].iter():
-            self._form[element.tag] = element
+        for root_el in res:
+            for element in root_el.iter():
+                self._form[element.tag] = element
 
     def add_control_object(self, name, control_obj):
         supported = False
