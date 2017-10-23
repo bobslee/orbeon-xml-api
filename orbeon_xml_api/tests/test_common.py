@@ -6,7 +6,8 @@ from ..runner import Runner
 from ..utils import xml_from_file
 
 TEXT_CONTROLS_BIND = ['text-controls-bind', 'input-bind', 'htmlarea-bind', 'output-bind',
-                      'secret-bind', 'input-counter-bind', 'textarea-bind', 'textarea-counter-bind']
+                      'secret-bind', 'input-counter-bind', 'textarea-bind', 'textarea-counter-bind',
+                      'NC.no-copy-field-bind']
 
 DATE_TIME_CONTROLS_BIND = ['date-time-controls-bind', 'date-bind', 'time-bind', 'datetime-bind',
                            'dropdown-date-bind', 'fields-date-bind']
