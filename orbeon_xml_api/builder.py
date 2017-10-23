@@ -118,6 +118,9 @@ class Builder:
 
         for tag, v in res_dict.get('resource', {}).items():
             tag = u"%s" % tag
+
+            if isinstance(v, list):
+                v = v[0]
             self.resource[unaccent_unicode(tag)] = Resource(self, v)
 
     def set_fr_body_elements(self):
@@ -235,7 +238,7 @@ class Bind:
     def get_fr_control_object(self, element):
         fr_control_tag = etree.QName(element).localname
 
-        if fr_control_tag == 'select1':
+        if fr_control_tag in ('select1', 'dropdown-select1'):
             if self.builder._control_objects.get('Select1Control', False):
                 return self.builder._control_objects.get('Select1Control')(self.builder, self, element)
             else:
