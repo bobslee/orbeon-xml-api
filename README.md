@@ -51,31 +51,60 @@ All contributions, bug reports, bug fixes, documentation improvements, enhanceme
 
 ## Usage examples
 
-Following examples use an Orbeon demo form **"Controls"**
 For more examples of usage, see the unit-tests.
 
 ``` python
 >> from orbeon-xml-api import Builder, Runner
-
-# builder_xml is an Orbeon Builder XML document (text)
-# runner_xml is an Orbeon Runner XML document (text)
-
+>>
+# builder_xml is an Orbeon Builder XML document (text/string)
+# runner_xml is an Orbeon Runner XML document (text/string)
+>>
 >> builder = Builder(builder_xml)
 >> runner = Runner(builder, runner_xml)
 
->> print runner.form.inputfield.value
-'Michelle'
->> runner.form.inputfield.label
-'Input Field'
+# Text Field (control)
+>> runner.form.firstname.label
+'First Name'
 
 # Raw XML value
->> print runner.form.inputfield.datetime.raw_value
-'2009-10-16T17:30:00'
+>> print runner.form.firstname.raw_value
+'Michelle'
 
-# Python object
->> print runner.form.inputfield.datetime.value
-datetime.datetime(2009 10 16 17 30)
+# Value as Python string too
+>> print runner.form.firstname.value
+'Michelle'
 
+# Date (control)
+>> print runner.form.birthday.label
+'Birthday'
+
+# Raw XML
+>> print runner.form.birthday.raw_value
+'2009-10-16'
+
+# Value as Python Date object
+>> print runner.form.birthday.value
+datetime.date(2009 10 16)
+
+# Selection Checkboxes (control)
+>> print runner.form.favorite_dishes.label
+'Favorite dishes'
+
+# Raw XML
+>> print runner.form.favorite_dishes.raw_value
+'mixgrill pizza sushi'
+
+# Choices as Python dict (key => choice value, value => choice label)
+>> print runner.form.favorite_dishes.choices
+{'mixgrill': 'Mixed Grill, 'pizza': 'Pizza', 'sushi': 'Sushi'}
+
+# Choices labels as Python list
+>> print runner.form.favorite_dishes.choices_labels
+['Mixed Grill, 'Pizza', 'Sushi']
+
+# Choices values as Python list
+>> print runner.form.favorite_dishes.choices_values
+['grill, 'pizza', 'sushi']
 ```
 
 ## Unit tests
