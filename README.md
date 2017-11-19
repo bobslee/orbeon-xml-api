@@ -7,9 +7,9 @@ For information about Orbeon, see [Orbeon homepage](https://www.orbeon.com)
 ## Introduction
 
 **orbeon-xml-api** is a Python package, which loads and transforms
-Orbeon Builder and Runner XML into usable Python objects.  It's main
+Orbeon **Builder XML** and **Runner XML** into **usable Python objects**.  It's main
 aim is to provide easy access to a Form its controls/fields, also
-captured as Python objects, which makes this API very versatile and usable.
+captured as **Python objects**, which makes this API very versatile and usable.
 
 **Notes about terms:**
   - "Builder" could be read/seen as "Builder Form"
@@ -18,7 +18,7 @@ captured as Python objects, which makes this API very versatile and usable.
 
 ## Features
 
-  - Compatible with Python 2.7 ([GitHub issu to support 3.3 and later](https://github.com/bobslee/orbeon-xml-api/issues/7))
+  - Compatible with Python 2.7 ([GitHub issue to support 3.3 and later](https://github.com/bobslee/orbeon-xml-api/issues/7))
   - Constructor of the **Builder** and **Runner** class, only requires
     the XML and an optional language code for translations.
   - Get a Runner object Control/Fields as a usable object, by the Pythonic attribute-getter (`__getattr__`)
