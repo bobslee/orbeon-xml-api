@@ -11,5 +11,5 @@ setup(
     packages=[
         'orbeon_xml_api'
     ],
-    install_requires=['lxml', 'xmltodict']
+    install_requires=['lxml', 'xmltodict', 'xmlunittest']
 )
