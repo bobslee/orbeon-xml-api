@@ -41,12 +41,12 @@ package index](https://pypi.python.org/pypi/orbeon-xml-api)
 pip install orbeon-xml-api
 ```
 
-**Dependencies:** `lxml, xmltodict`
+**Dependencies:** `lxml, xmltodict, xmlunittest`
 
 ## License
 [MIT](LICENSE)
 
-## Contributing to pandas
+## Contributing
 All contributions, bug reports, bug fixes, documentation improvements, enhancements and ideas are welcome.
 
 ## Usage examples
