@@ -181,11 +181,11 @@ class Runner:
                         root.append(n_el_parent)
 
                 # Initialize parent
-                if n_parent_control._bind.name not in parents:
+                if hasattr(n_parent_control, '_bind') and n_parent_control._bind.name not in parents:
                     parents[n_parent_control._bind.name] = None
 
                 # Controls
-                if n_parent_control._bind.name in parents and n_new_control and n_new_control._model_instance is not None:
+                if hasattr(n_parent_control, '_bind') and n_parent_control._bind.name in parents and n_new_control and n_new_control._model_instance is not None:
                     parents[n_parent_control._bind.name].append(n_new_control._model_instance)
                 elif n_new_control and hasattr(n_new_control._parent, '_bind'):
                     parents[n_new_control._parent._bind.name] = n_new_control._model_instance
