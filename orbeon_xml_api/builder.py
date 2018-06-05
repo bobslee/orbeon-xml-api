@@ -83,8 +83,8 @@ class Builder:
         self.sanitized_control_names = {}
         self.set_sanitized_control_names()
 
-        self._form = {}
-        self.set_form()
+        self.form_instance = []
+        self.set_form_instance()
 
     def set_xml_root(self):
         self.xml_root = generate_xml_root(self.xml)
@@ -153,13 +153,13 @@ class Builder:
     def set_context(self, context):
         self.context = context
 
-    def set_form(self):
+    def set_form_instance(self):
         query = "//*[@id='fr-form-instance']/form/*"
         res = self.xml_root.xpath(query)
 
         for root_el in res:
             for element in root_el.iter():
-                self._form[element.tag] = element
+                self.form_instance.append(element)
 
     def add_control_object(self, name, control_obj):
         supported = False

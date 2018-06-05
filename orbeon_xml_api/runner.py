@@ -131,7 +131,8 @@ class Runner:
 
         parents = {}
 
-        for tag, element in builder_obj.controls.iteritems():
+        for element in builder_obj.form_instance:
+            tag = element.tag
             if tag in self.builder.controls.keys():
                 # k_: Known elements (present in original runner/builder)
                 k_control = self.builder.controls.get(tag, False)
