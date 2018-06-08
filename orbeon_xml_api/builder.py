@@ -161,6 +161,18 @@ class Builder:
             for element in root_el.iter():
                 self.form_instance.append(element)
 
+    def get_form_instance_raw(self):
+        root = etree.fromstring(self.xml)
+        query = "//*[@id='fr-form-instance']/form"
+        ret = root.xpath(query)
+
+        # cleanup namespaces
+        parent = etree.Element('form')
+        for child in ret[0]:
+            if child.tag != 'form':
+                parent.append(child)
+        return etree.tostring(parent, encoding='unicode')
+
     def add_control_object(self, name, control_obj):
         supported = False
         for klass in XF_TYPE_CONTROL.values():
