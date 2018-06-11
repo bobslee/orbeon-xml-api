@@ -132,13 +132,14 @@ class Runner:
         for element in merged_form.iter():
             tag = element.tag
             if tag not in ['annotation', 'image']:
-                if no_copy_prefix and tag.startswith(no_copy_prefix):
-                    pass
-                else:
-                    ov = self.xml_root.xpath('//%s' % tag)
-                    if len(ov) > 0 and ov[0].text:
-                        if len(ov[0].text.strip()) > 0:
-                            element.text = ov[0].text
+                if isinstance(tag, basestring):
+                    if no_copy_prefix and tag.startswith(no_copy_prefix):
+                        pass
+                    else:
+                        ov = self.xml_root.xpath('//%s' % tag)
+                        if len(ov) > 0 and ov[0].text:
+                            if len(ov[0].text.strip()) > 0:
+                                element.text = ov[0].text
 
         merge_form_xml = etree.tostring(merged_form)
         merge_form_xml = bytes(bytearray(merge_form_xml, encoding='utf-8'))
