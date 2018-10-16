@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright 2017-2018 Bob Leers (http://www.novacode.nl)
+# See LICENSE file for full licensing details.
+
 class RunnerCopyBuilderMerge:
 
     def __init__(self, runner, builder, **kwargs):
