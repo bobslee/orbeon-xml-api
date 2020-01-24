@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017-2018 Bob Leers (http://www.novacode.nl)
-# See LICENSE file for full licensing details.
+
+
 
 from lxml import etree
 
@@ -10,7 +10,7 @@ from controls import StringControl, DateControl, TimeControl, DateTimeControl, \
     BooleanControl, AnyUriControl, EmailControl, DecimalControl, \
     Select1Control, OpenSelect1Control, SelectControl, ImageAnnotationControl
 from utils import generate_xml_root, unaccent_unicode
-
+#.ITERITEMS ARE MADE TO ITEMS()
 # `xforms:` types are here for backwards compatibility.
 XF_TYPE_CONTROL = {
     'xf:string': StringControl,

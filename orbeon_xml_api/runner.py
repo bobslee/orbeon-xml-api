@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017-2018 Bob Leers (http://www.novacode.nl)
-# See LICENSE file for full licensing details.
+
+
 
 import re
 from lxml import etree
@@ -128,27 +128,79 @@ class Runner:
 
     def merge(self, builder_obj, **kwargs):
         # TODO Move and rebuild into RunnerCopyBuilderMerge (class)
+        parser = etree.XMLParser(ns_clean=True, encoding='utf-8')
+        root = etree.XML('<?xml version="1.0" encoding="UTF-8"?><form></form>', parser)
+
         no_copy_prefix = kwargs.get('no_copy_prefix', None)
+
         parents = {}
-        merged_form = builder_obj.get_form_instance_raw()
-        merged_form = etree.fromstring(merged_form)
 
-        for element in merged_form.iter():
-            tag = element.tag
-            if tag not in ['annotation', 'image']:
-                if isinstance(tag, basestring):
-                    if no_copy_prefix and tag.startswith(no_copy_prefix):
-                        pass
+        for tag, element in builder_obj.controls.iteritems():
+            if tag in self.builder.controls.keys():
+                # k_: Known elements (present in original runner/builder)
+                k_control = self.builder.controls.get(tag, False)
+
+                if not k_control:
+                    continue
+
+                k_parent_control = k_control._parent
+                k_form_element = self.get_form_element(tag)
+
+                # Sections (escpecially)
+                if k_parent_control is None and tag not in parents:
+                    parents[tag] = etree.Element(tag)
+                    root.append(parents[tag])
+
+                # Controls
+                if k_form_element is not None:
+                    if k_parent_control is not None and hasattr(k_parent_control, '_bind') and k_parent_control._bind.name not in parents:
+                        k_el_parent = etree.Element(k_parent_control._bind.name)
+                        parents[k_parent_control._bind.name] = k_el_parent
+                        root.append(k_el_parent)
+
+                    if no_copy_prefix is not None and re.search(r"^%s" % no_copy_prefix, tag) is not None:
+                        # Instead of the Runner control, add the Builder model_instance
+                        parents[k_parent_control._bind.name].append(k_control._model_instance)
                     else:
-                        ov = self.xml_root.xpath('//%s' % tag)
-                        if len(ov) > 0 and ov[0].text:
-                            if len(ov[0].text.strip()) > 0:
-                                element.text = ov[0].text
+                        parents[k_parent_control._bind.name].append(k_form_element)
+                        # root.append(k_form_element)
+            else:
+                # n_: New elements
+                n_new_control = builder_obj.controls.get(tag, False)
 
-        merge_form_xml = etree.tostring(merged_form)
+                if not n_new_control:
+                    continue
+
+                n_parent_control = n_new_control._parent
+
+                # Sections (escpecially) don't have a parent, hence it's <form> root.
+                if n_parent_control is None and tag not in parents:
+                    parents[tag] = etree.Element(tag)
+                    root.append(parents[tag])
+                elif n_parent_control is not None and hasattr(n_parent_control, '_bind') and n_parent_control._bind.name not in parents:
+                    if n_parent_control._bind.name in builder_obj._form:
+                        n_parent_form_element = builder_obj._form[n_parent_control._bind.name]
+                        n_el_parent = etree.Element(n_parent_form_element.tag)
+                        parents[n_parent_control._bind.name] = n_el_parent
+                        root.append(n_el_parent)
+
+                # Initialize parent
+                if hasattr(n_parent_control, '_bind') and n_parent_control._bind.name not in parents:
+                    parents[n_parent_control._bind.name] = None
+
+                # Controls
+                if hasattr(n_parent_control, '_bind') and n_parent_control._bind.name in parents and n_new_control and n_new_control._model_instance is not None:
+                    parents[n_parent_control._bind.name].append(n_new_control._model_instance)
+                elif n_new_control and hasattr(n_new_control._parent, '_bind'):
+                    parents[n_new_control._parent._bind.name] = n_new_control._model_instance
+
+        # Unicode support
+        merge_form_xml = etree.tostring(root)
         merge_form_xml = bytes(bytearray(merge_form_xml, encoding='utf-8'))
         merged_runner = Runner(merge_form_xml, builder_obj)
+
         return merged_runner
+
 
 class RunnerForm:
 
